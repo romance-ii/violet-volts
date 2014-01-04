@@ -1,0 +1,4 @@
+[submodule "Romance"]
+	path = Romance-II
+	url = git@github.com:romance-ii/romance-ii
+	branch = Romance-2
