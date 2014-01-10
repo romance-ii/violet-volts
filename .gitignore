@@ -1,0 +1,17 @@
+# Backup, temp files
+tmp.*
+*.tmp
+temp-*
+*~
+*.bak
+*.orig
+
+# Deployment packages
+*.apk
+*.i386.rpm
+*.i686.rpm
+*.x86_64.rpm
+setup-*.exe
+*.msi
+*.deb
+*.war
