@@ -2,3 +2,9 @@
 	path = Romance-II
 	url = git@github.com:romance-ii/romance-ii
 	branch = Romance-2
+[submodule "talos"]
+	path = Talos
+	url = git@github.com:romance-ii/talos
+[submodule "proserpina"]
+	path = Proserpina
+	url = git@github.com:romance-ii/proserpina
