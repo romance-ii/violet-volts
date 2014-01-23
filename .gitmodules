@@ -8,3 +8,21 @@
 [submodule "proserpina"]
 	path = Proserpina
 	url = git@github.com:romance-ii/proserpina
+[submodule "glitch-avatars"]
+	path = art/game/glitch/avatars
+	url = git@github.com:romance-ii/glitch-avatars.git
+[submodule "parenthetical"]
+	path = Parenthetical
+	url = git@github.com:romance-ii/parenthetical.git
+[submodule "glitch-items"]
+	path = art/game/glitch/items
+	url = git@github.com:romance-ii/glitch-items.git
+[submodule "glitch-locations"]
+	path = art/game/glitch/locations
+	url = git@github.com:romance-ii/glitch-locations.git
+[submodule "glitch-overlays"]
+	path = art/game/glitch/overlays
+	url = git@github.com:romance-ii/glitch-overlays.git
+[submodule "lost-garden"]
+	path = art/game/lost-garden
+	url = git@github.com:romance-ii/lost-garden.git
