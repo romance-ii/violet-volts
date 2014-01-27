@@ -15,3 +15,4 @@ setup-*.exe
 *.msi
 *.deb
 *.war
+dist/*
