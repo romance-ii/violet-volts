@@ -16,3 +16,5 @@ setup-*.exe
 *.deb
 *.war
 dist/*
+.emacs.desktop
+.emacs.desktop.lock
