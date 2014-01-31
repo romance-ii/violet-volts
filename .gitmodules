@@ -3,7 +3,7 @@
 	url = git@github.com:romance-ii/romance-ii
 	branch = Romance-2
 [submodule "talos"]
-	path = Talos
+	path = Talos-Tortoise/Talos
 	url = git@github.com:romance-ii/talos
 [submodule "proserpina"]
 	path = Proserpina
