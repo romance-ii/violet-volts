@@ -1,0 +1,9 @@
+com.android.ide.eclipse.ddms.logLevel=debug
+ddms.logcat.auotmonitor.level=warn
+eclipse.preferences.version=1
+logcat.msg.color.debug=139,105,20
+logcat.msg.color.error=165,42,42
+logcat.msg.color.info=0,0,255
+logcat.msg.color.verbose=191,191,191
+logcat.msg.color.warn=255,165,0
+logcat.view.auto-scroll-lock=true

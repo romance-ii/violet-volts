@@ -1,0 +1,21 @@
+01:23:46 **** Incremental Build of configuration Default for project inapppurchasesnative ****
+/bin/bash /ndk-build NDK_DEBUG=1 V=1 all 
+/bin/bash: /ndk-build: No such file or directory
+
+01:23:46 Build Finished (took 98ms)
+
+01:37:40 **** Build of configuration Default for project inapppurchasesnative ****
+/bin/bash /ndk-build NDK_DEBUG=1 V=1 all 
+/bin/bash: /ndk-build: No such file or directory
+02:57:14 **** Incremental Build of configuration Default for project inapppurchasesnative ****
+/bin/bash /ndk-build NDK_DEBUG=1 V=1 all 
+/bin/bash: /ndk-build: No such file or directory
+00:18:32 **** Build of configuration Default for project inapppurchasesnative ****
+/bin/bash /opt/nVidia-Tegra/android-ndk-r9b/ndk-build NDK_DEBUG=1 V=1 all 
+Android NDK: WARNING: Ignoring unknown import directory:  ../../../libs/jni    
+jni/Android.mk:38: *** Android NDK: Aborting.    .  Stop.
+Android NDK: WARNING: Ignoring unknown import directory:  ../../../libs    
+Android NDK: jni/Android.mk: Cannot find module with tag 'nv_and_util' in import path    
+Android NDK: Are you sure your NDK_MODULE_PATH variable is properly defined ?    
+Android NDK: The following directories were searched:    
+Android NDK:         
