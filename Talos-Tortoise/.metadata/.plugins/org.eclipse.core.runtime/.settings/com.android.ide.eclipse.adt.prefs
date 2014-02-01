@@ -1,7 +1,3 @@
-com.android.ide.eclipse.adt.attrSort=logical
-com.android.ide.eclipse.adt.buildVerbosity=NORMAL
 com.android.ide.eclipse.adt.fixLegacyEditors=1
-com.android.ide.eclipse.adt.formatOnSave=true
-com.android.ide.eclipse.adt.monitorDensity=142
 com.android.ide.eclipse.adt.sdk=/opt/android-sdk-linux
 eclipse.preferences.version=1

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSetManager>
-<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1391066257261_2" label="Talos Tortoise" name="Talos Tortoise">
-<item elementID="=OuyaTalos" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=TalosTouch" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=Talos" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=OuyaTalosTortoise" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
-<item elementID="=TalosTortoiseTouch" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1391226946029_0" label="Talós Tortoises" name="Talós Tortoises">
+<item elementID="=TalosTouchActivity" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1391059227272_0" label="Window Working Set" name="Aggregate for window 1391059227272"/>
-<mruList name="Talos Tortoise"/>
+<mruList name="Talós Tortoises"/>
 </workingSetManager>

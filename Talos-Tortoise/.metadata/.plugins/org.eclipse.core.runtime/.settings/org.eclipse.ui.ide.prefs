@@ -1,7 +1,4 @@
-PROBLEMS_FILTERS_MIGRATE=true
-SWITCH_PERSPECTIVE_ON_PROJECT_CREATION=always
 TASKS_FILTERS_MIGRATE=true
-WORKSPACE_NAME=Talos Tortoise
 eclipse.preferences.version=1
 platformState=1391143739638
 quickStart=false
