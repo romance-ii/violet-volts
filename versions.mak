@@ -1,7 +1,7 @@
 ########################################################################
 # Configuration Cards
 
-# Version of the software
+# Version of the (server) software
 VERSION=0.1.1
 
 # Version of the “assets pack.” Note that this includes assets
