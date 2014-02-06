@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+/home/brpocock/Projects/violet-volts/Talos-Tortoise/.metadata/.plugins/org.eclipse.jdt.core
-1002862764.index
-1276522635.index
-4145758927.index
