@@ -9,5 +9,8 @@ Romance-II/src/romans/lib/cl-bullet2l/LICENSE:
 	git submodule init
 	git submodule sync
 	git submodule update
+	git submodule foreach git submodule init
+	git submodule foreach git submodule sync
+	git submodule foreach git submodule update
 	cd Romance-II; ./Build
 
