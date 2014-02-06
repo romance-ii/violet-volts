@@ -4,13 +4,22 @@
 # Options to build front-end clients would be here.
 # The web-based front-end is always built.
 
+# Parenthetical: Javascript
 WEBFRONT=Parenthetical-Tortoise
+WEBVERSION=0.1.2
 
+# Talos: Android
+TALOSNAME=Talos-Tortoise
+TALOSVERSION=0.0.1
 TALOSDIR=Talos-Tortoise
 TALOSTOUCHDIR=Talos-Tortoise/Touch
 TALOSOUYADIR=Talos-Tortoise/Ouya
+TALOSTOUCHDIST=../dist/os/Linux/Android/Touch
+TALOSOUYADIST=../dist/os/Linux/Android/OUYA
 
+# Proserpina: Native binaries (Lin/Mac/Win)
 PROSERPINADIR=Pomegranate
+PROSERPINAVERSION=0.0.1
 
 ########################################################################
 
