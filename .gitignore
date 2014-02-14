@@ -18,3 +18,4 @@ setup-*.exe
 dist/*
 .emacs.desktop
 .emacs.desktop.lock
+build/
