@@ -26,3 +26,6 @@
 [submodule "lost-garden"]
 	path = art/game/lost-garden
 	url = git@github.com:romance-ii/lost-garden.git
+[submodule "kenney-donation"]
+	path = art/game/kenney-donation
+	url = git@github.com:romance-ii/kenneydonation.git
