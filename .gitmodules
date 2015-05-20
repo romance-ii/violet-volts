@@ -29,3 +29,6 @@
 [submodule "kenney-donation"]
 	path = art/game/kenney-donation
 	url = git@github.com:romance-ii/kenneydonation.git
+[submodule "UnrealEngine"]
+	path = UnrealEngine
+	url = git@github.com:EpicGames/UnrealEngine
