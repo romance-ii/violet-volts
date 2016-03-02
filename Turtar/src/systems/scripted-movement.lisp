@@ -1,7 +1,8 @@
-(defpackage scripted-movement
+;;; -*- lisp -*-
+(defpackage turtar/scripted-movement
   (:use :cl :oliphaunt :turtar)
-  (:export scripted-movement))
-(in-package scripted-movement)
+  (:export #:scripted-movement))
+(in-package :turtar/scripted-movement)
 
 ;;; scripted-movement
 ;;; Part of Turtar

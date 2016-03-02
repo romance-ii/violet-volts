@@ -1,7 +1,9 @@
-(defpackage sound
-  (:use :cl :oliphaunt :turtar)
-  (:export sound))
-(in-package sound)
+;;; -*- lisp -*-
+(defpackage turtar/sound
+  (:use :cl :oliphaunt :turtar
+ :turtar/entity)
+  (:export #:sound))
+(in-package :turtar/sound)
 
 ;;; sound
 ;;; Part of Turtar
@@ -20,6 +22,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass sound ()
+(defclass sound (entity)
   ())
 

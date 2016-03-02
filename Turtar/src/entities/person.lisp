@@ -1,7 +1,9 @@
-(defpackage person
-  (:use :cl :oliphaunt :turtar)
-  (:export person))
-(in-package person)
+;;; -*- lisp -*-
+(defpackage turtar/person
+  (:use :cl :oliphaunt :turtar
+ :turtar/entity)
+  (:export #:person))
+(in-package :turtar/person)
 
 ;;; person
 ;;; Part of Turtar
@@ -20,6 +22,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass person ()
+(defclass person (entity)
   ())
 

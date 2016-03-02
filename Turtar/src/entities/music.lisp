@@ -1,7 +1,9 @@
-(defpackage music
-  (:use :cl :oliphaunt :turtar)
-  (:export music))
-(in-package music)
+;;; -*- lisp -*-
+(defpackage turtar/music
+  (:use :cl :oliphaunt :turtar
+ :turtar/entity)
+  (:export #:music))
+(in-package :turtar/music)
 
 ;;; music
 ;;; Part of Turtar
@@ -20,6 +22,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass music ()
+(defclass music (entity)
   ())
 

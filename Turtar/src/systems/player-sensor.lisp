@@ -1,7 +1,8 @@
-(defpackage player-sensor
+;;; -*- lisp -*-
+(defpackage turtar/player-sensor
   (:use :cl :oliphaunt :turtar)
-  (:export player-sensor))
-(in-package player-sensor)
+  (:export #:player-sensor))
+(in-package :turtar/player-sensor)
 
 ;;; player-sensor
 ;;; Part of Turtar

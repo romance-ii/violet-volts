@@ -1,7 +1,8 @@
-(defpackage player-movement
+;;; -*- lisp -*-
+(defpackage turtar/player-movement
   (:use :cl :oliphaunt :turtar)
-  (:export player-movement))
-(in-package player-movement)
+  (:export #:player-movement))
+(in-package :turtar/player-movement)
 
 ;;; player-movement
 ;;; Part of Turtar

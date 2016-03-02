@@ -1,7 +1,8 @@
-(defpackage physics
+;;; -*- lisp -*-
+(defpackage turtar/physics
   (:use :cl :oliphaunt :turtar)
-  (:export physics))
-(in-package physics)
+  (:export #:physics))
+(in-package :turtar/physics)
 
 ;;; physics
 ;;; Part of Turtar

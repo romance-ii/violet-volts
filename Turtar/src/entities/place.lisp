@@ -1,7 +1,9 @@
-(defpackage place
-  (:use :cl :oliphaunt :turtar)
-  (:export place))
-(in-package place)
+;;; -*- lisp -*-
+(defpackage turtar/place
+  (:use :cl :oliphaunt :turtar
+ :turtar/entity)
+  (:export #:place))
+(in-package :turtar/place)
 
 ;;; place
 ;;; Part of Turtar
@@ -20,6 +22,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass place ()
+(defclass place (entity)
   ())
 
