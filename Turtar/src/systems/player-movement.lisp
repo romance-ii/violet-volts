@@ -1,10 +1,13 @@
-(defpackage player-movement
-  (:use :cl :oliphaunt :turtar)
-  (:export player-movement))
-(in-package player-movement)
+;;; -*- lisp -*-
+(defpackage turtar/player-movement
+  (:use :cl :oliphaunt)
+  (:export #:player-movement))
+(in-package :turtar/player-movement)
 
 ;;; player-movement
+;;;
 ;;; Part of Turtar
+;;;
 ;;; Copyright © 2016, Bruce-Robert Fenn Pocock
 ;;;
 ;;; This program is free software: you can redistribute it and/or modify

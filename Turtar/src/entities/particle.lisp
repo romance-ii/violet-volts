@@ -1,7 +1,9 @@
-(defpackage particle
-  (:use :cl :oliphaunt :turtar)
-  (:export particle))
-(in-package particle)
+;;; -*- lisp -*-
+(defpackage turtar/particle
+  (:use :cl :oliphaunt
+ :turtar/entity)
+  (:export #:particle))
+(in-package :turtar/particle)
 
 ;;; particle
 ;;; Part of Turtar
@@ -20,6 +22,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass particle ()
+(defclass particle (entity)
   ())
 

@@ -1,10 +1,12 @@
-;;; -*- lisp -*-
-(defpackage turtar/player-sensor
-  (:use :cl :oliphaunt)
-  (:export #:player-sensor))
-(in-package :turtar/player-sensor)
 
-;;; player-sensor
+
+;;; -*- lisp -*-
+(defpackage turtar/scripted-movement
+  (:use :cl :oliphaunt :turtar)
+  (:export #:scripted-movement))
+(in-package :turtar/scripted-movement)
+
+;;; scripted-movement
 ;;; Part of Turtar
 ;;; Copyright © 2016, Bruce-Robert Fenn Pocock
 ;;;
@@ -21,6 +23,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass player-sensor ()
+(defclass scripted-movement ()
   ())
 

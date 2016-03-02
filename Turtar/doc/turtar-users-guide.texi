@@ -1,0 +1,299 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename turtar-users-guide.info
+@settitle Turtar Users' Guide
+@c %**end of header
+@copying
+A handbook to exploring Tartaruchorum and Tootanga.
+
+Copyright @copyright{} 2016  Bruce-Robert Fenn Pocock
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
+
+A copy of the license is also available from the Free Software
+Foundation Web site at @url{http://www.gnu.org/licenses/fdl.html}.
+
+@end quotation
+
+The document was typeset with
+@uref{http://www.texinfo.org/, GNU Texinfo}.
+
+@end copying
+
+@titlepage
+@title Turtar Users' Guide
+@subtitle A handbook to exploring Tartaruchorum and Tootanga
+@author Bruce-Robert Fenn Pocock <brpocock@@Star-Hope.org>
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@c Output the table of the contents at the beginning.
+@contents
+
+@ifnottex
+@node Top, Chapter One, (dir), (dir)
+@top Turtar Users' Guide
+
+@insertcopying
+@end ifnottex
+
+@c Generate the nodes for this menu with `C-c C-u C-m'.
+@menu
+* Chapter One::
+* Installing the Turtar Program::
+* Getting Started::
+* Tartaruchorum::
+* Tootanga::
+* Copying This Manual::
+* Index::
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Installing the Turtar Program
+
+* Turtar on Linux Systems::
+* Turtar on Microsoft Windows::
+
+Turtar on Linux® Systems
+
+* Turtar on Fedora::
+* Turtar on Android::
+* Turtar on Other Linux Systems::
+
+Tartaruchorum
+
+* The Major Cities::
+
+Tootanga
+
+* The Ghost Towns::
+* The Shadowfalls::
+
+Copying This Manual
+
+* GNU Free Documentation License::  License for copying this manual.
+
+@end detailmenu
+@end menu
+
+@c Update all node entries with `C-c C-u C-n'.
+@c Insert new nodes with `C-c C-c n'.
+@node Chapter One, Installing the Turtar Program, Top, Top
+@chapter Introduction
+
+@i{Turtar}  is a  fun new  online game  you can  play with  your friends
+and  family! In  @i{Turtar},  you'll be  able to  explore  the world  of
+Tartaruchorum, visit  the ancient elephant  graveyards on the  island of
+Tootanga, and help  the Turtars --- a race of  intelligent tortoises ---
+build their civilization.
+
+@node  Installing the Turtar Program, Getting Started, Chapter One, Top
+@chapter Installing the Turtar Program
+
+First,  you'll  need  to  get  the  @i{Turtar}  game  program  for  your
+system.@footnote{You  can  play  @i{Turtar}   on  a  personal  computer,
+tablet, portable game  system, or some video game consoles  that hook up
+to  your  TV.  No matter  what  kind  of  device  you're using  to  play
+@i{Turtar}, we're going to call it ``your system'' in this manual.}
+
+@menu
+* Turtar on Linux Systems::
+* Turtar on Microsoft Windows::
+@end menu
+
+@node Turtar on Linux Systems, Turtar on Microsoft Windows, Installing the Turtar Program, Installing the Turtar Program
+@section Turtar on Linux® Systems
+
+Turtar  can  be played  on  Linux®  systems on  personal
+computers,  tablets,  portable game  systems,  video  game consoles,  or
+other devices.
+
+@menu
+* Turtar on Fedora::
+* Turtar on Android::
+* Turtar on Other Linux Systems::
+@end menu
+
+@node Turtar on Fedora, Turtar on Android, Turtar on Linux Systems, Turtar on Linux Systems
+@subsection Turtar on Fedora
+
+If  your  system  runs  Fedora,  Red  Hat  Enterprise  Linux,  Community
+Enterprise  Operating   System  (CentOS),   Scientific  Linux,   or  any
+compatible system, you can install Turtar from our web site.
+
+Hint: To check  your system type, click on the  top-right corner of your
+screen  where the  volume control  and other  status icons  appear, then
+click on the symbol that looks  like a crossed wrench and screwdriver to
+bring up the @i{Settings} app. On  the bottom row, click @b{Details} and
+you'll  see the  operating system  you're running.  Or, from  a Terminal
+window, you can type @samp{cat /etc/system-release}.
+
+To  add Turtar's  Software  Repository to  the  @i{Software} catalog  on
+Fedora,          visit         the          web         site          at
+@samp{http://turtar.adventuring.click/get/fedora/}   and    follow   the
+on-screen instructions.
+
+If you later  decide to remove @i{Turtar}, you can  use the @i{Software}
+application to remove it.
+
+To start @i{Turtar}, press the @t{Super}  key (often, this has a logo on
+it, like  a penguin, an apple,  or a window) or  click @b{Activities} in
+the top-left  corner of the  screen to  get to the  Activities Overview.
+Then, either type @samp{Turtar} to locate  the app, or click the icon at
+the bottom of the Dash that looks like nine small boxes to show all your
+apps, and scroll down to find the @samp{Turtar} icon.
+
+You  can keep  the @i{Turtar}  icon on  your Dash  all the  time if  you
+right-click on it and pick @samp{Add to Favorites}.
+
+@node Turtar on Android, Turtar on Other Linux Systems, Turtar on Fedora, Turtar on Linux Systems
+@subsection Turtar on Android
+
+If  your system  runs  Android,  you can  download  @i{Turtar} from  the
+@i{Google Play}  or @i{Amazon  App Store}  markets, install  it directly
+from our web site, or ``sideload'' it yourself.
+
+If you use the @i{Google Play} or @i{Amazon App Store} markets, open the
+market  app   on  your  system,   and  tap  the  Search   icon  (the
+magnifying-glass).  Then, type  in  @i{Turtar Adventure}  and tap  the
+``Go''  or  ``Search''  button.   Install  the  application  by  tapping
+``Install'' and following the on-screen instructions.
+
+If you use another market app, you may want to search it as well. We may
+bring @i{Turtar} to other marketplaces.
+
+If you don't use these market  apps, you can install @i{Turtar} directly
+from our web site.  Open your web browser on your  Android system and go
+to  @samp{http://turtar.adventuring.click/get/android/}  and follow  the
+on-screen instructions.
+
+To              ``sideload''              @i{Turtar},              visit
+@samp{http://turtar.adventuring.click/get/android/}  on   your  PC  with
+sideloading software and download the Android Package (@samp{apk}) file.
+Use  your  sideloading  software  to  ``push''  the  package  onto  your
+Android system.
+
+Once you've installed  @i{Turtar}, you can find the icon  to start it in
+your applications menu, which you  usually access from your Home screen.
+You can  probably press your finger  on the icon  and hold it for  a few
+seconds  to  drag  the  icon   from  the  applications  menu  onto  your
+Home screen. 
+
+@node Turtar on Other Linux Systems,  , Turtar on Android, Turtar on Linux Systems
+@subsection Turtar on Other Linux Systems
+
+To  install @i{Turtar}  on  any Linux®  system based  on
+either  @i{Red  Hat  Package  Manager} (@samp{rpm})  or  the  @i{Debian}
+operating system  (including @i{Ubuntu}),  you can download  and compile
+@i{Turtar} yourself using a few (relatively) simple steps. This may also
+work on other Linux® systems, but you'll have to install
+the required tools and libraries yourself.
+
+Visit    @samp{http://turtar.adventuring.click/get/linux-source/}    and
+follow the on-screen instructions. For most users, all you'll need to do
+is open a Terminal window, and type:
+
+@sample
+curl http://turtar.adventuring.click/download/linux-source.sh | bash
+@end sample
+
+Note that the symbol @t{|} is  the vertical bar character, not a one,
+ell, or  exclamation mark. (On  a US  English keyboard, it's  typed with
+@t{Shift} + @t{Backslash}.)
+
+If you install @i{Turtar} in this way, you'll end up with a folder named
+@t{Turtar} in your Home folder.  Keep this folder. To update @i{Turtar},
+or remove it,  you'll need the contents of the  folder intact. The icons
+to start, update, or remove @i{Turtar} will be inside that folder.
+
+@node Turtar on Microsoft Windows,  , Turtar on Linux Systems, Installing the Turtar Program
+@section Turtar on Microsoft Windows
+
+If your system runs Microsoft Windows,  you can download Turtar from our
+web site.
+
+Visit  @samp{http://turtar.adventuring.click/get/win64/} and  follow the
+on-screen instructions to download the latest @t{Turtar Setup.exe} file.
+When the file has been downloaded, you'll need to open the file.
+
+The  @t{Turtar  Setup.exe}  program  will  then  install  @i{Turtar}  on
+your system. It will also add @i{Turtar} to your @t{Start} menu.
+
+@node Getting Started, Tartaruchorum, Installing the Turtar Program, Top
+@chapter Getting Started
+
+@node Tartaruchorum, Tootanga, Getting Started, Top
+@chapter Tartaruchorum
+
+@menu
+* The Major Cities::
+@end menu
+
+@node The Major Cities,  , Tartaruchorum, Tartaruchorum
+@section The Major Cities
+
+
+@node Tootanga, Copying This Manual, Tartaruchorum, Top
+@chapter Tootanga
+
+@menu
+* The Ghost Towns::
+* The Shadowfalls::
+@end menu
+
+@node The Ghost Towns, , Tootanga, Tootanga
+@section The Ghost Towns
+
+Tootanga was once the home to a  race of magical elephants, who used the
+power of the Wishing Wells of Tootanga to build their civilization.
+
+Over time, however, a powerful  evil force overcame these elephants, and
+they  disappeared from  the land.  Now,  Tootanga is  dotted with  ghost
+towns, abandoned long  ago in the losing battle against  the forces from
+the Shadowfalls.
+
+You might wish  to explore the ghost towns of  Tootanga. Perhaps someone
+can discover how to  unlock the power of the Wishing  Wells and undo the
+shadowy curses that destroyed the land.
+
+@node The Shadowfalls,  , The Ghost Towns, Tootanga
+@section The Shadowfalls
+
+A  place of  dark  magic, the  Shadowfalls are  found  in the  northeast
+of Tootanga.  This was once  the seat of power  of an evil  sorcerer who
+destroyed  the elephant  civilization  of Tootanga  in  his attempts  to
+obtain the power of the Wishing Wells.
+
+Ultimately, though, that  sorcerer was unsuccessful. While  he did curse
+the  Wishing   Wells,  he  was   never  able  to  unlock   their  power.
+The destruction that  his minions wrought across Tootanga  is still very
+visible today, though.
+
+
+@node Copying This Manual, Index, Tootanga, Top
+@appendix Copying This Manual
+
+@menu
+* GNU Free Documentation License::  License for copying this manual.
+@end menu
+
+@c Get fdl.texi from http://www.gnu.org/licenses/fdl.html
+@include fdl.texi
+
+@node Index,  , Copying This Manual, Top
+@unnumbered Index
+
+@printindex cp
+
+@bye
+
+@c turtar-users-guide.texi ends here

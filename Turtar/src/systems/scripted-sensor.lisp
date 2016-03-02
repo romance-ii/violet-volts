@@ -1,7 +1,8 @@
-(defpackage scripted-sensor
-  (:use :cl :oliphaunt :turtar)
-  (:export scripted-sensor))
-(in-package scripted-sensor)
+;;; -*- lisp -*-
+(defpackage turtar/scripted-sensor
+  (:use :cl :oliphaunt)
+  (:export #:scripted-sensor))
+(in-package :turtar/scripted-sensor)
 
 ;;; scripted-sensor
 ;;; Part of Turtar
