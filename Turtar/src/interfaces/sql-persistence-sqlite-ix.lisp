@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/sql-persistence-sqlite-ix
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
         :turtar/sql-persistence-peer-ix)
   (:export #:sql-persistence-sqlite-ix))
 (in-package :turtar/sql-persistence-sqlite-ix)

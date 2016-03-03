@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/sql-persistence-mysql-ix
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
         :turtar/sql-persistence-peer-ix)
   (:export #:sql-persistence-mysql-ix))
 (in-package :turtar/sql-persistence-mysql-ix)

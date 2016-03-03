@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/player-sensor
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:player-sensor))
 (in-package :turtar/player-sensor)
 

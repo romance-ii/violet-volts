@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/player-unreal-stream-ix
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:player-unreal-stream-ix))
 (in-package :turtar/player-unreal-stream-ix)
 

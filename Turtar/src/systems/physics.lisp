@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/physics
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:physics))
 (in-package :turtar/physics)
 

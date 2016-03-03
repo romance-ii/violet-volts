@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/place
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
  :turtar/entity)
   (:export #:place))
 (in-package :turtar/place)

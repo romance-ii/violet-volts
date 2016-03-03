@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/sql-persistence-postgresql-ix
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
         :turtar/sql-persistence-peer-ix)
   (:export #:sql-persistence-postgresql-ix))
 (in-package :turtar/sql-persistence-postgresql-ix)

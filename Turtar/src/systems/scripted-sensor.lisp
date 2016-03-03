@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/scripted-sensor
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:scripted-sensor))
 (in-package :turtar/scripted-sensor)
 

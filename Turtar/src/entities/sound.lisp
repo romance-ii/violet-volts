@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/sound
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
  :turtar/entity)
   (:export #:sound))
 (in-package :turtar/sound)

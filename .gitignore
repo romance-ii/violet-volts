@@ -19,3 +19,5 @@ dist/*
 .emacs.desktop
 .emacs.desktop.lock
 build/
+DEADJOE
+*.fasl

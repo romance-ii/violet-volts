@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/cluster-raw-peer-ix
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:cluster-raw-peer-ix))
 (in-package :turtar/cluster-raw-peer-ix)
 

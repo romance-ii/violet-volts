@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/music
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
  :turtar/entity)
   (:export #:music))
 (in-package :turtar/music)

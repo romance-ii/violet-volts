@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/utterance
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
  :turtar/entity)
   (:export #:utterance))
 (in-package :turtar/utterance)

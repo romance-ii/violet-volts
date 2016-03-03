@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/player-stream-ix
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:player-stream-ix))
 (in-package :turtar/player-stream-ix)
 
@@ -21,6 +21,6 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defclass player-stream-ix (player-pakcet-ix)
+(defclass player-stream-ix (player-packet-ix)
   ())
 

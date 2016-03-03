@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/player-websocket-ix
-  (:use :cl :oliphaunt :turtar)
+  (:use :cl :oliphaunt)
   (:export #:player-websocket-ix))
 (in-package :turtar/player-websocket-ix)
 

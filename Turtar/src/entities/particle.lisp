@@ -1,6 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/particle
-  (:use :cl :oliphaunt :turtar
+  (:use :cl :oliphaunt
  :turtar/entity)
   (:export #:particle))
 (in-package :turtar/particle)
