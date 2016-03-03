@@ -1,11 +1,13 @@
 ;;; -*- lisp -*-
 (defpackage turtar/physics
-  (:use :cl :oliphaunt)
+  (:use :cl :oliphaunt :turtar/system)
   (:export #:physics))
 (in-package :turtar/physics)
 
 ;;; physics
+;;; 
 ;;; Part of Turtar
+;;; 
 ;;; Copyright © 2016, Bruce-Robert Fenn Pocock
 ;;;
 ;;; This program is free software: you can redistribute it and/or modify
@@ -21,6 +23,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass physics ()
+(defclass physics (proc-system)
   ())
 

@@ -186,7 +186,7 @@
 
 
 
-(defclass thing (entity)
+(defclass thing (component)
   ((universe :initarg :universe :initform nil :reader thing-universe)
    ;;; — Position and its derivatives
    (position :type vec3 :initarg :position :initform (vec3 0 0 0) :reader thing-position)
@@ -217,26 +217,6 @@
    (body :type body :initarg :body :initform (make-instance 'spherical-body :radius 1) :reader thing-body)))
 
 
-
-(defmethod thing-equal ((a thing) (b thing))
-  (and (equalp (thing-universe a) (thing-universe b))
-       (every #'identity (mapcar #'vec3= 
-                                 (coerce (thing-position-and-derivatives a) 'list)
-                                 (coerce (thing-position-and-derivatives b) 'list)))
-       (every #'identity (mapcar #'rot2= 
-                                 (coerce (thing-rotation-and-derivatives a) 'list)
-                                 (coerce (thing-rotation-and-derivatives b) 'list)))
-       (= (thing-position+rotation-updated a) (thing-position+rotation-updated b))
-       (= (thing-mass a) (thing-mass b))
-       (body-equal (thing-body a) (thing-body b))))
-
-(defun copy-thing (thing)
-  (copy-object thing))
-
-(let* ((thingus (make-instance 'thing))
-       (thingie (copy-thing thingus)))
-  (assert (thing-equal thingus thingie))
-  (assert (not (entity-equal thingus thingie))))
 
 (defun thing-jounce (thing) (thing-snap thing))
 (defun thing-angular-jounce (thing) (thing-angular-snap thing))
@@ -272,6 +252,23 @@
   (check-type thing thing)
   (map 'vector (curry #'thing-rotation-derivative thing)
        '(0 1 2 3 4 5 6 7 8)))
+
+(defmethod component-equal ((a thing) (b thing))
+  (and (equalp (thing-universe a) (thing-universe b))
+       (every #'identity (mapcar #'vec3= 
+                                 (coerce (thing-position-and-derivatives a) 'list)
+                                 (coerce (thing-position-and-derivatives b) 'list)))
+       (every #'identity (mapcar #'rot2= 
+                                 (coerce (thing-rotation-and-derivatives a) 'list)
+                                 (coerce (thing-rotation-and-derivatives b) 'list)))
+       (= (thing-position+rotation-updated a) (thing-position+rotation-updated b))
+       (= (thing-mass a) (thing-mass b))
+       (body-equal (thing-body a) (thing-body b))))
+
+(let* ((thingus (make-instance 'thing))
+       (thingie (copy-object thingus)))
+  (assert (component-equal thingus thingie))
+  (assert (> (component-version thingie) (component-version thingus))))
 
 
 
