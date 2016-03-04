@@ -2,7 +2,9 @@
 (defpackage turtar/thing
   (:use :cl :oliphaunt
         :turtar/entity)
-  (:export #:thing))
+  (:export #:thing
+           #:thing-update-position+rotation
+           #:thing-resting-p))
 (in-package :turtar/thing)
 
 ;;; Thing
@@ -270,18 +272,22 @@
   (assert (component-equal thingus thingie))
   (assert (> (component-version thingie) (component-version thingus))))
 
+(defmethod thing-resting-p (thing)
+  (and (every #'vec3-zerop (thing-position-and-derivatives thing))
+       (every #'rot2-zerop (thing-rotation-and-derivatives thing))))
+
 
 
 (defun thing-update-position+rotation-derivatives (&key position rotation Δτ)
   (let ((position-derivatives (copy-array position))
         (rotation-derivatives (copy-array rotation)))
     (loop for derivative from 7 downto 0
-       do (setf (aref position-derivatives derivative)
-                (vec3+ (aref position-derivatives derivative) 
-                       (vec3* Δτ (aref position-derivatives (1+ derivative)))))
-       do (setf (aref rotation-derivatives derivative)
-                (rot2+ (aref rotation-derivatives derivative) 
-                       (rot2* Δτ (aref rotation-derivatives (1+ derivative))))))
+          do (setf (aref position-derivatives derivative)
+                   (vec3+ (aref position-derivatives derivative) 
+                          (vec3* Δτ (aref position-derivatives (1+ derivative)))))
+          do (setf (aref rotation-derivatives derivative)
+                   (rot2+ (aref rotation-derivatives derivative) 
+                          (rot2* Δτ (aref rotation-derivatives (1+ derivative))))))
     (values position-derivatives rotation-derivatives)))
 
 (defun mutate-position+rotation-derivatives (thing position-derivatives rotation-derivatives)

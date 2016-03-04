@@ -2,7 +2,7 @@
 (defpackage turtar/creature
   (:use :cl :oliphaunt
         :turtar/entity)
-  (:export #:#:creature))
+  (:export #:creature))
 (in-package :turtar/creature)
 
 ;;; Creature
@@ -22,6 +22,6 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defclass creature (entity)
+(defclass creature (component)
   ())
 

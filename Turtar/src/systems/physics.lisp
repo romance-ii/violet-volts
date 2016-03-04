@@ -1,7 +1,8 @@
 ;;; -*- lisp -*-
 (defpackage turtar/physics
   (:use :cl :oliphaunt :turtar/system)
-  (:export #:physics))
+  (:export #:physics
+           #:start-physics))
 (in-package :turtar/physics)
 
 ;;; physics
@@ -23,6 +24,38 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass physics (proc-system)
-  ())
+(defun physics-update (entity system)
+  (turtar/entity:with-component-update (entity thing 'turtar/thing:thing)
+    (turtar/thing:thing-update-position+rotation thing :target-real-time (physics-now system))))
+
+(defparameter *physics-tick-time* 1/50)
+
+(defclass physics-system (proc-system)
+  ((now :type real :accessor physics-now)
+   (last-tick :type real :accessor physics-last-tick)
+   (Δτ :type real :accessor physics-Δτ :accessor physics-delta-t)))
+
+(defmethod initialize-instance :after ((system physics-system) &key &allow-other-keys)
+  (setf (physics-now system) (get-internal-real-time)
+        (physics-last-tick system) (- (get-internal-real-time) *physics-tick-time*)))
+
+(defun next-tick-time (system)
+  (+ (physics-last-tick system) *physics-tick-time*))
+
+(defun time-to-next-tick (system)
+  (- (get-internal-real-time) (next-tick-time system)))
+
+(defun physics-tick (system)
+  (sleep (time-to-next-tick system))
+  (setf (physics-last-tick system) (physics-now system)
+        (physics-now system) (get-internal-real-time))
+  (proc-system-react system))
+
+(defun start-physics ()
+  (start-system (make-instance 'physics-system :operator #'physics-update
+                                               :selector '(turtar/thing:thing)
+                                               :reaction #'physics-tick
+                                               :filter-not #'turtar/thing:thing-resting-p)))
+
+
 

@@ -12,13 +12,16 @@
            #:entity
            #:entity-component
            #:entity-components
+           #:entity-components/sorted
            #:entity-eql
            #:entity-equal
            #:entity-has-component-p
            #:entity-id
            #:mutate
            #:update-entity-components
-           #:with-entity-transaction-locked))
+           #:with-component-update
+           #:with-entity-transaction-locked
+           #:with-private-local-entities-for-testing))
 (in-package :turtar/entity)
 
 ;;; core-entity
@@ -85,9 +88,22 @@
           (component-version component)
           (coerce (component-hash component) 'list)))
 
-(defun sorted-component-classes (entity)
-  (sort (mapcar (compose #'class-name #'class-of) (entity-components entity))
-        #'string< :key #'symbol-name))
+(defun entity-components/sorted (entity)
+  (stable-sort (mapcar (compose #'class-name #'class-of) (entity-components entity))
+               #'string<))
+
+(defgeneric component-equal (a b)
+  (:method ((a component) (b component))
+    (and (eql (class-of a) (class-of b))
+         (= (slot-value a 'component-version) (slot-value b 'component-version))
+         (equalp (slot-value a 'component-hash) (slot-value b 'component-hash))))
+  (:method ((a null-component) (b null-component)) t)
+  (:method (a b) nil))
+
+(let ((c (make-instance 'component))
+      (d (make-instance 'component)))
+  (assert (not (eql c d)))
+  (assert (component-equal c d)))
 
 (defgeneric entity-component (entity component-class) 
   (:method-combination or))
@@ -102,6 +118,23 @@
   (when (gethash component-class (entity-direct-components entity))
     t))
 
+(defun attach-component (entity component)
+  (let ((component-class (class-name (class-of component))))
+    (if-let (found (entity-component entity component-class))
+      (error 'component-already-attached :entity entity :new-component component :old-component found)
+      (setf (gethash component-class (slot-value entity 'direct-components)) component))))
+
+(let ((entity (make-instance 'entity))
+      (a (make-instance 'component))
+      (b (make-instance 'component)))
+  (attach-component entity a)
+  (entity-components entity)
+  (assert (member a (entity-components entity) :test #'component-equal))
+  (assert (component-equal a (entity-component entity 'component)))
+  (assert (handler-case
+              (progn (attach-component entity b) nil)
+            (component-already-attached (c) (declare (ignore c)) t))))
+
 (let ((entity (make-instance 'entity)))
   (assert (null (entity-component entity 'null-component)))
   (assert (not (entity-has-component-p entity 'null-component)))
@@ -109,19 +142,6 @@
     (attach-component entity n)
     (assert (entity-has-component-p entity 'null-component))
     (assert (eql n (entity-component entity 'null-component)))))
-
-(defgeneric component-equal (a b)
-  (:method ((a component) (b component))
-    (and (eql (class-of a) (class-of b))
-         (= (slot-value a 'component-version) (slot-value b 'component-version))
-         (equalp (slot-value a 'component-hash) (slot-value b 'component-hash))))
-  (:method ((a null-component) (b null-component)) t)
-  (:method (a b) nil))
-
-(let ((c (make-instance 'component))
-      (d (make-instance 'component)))
-  (assert (not (eql c d)))
-  (assert (component-equal c d)))
 
 (define-condition entity-component-error (error) 
   ((entity :initarg :entity :reader entity-component-error-entity))
@@ -148,23 +168,6 @@
              (format s "There is not a component of class ~s attached to ~:[that entity~;entity ~:*~a~]"
                      (component-not-attached-component-class c)
                      (entity-component-error-entity c)))))
-
-(defun attach-component (entity component)
-  (let ((component-class (class-name (class-of component))))
-    (if-let (found (entity-component entity component-class))
-      (error 'component-already-attached :entity entity :new-component component :old-component found)
-      (setf (gethash component-class (slot-value entity 'direct-components)) component))))
-
-(let ((entity (make-instance 'entity))
-      (a (make-instance 'component))
-      (b (make-instance 'component)))
-  (attach-component entity a)
-  (entity-components entity)
-  (assert (member a (entity-components entity) :test #'component-equal))
-  (assert (component-equal a (entity-component entity 'component)))
-  (assert (handler-case
-              (progn (attach-component entity b) nil)
-            (component-already-attached (c) (declare (ignore c)) t))))
 
 (defgeneric delete-component (entity component &key if-not-exists))
 
@@ -216,10 +219,10 @@
                                 (mapcar (curry #'entity-component b) classes)))))
 
 (defun entity-equal (a b)
-  (let ((sorted-a (sorted-component-classes a)))
+  (let ((sorted-a (entity-components/sorted a)))
     (or (eql a b)
         (and (equalp sorted-a
-                     (sorted-component-classes b))
+                     (entity-components/sorted b))
              (entity-components-equal a b sorted-a)))))
 
 (let ((a (make-instance 'entity))
@@ -434,5 +437,20 @@ Returns the newly-constructed object instance without altering BASE-INSTANCE."))
     (dolist (component components)
       (replace-component entity component))))
 
+(defmacro with-private-local-entities-for-testing (&body body)
+  `(let ((*local-entities* (make-weak-table)))
+     ,@body))
 
+(defmacro with-component-update ((entity component-instance component-class) &body body)
+  (let ((orig-components (gensym (format nil "~s-COMPONENTS-" entity)))
+        (component-instance-version (gensym (format nil "~s-VERSION-" component-instance))))
+    `(let* ((,orig-components (entity-components ,entity))
+            (,component-instance (entity-component ,entity ,component-class))
+            (,component-instance-version (component-version ,component-instance)))
+       (progn ,@body)
+       (if (> (component-version ,component-instance) ,component-instance-version)
+           (substitute-if ,component-instance (lambda (component)
+                                                (eql (class-of component) (class-of ,component-instance)))
+                          ,orig-components)
+           ,orig-components))))
 
