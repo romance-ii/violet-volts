@@ -4,7 +4,8 @@
         :turtar/entity)
   (:export #:thing
            #:thing-update-position+rotation
-           #:thing-resting-p))
+           #:thing-resting-p
+           #:distance-between))
 (in-package :turtar/thing)
 
 ;;; Thing
@@ -278,16 +279,16 @@
 
 
 
-(defun thing-update-position+rotation-derivatives (&key position rotation Δτ)
+(defun thing-update-position+rotation-derivatives (&key position rotation Δt)
   (let ((position-derivatives (copy-array position))
         (rotation-derivatives (copy-array rotation)))
     (loop for derivative from 7 downto 0
-          do (setf (aref position-derivatives derivative)
-                   (vec3+ (aref position-derivatives derivative) 
-                          (vec3* Δτ (aref position-derivatives (1+ derivative)))))
-          do (setf (aref rotation-derivatives derivative)
-                   (rot2+ (aref rotation-derivatives derivative) 
-                          (rot2* Δτ (aref rotation-derivatives (1+ derivative))))))
+       do (setf (aref position-derivatives derivative)
+                (vec3+ (aref position-derivatives derivative) 
+                       (vec3* Δt (aref position-derivatives (1+ derivative)))))
+       do (setf (aref rotation-derivatives derivative)
+                (rot2+ (aref rotation-derivatives derivative) 
+                       (rot2* Δt (aref rotation-derivatives (1+ derivative))))))
     (values position-derivatives rotation-derivatives)))
 
 (defun mutate-position+rotation-derivatives (thing position-derivatives rotation-derivatives)
@@ -312,33 +313,45 @@
           :angular-lock (aref rotation-derivatives 7)
           :angular-drop (aref rotation-derivatives 8)))
 
-(defun thing-update-position+rotation (thing &key target-real-time Δτ delta-t)
-  (assert (or (null target-real-time) (null Δτ) delta-t))
-  (assert (or (null target-real-time) Δτ (null delta-t)))
-  (assert (or target-real-time (null Δτ) (null delta-t)))
+(defun thing-update-position+rotation (thing &key target-real-time Δt delta-t)
+  (assert (or (null target-real-time) (null Δt) delta-t))
+  (assert (or (null target-real-time) Δt (null delta-t)))
+  (assert (or target-real-time (null Δt) (null delta-t)))
   (check-type target-real-time (or null (real 0 *)))
-  (check-type Δτ (or null (real 0 *)))
+  (check-type Δt (or null (real 0 *)))
   (check-type delta-t (or null (real 0 *)))
   
   (multiple-value-bind (position-derivatives rotation-derivatives)
       (thing-update-position+rotation-derivatives :position (thing-position-and-derivatives thing)
                                                   :rotation (thing-rotation-and-derivatives thing)
-                                                  :Δτ (if target-real-time
+                                                  :Δt (if target-real-time
                                                           (- target-real-time
                                                              (thing-position+rotation-updated thing))
-                                                          (or Δτ delta-t)))
+                                                          (or Δt delta-t)))
     (mutate-position+rotation-derivatives thing position-derivatives rotation-derivatives)))
 
 (let* ((before (make-instance 'thing :position (vec3 5 8 2)))
-       (after (thing-update-position+rotation before :Δτ 1)))
+       (after (thing-update-position+rotation before :Δt 1)))
   (assert (vec3= (thing-position after) (vec3 5 8 2))))
 
 (let* ((before (make-instance 'thing :position (vec3 4 5 6) :velocity (vec3 10 0 0)))
-       (after (thing-update-position+rotation before :Δτ 1)))
+       (after (thing-update-position+rotation before :Δt 1)))
   (assert (vec3= (thing-position after) (vec3 14 5 6))))
 
 (let* ((before (make-instance 'thing :position (vec3 4 5 6) :snap (vec3 10 0 0)))
-       (after (thing-update-position+rotation before :Δτ 1)))
+       (after (thing-update-position+rotation before :Δt 1)))
   (assert (vec3= (thing-position after) (vec3 14 5 6))))
 
+(defgeneric distance-between (a b))
 
+(defmethod distance-between ((a vec3) (b vec3))
+  (sqrt (+ (expt (- (vec3-x a) (vec3-x b)) 2)
+           (expt (- (vec3-y a) (vec3-y b)) 2)
+           (expt (- (vec3-z a) (vec3-z b)) 2))))
+
+(defmethod distance-between ((a thing) (b thing))
+  (distance-between (thing-position a) (thing-position b)))
+
+(assert (= 1 (distance-between (vec3 0 0 0) (vec3 1 0 0))))
+(assert (= 0 (distance-between (vec3 4 5 6) (vec3 4 5 6))))
+(assert (= (sqrt 14) (distance-between (vec3 0 0 0) (vec3 1 2 3))))

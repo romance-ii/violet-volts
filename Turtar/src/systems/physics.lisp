@@ -33,7 +33,7 @@
 (defclass physics-system (proc-system)
   ((now :type real :accessor physics-now)
    (last-tick :type real :accessor physics-last-tick)
-   (Δτ :type real :accessor physics-Δτ :accessor physics-delta-t)))
+   (Δt :type real :accessor physics-Δt :accessor physics-delta-t)))
 
 (defmethod initialize-instance :after ((system physics-system) &key &allow-other-keys)
   (setf (physics-now system) (get-internal-real-time)
@@ -51,11 +51,15 @@
         (physics-now system) (get-internal-real-time))
   (proc-system-react system))
 
-(defun start-physics ()
-  (start-system (make-instance 'physics-system :operator #'physics-update
-                                               :selector '(turtar/thing:thing)
-                                               :reaction #'physics-tick
-                                               :filter-not #'turtar/thing:thing-resting-p)))
+(defmethod turtar:hook-world-bootstrap progn (world)
+  (make-instance 'physics-system
+                 :name (concatenate 'string
+                                    "Physics system in "
+                                    (turtar:world-name world))
+                 :operator #'physics-update
+                 :selector '(turtar/thing:thing)
+                 :reaction #'physics-tick
+                 :filter-not #'turtar/thing:thing-resting-p))
 
 
 

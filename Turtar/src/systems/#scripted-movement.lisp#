@@ -1,11 +1,12 @@
-;;; -*- lisp -*-
-(defpackage turtar/music
-  (:use :cl :oliphaunt
-        :turtar/entity)
-  (:export #:music))
-(in-package :turtar/music)
 
-;;; music
+
+;;; -*- lisp -*-
+(defpackage turtar/scripted-movement
+  (:use :cl :oliphaunt :turtar)
+  (:export #:scripted-movement))
+(in-package :turtar/scripted-movement)
+
+;;; scripted-movement
 ;;; Part of Turtar
 ;;; Copyright © 2016, Bruce-Robert Fenn Pocock
 ;;;
@@ -22,6 +23,6 @@
 ;;; You should have received a copy of the GNU Affero General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(defclass music (turtar/sound:sound)
+(defclass scripted-movement ()
   ())
 

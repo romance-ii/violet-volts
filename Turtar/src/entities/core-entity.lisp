@@ -118,6 +118,24 @@
   (when (gethash component-class (entity-direct-components entity))
     t))
 
+(define-condition entity-component-error (error) 
+  ((entity :initarg :entity :reader entity-component-error-entity))
+  (:report (lambda (c s) 
+             (format s "An error occurred with ~:[an entity:component relationship~
+~;a component related to entity ~:*~a~]"
+                     (entity-component-error-entity c)))))
+
+(define-condition component-already-attached (entity-component-error)
+  ((new-component :initarg :new-component :reader component-already-attached-new-component)
+   (old-component :initarg :old-component :reader component-already-attached-old-component))
+  (:report (lambda (c s) 
+             (format s "Can not attach component ~a to ~:[an unknown entity~;entity ~:*~a~];
+ there is already a component of class ~s attached (~a)"
+                     (component-already-attached-new-component c)
+                     (entity-component-error-entity c)
+                     (class-name (class-of (component-already-attached-old-component c)))
+                     (component-already-attached-old-component c)))))
+
 (defun attach-component (entity component)
   (let ((component-class (class-name (class-of component))))
     (if-let (found (entity-component entity component-class))
@@ -142,24 +160,6 @@
     (attach-component entity n)
     (assert (entity-has-component-p entity 'null-component))
     (assert (eql n (entity-component entity 'null-component)))))
-
-(define-condition entity-component-error (error) 
-  ((entity :initarg :entity :reader entity-component-error-entity))
-  (:report (lambda (c s) 
-             (format s "An error occurred with ~:[an entity:component relationship~
-~;a component related to entity ~:*~a~]"
-                     (entity-component-error-entity c)))))
-
-(define-condition component-already-attached (entity-component-error)
-  ((new-component :initarg :new-component :reader component-already-attached-new-component)
-   (old-component :initarg :old-component :reader component-already-attached-old-component))
-  (:report (lambda (c s) 
-             (format s "Can not attach component ~a to ~:[an unknown entity~;entity ~:*~a~];
- there is already a component of class ~s attached (~a)"
-                     (component-already-attached-new-component c)
-                     (entity-component-error-entity c)
-                     (class-name (class-of (component-already-attached-old-component c)))
-                     (component-already-attached-old-component c)))))
 
 
 (define-condition component-not-attached (entity-component-error)

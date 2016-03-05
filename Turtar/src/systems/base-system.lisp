@@ -27,7 +27,10 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defun proc-system-reactive-components ())
+(defun proc-system-reactive-components (system)
+  (format t "~& No op; TODO. (in ~a)" (proc-system-name system))
+  (sleep 10)
+  nil)
 
 (defclass proc-system ()
   ((selector :initarg :selector :reader proc-system-selector)
@@ -71,11 +74,11 @@
 (defun transaction-make-changes (change-set)
   (when change-set
     (with-entity-transaction-locked ()
-                                    (dolist (pair change-set)
-                                      (destructuring-bind (entity-id components) pair
-                                        (if components
-                                            (update-entity-components entity-id components)
-                                            (delete-entity entity-id)))))))
+      (dolist (pair change-set)
+        (destructuring-bind (entity-id components) pair
+          (if components
+              (update-entity-components entity-id components)
+              (delete-entity entity-id)))))))
 
 (defun proc-operate (system entities)
   (transaction-make-changes (proc-operate/build-change-set (proc-system-operator system) entities)))
@@ -86,9 +89,9 @@
 (with-private-local-entities-for-testing
   (let* ((counter 0)
          (null-system (make-instance 'proc-system :selector '(turtar/entity::null-component) 
-                                                  :operator (lambda (x)
-                                                              (incf counter)
-                                                              x))))
+                                     :operator (lambda (x)
+                                                 (incf counter)
+                                                 x))))
     (assert (zerop counter))
     (assert (null (proc-select-entities null-system)))
     (let ((entity (make-instance 'entity)))
@@ -106,11 +109,11 @@
          (e2 (make-instance 'entity))
          (c2 (make-instance 'turtar/entity::null-component))
          (null-system-1 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter (lambda (e)
-                                                              (member c1 (entity-components e)))))
+                                       :filter (lambda (e)
+                                                 (member c1 (entity-components e)))))
          (null-system-2 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter-not (lambda (e)
-                                                                  (member c1 (entity-components e))))))
+                                       :filter-not (lambda (e)
+                                                     (member c1 (entity-components e))))))
     (attach-component e1 c1)
     (attach-component e2 c2)
     (assert (equalp (list e1) (proc-select-entities null-system-1)))
@@ -123,10 +126,14 @@
 (defvar *local-systems-running* (make-hash-table))
 
 (defun register-system (system-instance)
-  (pushnew system-instance *local-systems*))
+  (pushnew system-instance *local-systems* 
+           :test (compose #'string=) 
+           :key (compose #'class-name #'class-of)))
 
 (defun unregister-system (system-instance)
-  (removef *local-systems* system-instance))
+  (removef *local-systems* system-instance
+           :test (compose #'string=) 
+           :key (compose #'class-name #'class-of)))
 
 (defmethod initialize-instance :after ((instance proc-system) &key &allow-other-keys)
   (assert (listp (proc-system-selector instance)))
@@ -140,17 +147,27 @@
   (unregister-system null-system)
   (assert (not (member null-system *local-systems*))))
 
+(defun system-thread (system)
+  (gethash system *local-systems-running*))
+
 (defun system-running-p (system)
-  (when-let (thread (gethash system *local-systems-running*))
+  (when-let (thread (system-thread system))
     (thread-alive-p thread)))
 
 (defun system-thread-runner (system)
-  (until (proc-system-stop-p system)
-    (funcall (proc-system-reaction system) system)))
+  (lambda ()
+    (until (proc-system-stop-p system)
+      (funcall (proc-system-reaction system) system))))
+
+(defun turtlefy (word)
+  (concatenate 'string "〘" word "〙"))
 
 (defun start-system (system)
-  (let ((thread (make-thread (system-thread-runner system) :name (proc-system-name system))))
-    (setf (gethash system *local-systems-running*) thread)))
+  (handler-case
+      (let ((thread (make-thread (system-thread-runner system) :name (turtlefy (proc-system-name system)))))
+        (setf (gethash system *local-systems-running*) thread))
+    (error (c)
+      (format t "~& Unable to start system ~a: ~a" (proc-system-name system) c))))
 
 (define-condition thread-stop-forcibly (error) ())
 
@@ -171,6 +188,7 @@
   (dolist (system *local-systems*)
     (unless (system-running-p system)
       (start-system system))))
+
 
 
 (defvar *overseer* nil)
@@ -195,7 +213,33 @@
 
 (defun start-systems-overseer-thread ()
   (unless (overseer-alive-p)
-    (setf *overseer* (make-thread #'systems-overseer :name "Systems Overseer"))))
+    (setf *overseer* (make-thread #'systems-overseer :name (turtlefy "Systems Overseer")))))
+
+(defmethod turtar:hook-node-bootstrap progn (node)
+  (start-systems-overseer-thread))
 
 (defun stop-systems-overseer-thread ()
   (setf *overseer* nil))
+
+(defun system-thread-name (system)
+  (thread-name (system-thread system)))
+
+(defun system-status (system)
+  (if (system-running-p system) 
+      (system-thread-name system)
+      "✗"))
+
+(defun report-systems ()
+  (format t "~&~2% • Systems running locally on ~a:
+
+System Name~40tClass~60tRunning?
+~{~%~a~40t~a~60t~a~}
+
+Overseer thread~:[ is not running~; is running~]." 
+          (machine-instance)
+          (mapcan (lambda (system) 
+                    (list (proc-system-name system)
+                          (class-name (class-of system))
+                          (system-status system))) 
+                  *local-systems*)
+          (overseer-alive-p)))
