@@ -29,11 +29,6 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defun proc-system-reactive-components (system)
-  (format t "~& No op; TODO. (in ~a)" (proc-system-name system))
-  (sleep 10)
-  nil)
-
 (defclass system-stats ()
   ((created :reader proc-system-created
             :initform (get-universal-time))
@@ -239,6 +234,11 @@
          (*error-output* (proc-system-journal ,system))
          (*trace-output* (proc-system-journal ,system)))
      ,@body))
+
+(defun proc-system-reactive-components (system)
+  (format t "~& No op; TODO. (in ~a)" (proc-system-name system))
+  (sleep 10)
+  nil)
 
 (defun proc-system-react (system)
   (proc-operate system (proc-select-entities system)))
