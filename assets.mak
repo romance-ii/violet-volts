@@ -1,3 +1,219 @@
+build/art/kenney-donation/Art/Previews/Vector/topDownSports_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Previews/Vector/topDownSports_vector.swf
+
+build/art/kenney-donation/Art/Previews/Vector/topDownSports_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Previews/Vector/topDownSports_vector.swf
+
+build/art/kenney-donation/Art/Medals/Vector/medals_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Medals/Vector/medals_vector.swf
+
+build/art/kenney-donation/Art/Medals/Vector/medals_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Medals/Vector/medals_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ bricks/Vector/platformerBricks_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ bricks/Vector/platformerBricks_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ bricks/Vector/platformerBricks_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ bricks/Vector/platformerBricks_vector.swf
+
+build/art/kenney-donation/Art/Tappy\ Plane/Vector/tappyPlane_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Tappy\ Plane/Vector/tappyPlane_vector.swf
+
+build/art/kenney-donation/Art/Tappy\ Plane/Vector/tappyPlane_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Tappy\ Plane/Vector/tappyPlane_vector.swf
+
+build/art/kenney-donation/Art/Isometric\ road\ assets/Base\ pack/Vector/roadTiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Isometric\ road\ assets/Base\ pack/Vector/roadTiles_vector.swf
+
+build/art/kenney-donation/Art/Isometric\ road\ assets/Base\ pack/Vector/roadTiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Isometric\ road\ assets/Base\ pack/Vector/roadTiles_vector.swf
+
+build/art/kenney-donation/Art/Isometric\ road\ assets/Water\ pack/Vector/roadTiles_water_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Isometric\ road\ assets/Water\ pack/Vector/roadTiles_water_vector.swf
+
+build/art/kenney-donation/Art/Isometric\ road\ assets/Water\ pack/Vector/roadTiles_water_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Isometric\ road\ assets/Water\ pack/Vector/roadTiles_water_vector.swf
+
+build/art/kenney-donation/Art/Road\ textures/Vector/roadTextures_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Road\ textures/Vector/roadTextures_vector.swf
+
+build/art/kenney-donation/Art/Road\ textures/Vector/roadTextures_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Road\ textures/Vector/roadTextures_vector.swf
+
+build/art/kenney-donation/Art/UI\ pack/Vector/UIpack_vector.min.svg:	\
+		../art/game/kenney-donation/Art/UI\ pack/Vector/UIpack_vector.swf
+
+build/art/kenney-donation/Art/UI\ pack/Vector/UIpack_vector.min.svg:	\
+		../art/game/kenney-donation/Art/UI\ pack/Vector/UIpack_vector.swf
+
+build/art/kenney-donation/Art/Archive/Isometric\ road\ assets/Vector/roadTiles_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Isometric\ road\ assets/Vector/roadTiles_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Isometric\ road\ assets/Vector/roadTiles_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Isometric\ road\ assets/Vector/roadTiles_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Guns\ and\ engines/Vector/spaceArtGuns_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Guns\ and\ engines/Vector/spaceArtGuns_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Guns\ and\ engines/Vector/spaceArtGuns_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Guns\ and\ engines/Vector/spaceArtGuns_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Ship\ parts/Vector/spaceArtParts_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Ship\ parts/Vector/spaceArtParts_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Ship\ parts/Vector/spaceArtParts_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Ship\ parts/Vector/spaceArtParts_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Vector/spaceArt_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Vector/spaceArt_archive_vector.swf
+
+build/art/kenney-donation/Art/Archive/Space\ shooter\ assets/Vector/spaceArt_archive_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Archive/Space\ shooter\ assets/Vector/spaceArt_archive_vector.swf
+
+build/art/kenney-donation/Art/Hexagon\ assets/Base\ pack/Vector/hexagonTiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Hexagon\ assets/Base\ pack/Vector/hexagonTiles_vector.swf
+
+build/art/kenney-donation/Art/Hexagon\ assets/Base\ pack/Vector/hexagonTiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Hexagon\ assets/Base\ pack/Vector/hexagonTiles_vector.swf
+
+build/art/kenney-donation/Art/Hexagon\ assets/Buildings\ pack/Vector/hexagonBuildings_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Hexagon\ assets/Buildings\ pack/Vector/hexagonBuildings_vector.swf
+
+build/art/kenney-donation/Art/Hexagon\ assets/Buildings\ pack/Vector/hexagonBuildings_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Hexagon\ assets/Buildings\ pack/Vector/hexagonBuildings_vector.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineDark.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineDark.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineLight.swf
+
+build/art/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineLight.min.svg:	\
+		../art/game/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineLight.swf
+
+build/art/kenney-donation/Art/Space\ shooter\ assets/Vector/spaceShooter_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Space\ shooter\ assets/Vector/spaceShooter_vector.swf
+
+build/art/kenney-donation/Art/Space\ shooter\ assets/Vector/spaceShooter_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Space\ shooter\ assets/Vector/spaceShooter_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_aliens_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_aliens_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_aliens_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_aliens_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_enemies_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_enemies_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_enemies_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_enemies_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Mushroom\ pack/Vector/platformerMushroom_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Mushroom\ pack/Vector/platformerMushroom_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Mushroom\ pack/Vector/platformerMushroom_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Mushroom\ pack/Vector/platformerMushroom_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Ice\ pack/Vector/platformerIce_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Ice\ pack/Vector/platformerIce_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Ice\ pack/Vector/platformerIce_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Ice\ pack/Vector/platformerIce_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Vector/platformerCandy_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Vector/platformerCandy_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Vector/platformerCandy_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Vector/platformerCandy_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Request\ pack/Vector/platformerRequest_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Request\ pack/Vector/platformerRequest_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Request\ pack/Vector/platformerRequest_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Request\ pack/Vector/platformerRequest_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_tiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_tiles_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_tiles_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_tiles_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_enemies_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_enemies_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_enemies_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_enemies_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_characters_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_characters_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_characters_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_characters_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Building\ pack/Vector/platformerBuildings_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Building\ pack/Vector/platformerBuildings_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Building\ pack/Vector/platformerBuildings_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Building\ pack/Vector/platformerBuildings_vector.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part1.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part1.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part1.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part1.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part2.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part2.swf
+
+build/art/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part2.min.svg:	\
+		../art/game/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part2.swf
+
+build/art/kenney-donation/Art/Puzzle\ assets/Vector/puzzleAssets_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Puzzle\ assets/Vector/puzzleAssets_vector.swf
+
+build/art/kenney-donation/Art/Puzzle\ assets/Vector/puzzleAssets_vector.min.svg:	\
+		../art/game/kenney-donation/Art/Puzzle\ assets/Vector/puzzleAssets_vector.swf
+
 build/art/lost-garden/SmallWorld/original/SmallWorld-All.min.svg:	\
 		../art/game/lost-garden/SmallWorld/original/SmallWorld-All.swf
 
@@ -56367,6 +56583,42 @@ build/art/glitch/locations/source/homes_alakol/alakol_back_wall_extender.min.svg
 
 
 VERSIONEDASSETS=\
+	 build/$(PROJECT)-assets/kenney-donation/Art/Previews/Vector/topDownSports_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Medals/Vector/medals_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ bricks/Vector/platformerBricks_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Tappy\ Plane/Vector/tappyPlane_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Isometric\ road\ assets/Base\ pack/Vector/roadTiles_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Isometric\ road\ assets/Water\ pack/Vector/roadTiles_water_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Road\ textures/Vector/roadTextures_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/UI\ pack/Vector/UIpack_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Archive/Isometric\ road\ assets/Vector/roadTiles_archive_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Guns\ and\ engines/Vector/spaceArtGuns_archive_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Archive/Space\ shooter\ assets/Expansion\ -\ Ship\ parts/Vector/spaceArtParts_archive_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Archive/Space\ shooter\ assets/Vector/spaceArt_archive_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Hexagon\ assets/Base\ pack/Vector/hexagonTiles_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Hexagon\ assets/Buildings\ pack/Vector/hexagonBuildings_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentLight.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatDark.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_transparentDark.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedLight.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_shadedDark.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineDark.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_flatLight.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Onscreen\ controls/Vector/controls_lineLight.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Space\ shooter\ assets/Vector/spaceShooter_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_aliens_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Extra\ animations\ and\ enemies/Vector/platformerExtra_enemies_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Mushroom\ pack/Vector/platformerMushroom_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Ice\ pack/Vector/platformerIce_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Vector/platformerCandy_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Request\ pack/Vector/platformerRequest_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_tiles_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_enemies_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Base\ pack/Vector/platformer_characters_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Building\ pack/Vector/platformerBuildings_vector.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part1.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Platformer\ assets/Platformer\ assets/Tile\ extension\ pack/Vector/part2.svg \
+	 build/$(PROJECT)-assets/kenney-donation/Art/Puzzle\ assets/Vector/puzzleAssets_vector.svg \
 	 build/$(PROJECT)-assets/lost-garden/SmallWorld/original/SmallWorld-All.svg \
 	 build/$(PROJECT)-assets/glitch/avatars/vanity/hair/Curlers.svg \
 	 build/$(PROJECT)-assets/glitch/avatars/vanity/hair/Buzzcut.svg \
