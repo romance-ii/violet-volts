@@ -1,11 +1,9 @@
 ;;; -*- lisp -*-
 (defpackage turtar/thing
-  (:use :cl :oliphaunt
-        :turtar/entity)
+  (:use :cl :oliphaunt :turtar/entity :turtar/geometry)
   (:export #:thing
            #:thing-update-position+rotation
-           #:thing-resting-p
-           #:distance-between))
+           #:thing-resting-p))
 (in-package :turtar/thing)
 
 ;;; Thing
@@ -24,168 +22,6 @@
 ;;;
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
-
-
-
-(defstruct vec3 
-  (x :x :type real)
-  (y :y :type real)
-  (z :z :type real))
-
-(defun vec3 (x y z)
-  (check-type x real)
-  (check-type y real)
-  (check-type z real)
-  (make-vec3 :x x :y y :z z))
-
-(let ((a (vec3 1 2/3 .25)))
-  (assert (= (vec3-x a) 1))
-  (assert (= (vec3-y a) 2/3))
-  (assert (= (vec3-z a) .25)))
-
-(defun vec3= (a b &rest more)
-  (and (and (= (vec3-x a) (vec3-x b))
-            (= (vec3-y a) (vec3-y b))
-            (= (vec3-z a) (vec3-z b)))
-       (if more 
-           (apply #'vec3= a more)
-           t)))
-
-(let* ((a (vec3 1 2 3))
-       (b (copy-vec3 a)))
-  (assert (vec3= a b))
-  (assert (not (eql a b))))
-
-(defun vec3+ (a b &rest more)
-  (if more
-      (reduce #'vec3+ (append (list a b) more))
-      (vec3 (+ (vec3-x a) (vec3-x b))
-            (+ (vec3-y a) (vec3-y b))
-            (+ (vec3-z a) (vec3-z b)))))
-
-(assert (vec3= (vec3 2 3 4) (vec3+ (vec3 1 1 1) (vec3 1 2 3))))
-(assert (vec3= (vec3 3 4 5) (vec3+ (vec3 1 1 1) (vec3 1 1 1) (vec3 1 2 3))))
-
-(defgeneric vec3* (a b &rest more))
-
-(defmethod vec3* :around (a b &rest more)
-  (if more
-      (reduce #'vec3* (append (list a b) more))
-      (call-next-method)))
-
-(defmethod vec3* ((a vec3) (b real) &rest more)
-  (assert (null more))
-  (vec3 (* (vec3-x a) b)
-        (* (vec3-y a) b)
-        (* (vec3-z a) b)))
-
-(defmethod vec3* ((a real) (b vec3) &rest more)
-  (assert (null more))
-  (vec3 (* a (vec3-x b))
-        (* a (vec3-y b))
-        (* a (vec3-z b))))
-
-(assert (vec3= (vec3 2 4 6) (vec3* 2 (vec3 1 2 3))))
-(assert (vec3= (vec3 2 4 6) (vec3* (vec3 1 2 3) 2)))
-(assert (vec3= (vec3 4 8 12) (vec3* 2 (vec3 1 2 3) 2)))
-
-(defun vec3-zerop (vec)
-  (and (zerop (vec3-x vec))
-       (zerop (vec3-y vec))
-       (zerop (vec3-z vec))))
-
-(assert (vec3-zerop (vec3 0 0 0)))
-(assert (not (vec3-zerop (vec3 1 0 0))))
-(assert (not (vec3-zerop (vec3 7 8 9))))
-
-
-
-(defstruct rot2
-  (θ :θ :type real)
-  (φ :φ :type real))
-
-(defun rot2 (θ φ)
-  (let ((θ₀ (if (< (- pi) θ pi)
-                θ
-                (- (mod (+ θ pi) (* 2 pi)) pi)))
-        (φ₀ (if (< (/ pi -2) φ (/ pi 2))
-                φ
-                (- (mod (+ φ (/ pi 2)) pi) (/ pi 2)))))
-    (make-rot2 :θ θ₀ :φ φ₀)))
-
-(defun rot2-theta (rot) (rot2-θ rot))
-(defun rot2-phi (rot) (rot2-φ rot))
-
-(assert (= 1 (rot2-θ (rot2 1 1/2))))
-(assert (= 1/2 (rot2-φ (rot2 1 1/2))))
-(assert (= .5 (rot2-φ (rot2 1 (+ pi pi .5)))))
-
-(defun rot2= (a b &rest more)
-  (and (and (= (rot2-θ a) (rot2-θ b))
-            (= (rot2-φ a) (rot2-φ b)))
-       (if more
-           (apply #'rot2= a more)
-           t)))
-
-(assert (rot2= (rot2 1 1) (rot2 1 1)))
-
-(defun rot2+ (a b &rest more)
-  (if more
-      (reduce #'rot2+ (cons (list a b) more))
-      (rot2 (+ (rot2-θ a) (rot2-θ b))
-            (+ (rot2-φ a) (rot2-φ b)))))
-
-(assert (rot2= (rot2+ (rot2 0 0) (rot2 1 2)) (rot2 1 2)))
-(assert (rot2= (rot2+ (rot2 0 pi) (rot2 1 pi)) (rot2 1 0)))
-
-(defgeneric rot2* (a b &rest more))
-
-(defmethod rot2* :around (a b &rest more)
-  (if more
-      (reduce #'rot2* (cons (list a b) more))
-      (call-next-method)))
-
-(defmethod rot2* ((a rot2) (b real) &rest more)
-  (assert (null more))
-  (rot2 (* (rot2-θ a) b)
-        (* (rot2-φ a) b)))
-
-(defmethod rot2* ((a real) (b rot2) &rest more)
-  (assert (null more))
-  (rot2 (* a (rot2-θ b))
-        (* a (rot2-φ b))))
-
-(assert (rot2= (rot2 2 0) (rot2* 2 (rot2 1 0))))
-(assert (rot2= (rot2 2 0) (rot2* (rot2 1 0) 2)))
-
-(defun rot2-zerop (rot)
-  (and (zerop (rot2-θ rot))
-       (zerop (rot2-φ rot))))
-
-(assert (rot2-zerop (rot2 0 0)))
-(assert (not (rot2-zerop (rot2 45 72))))
-
-
-
-(defclass body () ())
-
-(defgeneric body-equal (a b) (:method ((a body) (b body)) nil))
-
-(defclass spherical-body (body)
-  ((radius :initarg :radius :initform 1 :reader spherical-body-radius)))
-
-(defmethod body-equal ((a spherical-body) (b spherical-body))
-  (= (spherical-body-radius a) (spherical-body-radius b)))
-
-(defclass rectangular-body (body)
-  ((length :type real :initarg :length :initform 1 :reader rectangular-body-length)
-   (width :type real :initarg :width :initform 1 :reader rectangular-body-width)
-   (depth :type real :initarg :depth :initform 1 :reader rectangular-body-depth)))
-
-(defmethod body-equal ((a rectangular-body) (b rectangular-body))
-  (and (= (rectangular-body-length a) (rectangular-body-length b))
-       (= (rectangular-body-width a) (rectangular-body-width b))
-       (= (rectangular-body-depth a) (rectangular-body-depth b))))
 
 
 
@@ -283,12 +119,12 @@
   (let ((position-derivatives (copy-array position))
         (rotation-derivatives (copy-array rotation)))
     (loop for derivative from 7 downto 0
-          do (setf (aref position-derivatives derivative)
-                   (vec3+ (aref position-derivatives derivative) 
-                          (vec3* Δt (aref position-derivatives (1+ derivative)))))
-          do (setf (aref rotation-derivatives derivative)
-                   (rot2+ (aref rotation-derivatives derivative) 
-                          (rot2* Δt (aref rotation-derivatives (1+ derivative))))))
+       do (setf (aref position-derivatives derivative)
+                (vec3+ (aref position-derivatives derivative) 
+                       (vec3* Δt (aref position-derivatives (1+ derivative)))))
+       do (setf (aref rotation-derivatives derivative)
+                (rot2+ (aref rotation-derivatives derivative) 
+                       (rot2* Δt (aref rotation-derivatives (1+ derivative))))))
     (values position-derivatives rotation-derivatives)))
 
 (defun mutate-position+rotation-derivatives (thing position-derivatives rotation-derivatives)
@@ -341,13 +177,6 @@
 (let* ((before (make-instance 'thing :position (vec3 4 5 6) :snap (vec3 10 0 0)))
        (after (thing-update-position+rotation before :Δt 1)))
   (assert (vec3= (thing-position after) (vec3 14 5 6))))
-
-(defgeneric distance-between (a b))
-
-(defmethod distance-between ((a vec3) (b vec3))
-  (sqrt (+ (expt (- (vec3-x a) (vec3-x b)) 2)
-           (expt (- (vec3-y a) (vec3-y b)) 2)
-           (expt (- (vec3-z a) (vec3-z b)) 2))))
 
 (defmethod distance-between ((a thing) (b thing))
   (distance-between (thing-position a) (thing-position b)))

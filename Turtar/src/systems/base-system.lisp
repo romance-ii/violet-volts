@@ -168,9 +168,9 @@
 (with-private-local-entities-for-testing
   (let* ((counter 0)
          (null-system (make-instance 'proc-system :selector '(turtar/entity::null-component) 
-                                                  :operator (lambda (x)
-                                                              (incf counter)
-                                                              x))))
+                                     :operator (lambda (x)
+                                                 (incf counter)
+                                                 x))))
     (assert (zerop counter))
     (assert (null (proc-select-entities null-system)))
     (let ((entity (make-instance 'entity)))
@@ -188,11 +188,11 @@
          (e2 (make-instance 'entity))
          (c2 (make-instance 'turtar/entity::null-component))
          (null-system-1 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter (lambda (e)
-                                                              (member c1 (entity-components e)))))
+                                       :filter (lambda (e)
+                                                 (member c1 (entity-components e)))))
          (null-system-2 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter-not (lambda (e)
-                                                                  (member c1 (entity-components e))))))
+                                       :filter-not (lambda (e)
+                                                     (member c1 (entity-components e))))))
     (attach-component e1 c1)
     (attach-component e2 c2)
     (assert (equalp (list e1) (proc-select-entities null-system-1)))
@@ -284,34 +284,48 @@
               (sleep 1/100))
             (proc-system-react system)))))))
 
-(defun turtlefy (word)
-  (concatenate 'string "〘" word "〙"))
+(defun node-name-for-thread-name ()
+  (format nil " @(~a>~a>~a)"
+          (turtar:world-name turtar:*world*) 
+          (turtar:cluster-name turtar:*cluster*) 
+          (turtar:node-name turtar:*node*)))
+
+(defun make-thread-name (system-name)
+  (format nil "〘~a〙 ~a" system-name 
+          (node-name-for-thread-name)))
+
+(defun clean-thread-name (thread-name)
+  (let ((node-name (node-name-for-thread-name)))
+    (if (and (< (length node-name) (length thread-name))
+             (string= node-name (subseq thread-name (- (length thread-name) (length node-name)))))
+        (subseq thread-name 0 (- (length thread-name) (length node-name)))
+        thread-name)))
 
 
 
 (defun debug-traced-var-if-valid (v f)
   (ignore-errors
-   (when (eq :valid
-             (sb-di:debug-var-validity v (sb-di:frame-code-location f)))
-     (cons (sb-di:debug-var-symbol v)
-           (sb-di:debug-var-value v f)))))
+    (when (eq :valid
+              (sb-di:debug-var-validity v (sb-di:frame-code-location f)))
+      (cons (sb-di:debug-var-symbol v)
+            (sb-di:debug-var-value v f)))))
 
 (defun debug-vars-in-frame (f)
   (ignore-errors (sb-di::debug-fun-debug-vars (sb-di:frame-debug-fun f))))
 
 (defun file-source-of-function-in-debug-frame (f)
   (ignore-errors
-   (sb-di:debug-source-namestring
-    (sb-di:code-location-debug-source
-     (sb-di:frame-code-location f)))))
+    (sb-di:debug-source-namestring
+     (sb-di:code-location-debug-source
+      (sb-di:frame-code-location f)))))
 
 (defun position-within-file-of-function-in-frame (f)
   (ignore-errors ;;; XXX does not work
-   (let ((cloc (sb-di:frame-code-location f)))
-     (unless (sb-di:code-location-unknown-p cloc)
-       (format nil "tlf~Dfn~D"
-               (sb-di:code-location-toplevel-form-offset cloc)
-               (sb-di:code-location-form-number cloc))))))
+    (let ((cloc (sb-di:frame-code-location f)))
+      (unless (sb-di:code-location-unknown-p cloc)
+        (format nil "tlf~Dfn~D"
+                (sb-di:code-location-toplevel-form-offset cloc)
+                (sb-di:code-location-form-number cloc))))))
 
 (defun debug-function-name-in-frame (frame)
   (ignore-errors (sb-di:debug-fun-name (sb-di:frame-debug-fun frame))))
@@ -370,12 +384,12 @@
   (when λ-list
     (format t "~%Λ List:~8t(")
     (loop
-      for firstp = t then nil
-      for (name . value) in λ-list
-      do (unless firstp (terpri))
-      do (if-let ((real-value (debug-local-var-real-value value)))
-           (format t "~11t(~a ~a)" name value)
-           (format t "~11t~a" name)))
+       for firstp = t then nil
+       for (name . value) in λ-list
+       do (unless firstp (terpri))
+       do (if-let ((real-value (debug-local-var-real-value value)))
+            (format t "~11t(~a ~a)" name value)
+            (format t "~11t~a" name)))
     (format t ")")))
 
 (defun debug-function-decorate-function-name (name)
@@ -415,33 +429,33 @@
 (defun print-stack-trace ()
   (loop for frame = (or sb-debug:*stack-top-hint*
                         (sb-di:top-frame))
-          then (sb-di:frame-down frame)
-        for frame-index from 0
-        while frame
-        do (let* ((fn (sb-di:frame-debug-fun frame))
-                  (fn-name (debug-function-name-in-frame frame))
-                  (λ-list (debug-variable-values (sb-di:debug-fun-lambda-list fn) frame))
-                  (λ-list-names (mapcar #'car λ-list) )) 
-             (format t "~3%~:(~[Top Frame~:;~:*~:r Calling Frame~]: ~a~)~
+     then (sb-di:frame-down frame)
+     for frame-index from 0
+     while frame
+     do (let* ((fn (sb-di:frame-debug-fun frame))
+               (fn-name (debug-function-name-in-frame frame))
+               (λ-list (debug-variable-values (sb-di:debug-fun-lambda-list fn) frame))
+               (λ-list-names (mapcar #'car λ-list) )) 
+          (format t "~3%~:(~[Top Frame~:;~:*~:r Calling Frame~]: ~a~)~
 ~@[~%~a~]
 ~6t~a~@[:~a~]~
 ~@[~% Closure name: ~a~]~
 ~@[~% Kind: ~a~]~
 ~@[~% Starting Location: ~a~]~%" 
-                     frame-index fn-name
-                     (debug-function-decorated fn fn-name)
-                     (debug-file-name-for-function-in-frame frame)
-                     (position-within-file-of-function-in-frame frame)
-                     (sb-di:debug-fun-closure-name fn frame)
-                     (sb-di:debug-fun-kind fn)
-                     (debug-function-start-location fn))
-             (debug-trace-λ-list λ-list)
-             (loop for (name . value) in (remove-if (rcurry #'member λ-list-names)
-                                                    (debug-variable-values  
-                                                     (debug-vars-in-frame frame)
-                                                     frame)
-                                                    :key #'car)
-                   do (print-debug-var-name+value name value)))))
+                  frame-index fn-name
+                  (debug-function-decorated fn fn-name)
+                  (debug-file-name-for-function-in-frame frame)
+                  (position-within-file-of-function-in-frame frame)
+                  (sb-di:debug-fun-closure-name fn frame)
+                  (sb-di:debug-fun-kind fn)
+                  (debug-function-start-location fn))
+          (debug-trace-λ-list λ-list)
+          (loop for (name . value) in (remove-if (rcurry #'member λ-list-names)
+                                                 (debug-variable-values  
+                                                  (debug-vars-in-frame frame)
+                                                  frame)
+                                                 :key #'car)
+             do (print-debug-var-name+value name value)))))
 
 (defun report-error (condition)
   (format t "~&~|~%⁂ An error has been signaled ⁂~%Condition of type ~s~%" (class-name (class-of condition)))
@@ -463,7 +477,7 @@
 (defun start-system (system)
   (with-signals-trapped (system)
     (let ((thread (make-thread (system-thread-runner system) 
-                               :name (turtlefy (proc-system-name system)))))
+                               :name (make-thread-name (proc-system-name system)))))
       (setf (gethash system *local-systems-running*) thread))))
 
 (define-condition thread-stop-forcibly (error) ())
@@ -523,7 +537,7 @@
 
 (defun system-status (system)
   (if (system-running-p system) 
-      (system-thread-name system)
+      (clean-thread-name (system-thread-name system))
       "Not Running"))
 
 (defun report-systems-running-summary ()

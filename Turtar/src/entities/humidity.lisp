@@ -1,9 +1,9 @@
 ;;; -*- lisp -*-
-(defpackage turtar/sound
+(defpackage turtar/humidity
   (:use :cl :oliphaunt
- :turtar/entity)
-  (:export #:sound))
-(in-package :turtar/sound)
+        :turtar/entity)
+  (:export #:humidity))
+(in-package :turtar/humidity)
 
 ;;; Humidity
 ;;; 
@@ -26,7 +26,8 @@
   ((litres-water :initarg :litres-water :reader litres-water)
    (water-temperature :initarg :water-temperature :reader water-temperature)
    (droplet-size :initarg :droplet-size :reader droplet-size)
-   (condensation-particulates :initarg :condensation-particulates :reader condensation-particulates)))
+   (condensation-particulates :initarg :condensation-particulates :reader condensation-particulates)
+   (wind-vector :initarg :wind-vector :reader wind-vector)))
 
 ;;; Reference: (see  doc/reference folder  “Vapour Pressures  of ice  and supercooled  water”) Q.  J. R.  Meteorol. Soc.
 ;;; (2005), 131, pp.  1539–1565 doi: 10.1256/qj.04.94 “Review of  the vapour pressures of ice and  supercooled water for

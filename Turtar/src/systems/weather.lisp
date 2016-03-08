@@ -1,7 +1,8 @@
 ;;; -*- lisp -*-
-(defpackage turtar/talking
+(defpackage turtar/weather
   (:use :cl :oliphaunt :turtar/system))
-(in-package :turtar/physics)
+(in-package :turtar/weather)
+
 
 ;;; Talking
 ;;; 
@@ -20,15 +21,13 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defclass talking-system (proc-system)
+(defclass weather-system (proc-system)
   ())
 
-(defun talking-update (listener system)
+(defun weather-update (listener system)
   ())
 
 (defmethod turtar:hook-world-bootstrap progn (world)
-  (make-instance 'talking-system
-                 :operator #'talking-update
-                 :selector '(turtar/utterance:language-listener)))
-
-
+  (make-instance 'weather-system
+                 :operator #'weather-update
+                 :selector '(turtar/humidity:humidity)))
