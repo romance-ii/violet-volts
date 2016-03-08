@@ -40,6 +40,10 @@
 (defconstant +T₀/°C+ 0.01	"triple-point of water in °C")
 (defconstant +T_st+ 373.15	"steam point of water in Kelvin (boiling point at 1 atm)")
 
+(defconstant +atm+ 1013.25	"Normal atmosphric pressure in hPa at 0°C")
+
+(defconstant +hPa->lb/in²+ .0145038	"hPa → Pounds/inch² (PSI)")
+
 (defun °C->K (n°C) "Convert °C to Kelvin."	(+ n°C (- +T₀/°C+) +T₀+))
 (defun K->°C (nK) "Convert Kelvin to °C."	(+ nK +T₀/°C+ (- +T₀+)))
 
@@ -140,3 +144,76 @@ $\\log\\       e^*\\       =       -7.90298(T_\\mathrm{st}/T-1)\\       +\\     
 (assert (≈ (temp->saturation-vapor-pressure 273.16) 6.11657 :ε .0005))
 (assert (≈ (temp->saturation-vapor-pressure 300) 35.368 :ε .002))
 
+(defconstant +H_vap+ 2257	"Enthalpy of vaporization of water = 2257 kJ/kg")
+(defconstant +Avogadro+ (* 6.02214085774 (expt 10 23)))
+(defconstant +Boltzmann+ (* 1.3806485279 (expt 10 -23)))
+(defconstant +R+ (* +Avogadro+ +Boltzmann+)	"Gas Constant (~8.314462175 J⋅K¯¹mol¯¹)")
+
+(defconstant +Θ/h+ (+ 25 19)	"Evaporation constant (in kg/m²h)")
+(defconstant +Θ/s+ (/ +Θ/h+ (* 60 60))	"Evaporation constant (in kg/m²s)")
+
+(defun humidity-ratio (vapor-partial-pressuce temperature)
+  (* .62198   ; Questionable magic number. No attribution.
+     (/ vapor-partial-pressure 
+        (- (temp->saturation-vapor-pressure temperature)
+           vapor-partial-pressure))))
+
+(defun latent-heat-of-water-vapor (temperature water-vapor-mass-kg)
+  "in kJ/kg"
+  (+ (* 1.006                              ; kJ/kg°C — magic number — unattributed
+        (K->°C temperature))
+     (* water-vapor-mass-kg (+ (* 1.84    ; another unsourced magic number
+                                  (K->°C temperature))
+                               +H_vap+))))
+
+(defconstant +specific-heat-of-water+ 4.187	"kJ/kgK (very approx.)")
+
+(defun latent-heat-of-water-droplets (temperature water-vapor-mass-kg vapor-partial-pressure)
+  (+ (* 1.006
+        (K->°C temperature))
+     (+ (* (humidity-ratio vapor-partial-pressure temperature)
+           1.84 (K->°C temperature))
+        +H_vap+
+        (* (- (humidity-ratio vapor-partial-pressure
+                              temperature)
+              (humidity-ratio (temp->saturation-vapor-pressure temperature)
+                              temperature ))
+           (* (- 4.19
+                 +specific-heat-of-water+)
+              (K->°C temperature))))))
+
+(defun evaporation (water-body humidity)
+  (let* ((x (humidity-ratio (vapor-partial-pressure humidity)
+                            (temperature humidity)))
+         (x_s (humidity-ratio (temp->saturation-vapor-pressure (temperature humidity))
+                              (temperature humidity))))
+    
+    (let ((evaporated-kg/s (* +Θ/s+ (surface-area water-body) (- x_s x)))
+          ;; heat taken in kJ/s = kW
+
+          (heat-taken (* evaporated-kg/s +H_vap+)))
+      
+      (values evaporated-kg/s heat-taken))))
+
+#|
+Latent Heat Flow - SI-Units
+
+The latent heat flow can be expressed in SI-units (metric) as
+
+Ql = hwe ρ q Δx / 3600         (2)
+
+where
+
+Ql = latent heat flow (kW)
+
+hwe = 2465.56 - latent heat of vaporization of water (kJ/kg)
+
+ρ = 1.202* - air density at standard conditions (kg/m3)
+
+q = air flow (m3/hr)
+
+Δx = humidity ratio difference (kg water/kg dry air)
+
+Sensible Heat
+
+|#
