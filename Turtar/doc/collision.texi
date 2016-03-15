@@ -1,0 +1,231 @@
+\input texinfo   @c -*-texinfo-*-
+@documentencoding UTF-8
+@c %**start of header
+@setfilename collision.info
+@settitle Distributed Physics in Turtar
+@c %**end of header
+@copying
+The physics simulation system of the Romance game system.
+
+Copyright @copyright{} 2016 Bruce-Robert Fenn Pocock
+
+Developed by  Bruce-Robert Fenn Pocock  @& Robert Dawson and  revised by
+Bruce-Robert Fenn Pocock @& Hans Sense
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
+
+A copy of the license is also available from the Free Software
+Foundation Web site at @url{http://www.gnu.org/licenses/fdl.html}.
+
+@end quotation
+
+The document was typeset with
+@uref{http://www.texinfo.org/, GNU Texinfo}.
+
+@end copying
+
+@titlepage
+@title Distributed Physics in Turtar
+@subtitle The physics simulation system of the Romance game system
+@author Bruce-Robert Fenn Pocock <brpocock@Star-Hope.org>
+
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@c Output the table of the contents at the beginning.
+@contents
+
+@ifnottex
+@node Top
+@top Dawson-Pocock-Sense Distributed Physics
+
+@insertcopying
+@end ifnottex
+
+@c Generate the nodes for this menu with `C-c C-u C-m'.
+@menu
+@end menu
+
+@c Update all node entries with `C-c C-u C-n'.
+@c Insert new nodes with `C-c C-c n'.
+@node Overview of the problem domain
+@chapter Overview
+
+In the  case of a  massively multi-player  online video game  system, the
+physics  system must  be able  to  cope with  potentially thousands  (or
+millions)    of    moving    objects,   potentially    with    disparate
+physical properties.  The Romance game  system provides a  mechanism for
+the distributed computation of the motion and collision of these objects
+in a relatively efficient manner.
+
+In the  Romance game  system, as  used in  Turtar (and,  previously, the
+defunct Tootsville  project), is built around  a @emph{entirely mutable}
+game world environment. Every object  in the game world can potentially
+be acted upon by various forces.
+
+@section Interactions
+
+In general, there are three main interactions possible. 
+
+Direct  forces are  those  which  are produced  by  a  game action:  for
+example, a  player, AI@footnote{artificially intelligent --  used in the
+broadest  sense   to  encompass  all   ``scripted''  computer-controlled
+characters, monsters,  and the like}  character, or machine in  the game
+world can exert force upon itself or other objects in the world.
+
+Force  fields ---  typified by  gravity  --- apply  continuous force  to
+objects within their boundaries.
+
+Resultant  forces  are  the  outcome of  interactions  between  objects,
+ie, collisions.
+
+@section The Physics Pipeline
+
+The physical simulation process is  designed to operate in quantum time.
+The quantum of time --- a  ``tick'' --- is usually 1/50 second, although
+in  stress conditions  (eg,  high  server loads)  it  could be  adjusted
+as  needed, although  frequent changes  to the  time quantum  could have
+deleterious effects on perceived ``smoothness'' of game play.
+
+All objects  in the  game world  have a base  position and  rotation, at
+a known  original point in  time, accurate as  of a given  quantum tick.
+(The origination time will effectively be  ``round'' to a tick; there is
+no subdivision in this case.)
+
+When an object  undergoes any acceleration, due to  direct forces, force
+fields, or resultant forces of a  collision, they are represented in the
+form of  derivatives of  the position  and rotation@footnote{Throughtout
+the remainder of this discussion, rotation will be implied when we speak
+of ``position.'' While  rotation effects are maintained in  the same way
+as position, they  have less ``impact'' upon  collision detection, which
+makes up the  bulk of this discussion.}. The game  system supports up to
+ninth derivatives on each of the x, y, z, and rho, theta, phi values for
+each object, which are collectively  (if imprecisely) referred to as its
+``momentum'' in general.  In addition, a gross bounding  box, aligned to
+the global x, y,  z axes, and a gross bounding  sphere around the center
+of an object are kept at all times.
+
+The movement of an  object is tracked in one of  three motion states, to
+conserve computation. 
+
+An object  which is  at rest is  quiesced to a  rest state,  and ignored
+unless the forces acting upon it change.
+
+An  object which  has  undergone  several changes  in  its position  and
+momentum ``recently'' is maintained in  an ``active'' state. This is the
+usual state  in most physics systems,  in which the position  is updated
+during each  tick. An  ``active'' object's  stored position  will always
+have been updated during the previous  tick, and often will remain in an
+``active'' state for (at least) several ticks.
+
+An object whose interactions are more stable (ie, typically an object in
+free motion  without any active  collisions) will  be stored in  what we
+have nicknamed  a ``Schrödinger'' state@footnote{We are  well aware that
+this  is more  whimsical than  accurate}. In  the Schrödinger  state, an
+object is  represented by  a bounding  ``cylinder'' along  its projected
+path  of motion.  This  simplified  bounding space  is  used to  predict
+a future  time at which the  object might interact with  another object.
+The Schrödinger state deserves same special discussion, forthcoming.
+
+After  all objects  have had  their  position updated  (if active),  all
+objects  (including   those  at  rest)  are   considered  for  potential
+collisions along a series of  gross filters. The gross collision filters
+compare the  bounding spaces of objects  and build sets ---  each called
+a   ``party''  ---   of   bodies  which   @emph{may}  have   interacted.
+Several gross collision filters break down such sets.
+
+Finally, fine  collision filters consider  the actual modeled  bodies of
+objects for collision, and may make changes to the bodies based upon the
+resultant  forces. After  the fine  collision system  has completed  its
+work, any updates  are applied to the ``world,'' and  the system is idle
+until the next tick begins. It is only at this point that the results of
+any updates are visible, eg, to players.
+
+@chapter Gross Collision
+
+The  first stage  of  the  gross collision  pipeline  operates on  an
+arbitrary hashing  of the  objects in  the game  world based  upon their
+bounding rectangular prisms. In the  case of a Schrödinger state object,
+the prism is a highly approximate subset of the area in which the object
+might be  found. In  the case  of an  active object,  this is  the least
+rectangle which  contains both the bounding  box of the prior  tick, and
+the ``requested'' bounding box during the new tick. For objects at rest,
+this is simply the object's bounding  box. As always (in Romance), these
+bounding boxes are aligned to the global x, y, and z planes.
+
+All of  the game world  is subdivided  into hash ``buckets''  based upon
+subdivision along planes  parallel to he x =  0, y = 0, or z  = 0 plane.
+Looked at  another way,  the hashing consists  of subdividing  each axis
+into one or more spans@footnote{where  one span does not actually impart
+any  subdivisions in  that axis},  which  in turn  contain an  arbitrary
+subspace of the universe. These partitions are binary, so eg, a division
+at y  = 0  could be  followed in  the y <  0 subspace  by a  division at
+x = -50, and in  the y > 0 subspace, by a division at  x = 500. When any
+edge of  an object's bounding box  is subdivided by the  partition, then
+the object will be referenced @emph{in both partitions}.
+
+In the  first pass  of gross collision  detection, simple  occlusions of
+bounding boxes suffice to continue to the next stage.
+
+A second stage occurs within the  same partitioning scheme as the first.
+At this point, any Schrödinger  state objects which are potential actors
+in  a collision  are ``awakened''  and have  their ``current''  position
+brought up to date. Any objects who passed the first gross collision are
+compared using slightly more accurate (and, thus, slower) comparisons to
+one another.
+
+For each  object, a  set of other  objects to which  it appears  a gross
+collision has occurred is noted. These  parties are then passed along to
+the fine collision system, but first, they must be merged.
+
+Recall that  objects can occur  in more  than one (in  fact, potentially
+several) gross  partitions. The sets  of gross collisions in  which each
+``copy''  of the  same object  is thought  to act  are collected.  If an
+object  is  found  to  have   no  interactions,  it  may  be  considered
+for  quiescence. When  any  object  is thought  to  have  only a  single
+interaction, it is retained.
+
+In the case  of a party of collisions which  includes two other objects,
+a  further  step  is  needed.  Each   member  of  the  party's  list  of
+interactions  is brought  into consideration  and merged  with the  set.
+If  such  a  party  had,  itself, only  detected  a  single  interaction
+previously, then it is removed from the ``pairs'' set.
+
+The outcome  of this  stage are  parties of  multiple objects,  pairs of
+objects,  and quiescent  objects who  are  known to  have no  collisions
+during this tick.
+
+Finally, these sets are distributed  for fine collisions to be detected,
+and  acted upon.  The set  merges creating  parties have  determined all
+possible bodies  which may have been  involved (during this tick)  in an
+interaction, so these computations can be distributed as needed.
+
+
+
+
+@node Copying This Manual
+@appendix Copying This Manual
+
+@menu
+* GNU Free Documentation License::  License for copying this manual.
+@end menu
+
+@c Get fdl.texi from http://www.gnu.org/licenses/fdl.html
+@include fdl.texi
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
+
+@c collision.texi ends here
