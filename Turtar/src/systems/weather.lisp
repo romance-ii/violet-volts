@@ -1,11 +1,10 @@
 ;;; -*- lisp -*-
-(defpackage turtar/sound
-  (:use :cl :oliphaunt
- :turtar/entity)
-  (:export #:sound))
-(in-package :turtar/sound)
+(defpackage turtar/weather
+  (:use :cl :oliphaunt :turtar/system))
+(in-package :turtar/weather)
 
-;;; Sound
+
+;;; Talking
 ;;; 
 ;;; Part of Turtar
 ;;; 
@@ -22,6 +21,13 @@
 ;;; You should  have received a  copy of  the GNU Affero  General Public License  along with  this program. If  not, see
 ;;; <http://www.gnu.org/licenses/>.
 
-(defclass sound (component)
+(defclass weather-system (proc-system)
   ())
 
+(defun weather-update (listener system)
+  ())
+
+(defmethod turtar:hook-world-bootstrap progn (world)
+  (make-instance 'weather-system
+                 :operator #'weather-update
+                 :selector '(turtar/humidity:humidity)))

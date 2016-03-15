@@ -1,6 +1,6 @@
-;;; -*- lisp -*-
+ ;;; -*- lisp -*- 
 (defpackage turtar/scripted-movement
-  (:use :cl :oliphaunt)
+  (:use :cl :oliphaunt :turtar)
   (:export #:scripted-movement))
 (in-package :turtar/scripted-movement)
 

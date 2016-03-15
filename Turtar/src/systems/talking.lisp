@@ -1,7 +1,6 @@
 ;;; -*- lisp -*-
 (defpackage turtar/talking
-  (:use :cl :oliphaunt :turtar/system)
-  (:export #:talking))
+  (:use :cl :oliphaunt :turtar/system))
 (in-package :turtar/physics)
 
 ;;; Talking
@@ -29,11 +28,7 @@
 
 (defmethod turtar:hook-world-bootstrap progn (world)
   (make-instance 'talking-system
-                 :name (concatenate 'string
-                                    "Talking system in "
-                                    (turtar:world-name world))
                  :operator #'talking-update
-                 :selector '(turtar/utterance:language-listener)
-                 :filter-not #'turtar/thing:thing-resting-p))
+                 :selector '(turtar/utterance:language-listener)))
 
 

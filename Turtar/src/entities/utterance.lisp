@@ -51,7 +51,7 @@
       (member language (language-listener-understands listener))))
 
 (defun listener-close-enough-to-hear-p (listener utterance)
-  (< (turtar/thing:distance-between listener (utterance-speaker utterance))
+  (< (turtar/geometry:distance-between listener (utterance-speaker utterance))
      (* (utterance-volume utterance) 10))) ; magic number for propagation volume
 
 (defun listener-can-hear-medium-p (listener medium)

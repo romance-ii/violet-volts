@@ -51,9 +51,6 @@
 
 (defmethod turtar:hook-world-bootstrap progn (world)
   (make-instance 'physics-system
-                 :name (concatenate 'string
-                                    "Physics system in "
-                                    (turtar:world-name world))
                  :operator #'physics-update
                  :selector '(turtar/thing:thing)
                  :reaction #'physics-tick

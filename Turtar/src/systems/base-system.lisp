@@ -55,7 +55,14 @@
 
 (defstruct signal-box
   (condition)
-  (signaled (get-internal-real-time)))
+  (signaled (get-internal-real-time))
+  (thread (current-thread))
+  (machine (machine-instance)))
+
+(defun proc-system-reactive-components (system)
+  (format t "~& No op; TODO. (in ~a)" (proc-system-name system))
+  (sleep 10)
+  nil)
 
 (defclass proc-system ()
   ((selector :initarg :selector :reader proc-system-selector)
@@ -93,18 +100,17 @@
 (defun format-internal-time (internal-real-time)
   (sb-int:format-universal-time nil (internal->universal-time internal-real-time)))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (dolist (method '(proc-system-started 
-                    proc-system-stopped 
-                    proc-system-components/life
-                    proc-system-journal
-                    proc-system-transactions/life
-                    proc-system-components/last-transaction
-                    proc-system-last-transaction-start
-                    proc-system-last-transaction-end
-                    proc-system-current-transaction-start))
-    (eval `(defmethod ,method ((proc-system proc-system))
-             (,method (proc-system-stats proc-system))))))
+(dolist (method '(proc-system-started 
+                  proc-system-stopped 
+                  proc-system-components/life
+                  proc-system-journal
+                  proc-system-transactions/life
+                  proc-system-components/last-transaction
+                  proc-system-last-transaction-start
+                  proc-system-last-transaction-end
+                  proc-system-current-transaction-start))
+  (eval `(defmethod ,method ((proc-system proc-system))
+           (,method (proc-system-stats proc-system)))))
 
 (defun proc-system-last-transaction-duration (system)
   (if (proc-system-last-transaction-end system)
@@ -115,7 +121,7 @@
 (defmethod proc-system-signals ((system-stats system-stats))
   (hash-table-values (proc-system-signal-hash system-stats)))
 (defmethod proc-system-signals ((proc-system proc-system))
-  (mapcar #'copy-object (proc-system-signals (proc-system-stats proc-system))))
+  (proc-system-signals (proc-system-stats proc-system)))
 (defmethod proc-system-signals-count ((system-stats system-stats))
   (hash-table-count (proc-system-signal-hash system-stats)))
 (defmethod proc-system-signals-count ((proc-system proc-system))
@@ -162,9 +168,9 @@
 (with-private-local-entities-for-testing
   (let* ((counter 0)
          (null-system (make-instance 'proc-system :selector '(turtar/entity::null-component) 
-                                                  :operator (lambda (x)
-                                                              (incf counter)
-                                                              x))))
+                                     :operator (lambda (x)
+                                                 (incf counter)
+                                                 x))))
     (assert (zerop counter))
     (assert (null (proc-select-entities null-system)))
     (let ((entity (make-instance 'entity)))
@@ -182,11 +188,11 @@
          (e2 (make-instance 'entity))
          (c2 (make-instance 'turtar/entity::null-component))
          (null-system-1 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter (lambda (e)
-                                                              (member c1 (entity-components e)))))
+                                       :filter (lambda (e)
+                                                 (member c1 (entity-components e)))))
          (null-system-2 (make-instance 'proc-system :selector '(turtar/entity::null-component)
-                                                    :filter-not (lambda (e)
-                                                                  (member c1 (entity-components e))))))
+                                       :filter-not (lambda (e)
+                                                     (member c1 (entity-components e))))))
     (attach-component e1 c1)
     (attach-component e2 c2)
     (assert (equalp (list e1) (proc-select-entities null-system-1)))
@@ -235,11 +241,6 @@
          (*trace-output* (proc-system-journal ,system)))
      ,@body))
 
-(defun proc-system-reactive-components (system)
-  (format t "~& No op; TODO. (in ~a)" (proc-system-name system))
-  (sleep 10)
-  nil)
-
 (defun proc-system-react (system)
   (proc-operate system (proc-select-entities system)))
 
@@ -251,13 +252,27 @@
            (proc-system-last-transaction-end ,system) (get-internal-real-time)
            (proc-system-current-transaction-start ,system) nil)))
 
+(defun system-record-signal (system boxed-signal)
+  (setf (gethash boxed-signal (slot-value (proc-system-stats system) 'signals))
+        boxed-signal))
+
+(defun system-reset-stats (system)
+  (setf (slot-value system 'stats) (make-instance 'system-stats)))
+
+(defun log-signal-for-operator (condition system)
+  (report-error condition)
+  (system-record-signal system (make-signal-box :condition condition)))
+
+(defun trap-signal (condition system)
+  (if swank:*global-debugger*
+      (signal condition)
+      (log-signal-for-operator condition system)))
+
 (defmacro with-signals-trapped ((system) &body body)
   `(handler-case
        (progn ,@body)
      (condition (condition)
-       (report-error condition)
-       (push (make-instance 'signal-box :condition condition) 
-             (proc-system-signals (proc-system-stats ,system))))))
+       (trap-signal condition ,system))))
 
 (defun system-thread-runner (system)
   (lambda ()
@@ -265,36 +280,52 @@
       (until (proc-system-stop-p system)
         (with-signals-trapped (system)
           (with-transaction-timing (system)
+            (until (proc-system-reaction system) 
+              (sleep 1/100))
             (proc-system-react system)))))))
 
-(defun turtlefy (word)
-  (concatenate 'string "〘" word "〙"))
+(defun node-name-for-thread-name ()
+  (format nil " @(~a>~a>~a)"
+          (turtar:world-name turtar:*world*) 
+          (turtar:cluster-name turtar:*cluster*) 
+          (turtar:node-name turtar:*node*)))
+
+(defun make-thread-name (system-name)
+  (format nil "〘~a〙 ~a" system-name 
+          (node-name-for-thread-name)))
+
+(defun clean-thread-name (thread-name)
+  (let ((node-name (node-name-for-thread-name)))
+    (if (and (< (length node-name) (length thread-name))
+             (string= node-name (subseq thread-name (- (length thread-name) (length node-name)))))
+        (subseq thread-name 0 (- (length thread-name) (length node-name)))
+        thread-name)))
 
 
 
 (defun debug-traced-var-if-valid (v f)
   (ignore-errors
-   (when (eq :valid
-             (sb-di:debug-var-validity v (sb-di:frame-code-location f)))
-     (cons (sb-di:debug-var-symbol v)
-           (sb-di:debug-var-value v f)))))
+    (when (eq :valid
+              (sb-di:debug-var-validity v (sb-di:frame-code-location f)))
+      (cons (sb-di:debug-var-symbol v)
+            (sb-di:debug-var-value v f)))))
 
 (defun debug-vars-in-frame (f)
   (ignore-errors (sb-di::debug-fun-debug-vars (sb-di:frame-debug-fun f))))
 
 (defun file-source-of-function-in-debug-frame (f)
   (ignore-errors
-   (sb-di:debug-source-namestring
-    (sb-di:code-location-debug-source
-     (sb-di:frame-code-location f)))))
+    (sb-di:debug-source-namestring
+     (sb-di:code-location-debug-source
+      (sb-di:frame-code-location f)))))
 
 (defun position-within-file-of-function-in-frame (f)
   (ignore-errors ;;; XXX does not work
-   (let ((cloc (sb-di:frame-code-location f)))
-     (unless (sb-di:code-location-unknown-p cloc)
-       (format nil "tlf~Dfn~D"
-               (sb-di:code-location-toplevel-form-offset cloc)
-               (sb-di:code-location-form-number cloc))))))
+    (let ((cloc (sb-di:frame-code-location f)))
+      (unless (sb-di:code-location-unknown-p cloc)
+        (format nil "tlf~Dfn~D"
+                (sb-di:code-location-toplevel-form-offset cloc)
+                (sb-di:code-location-form-number cloc))))))
 
 (defun debug-function-name-in-frame (frame)
   (ignore-errors (sb-di:debug-fun-name (sb-di:frame-debug-fun frame))))
@@ -353,12 +384,12 @@
   (when λ-list
     (format t "~%Λ List:~8t(")
     (loop
-      for firstp = t then nil
-      for (name . value) in λ-list
-      do (unless firstp (terpri))
-      do (if-let ((real-value (debug-local-var-real-value value)))
-           (format t "~11t(~a ~a)" name value)
-           (format t "~11t~a" name)))
+       for firstp = t then nil
+       for (name . value) in λ-list
+       do (unless firstp (terpri))
+       do (if-let ((real-value (debug-local-var-real-value value)))
+            (format t "~11t(~a ~a)" name value)
+            (format t "~11t~a" name)))
     (format t ")")))
 
 (defun debug-function-decorate-function-name (name)
@@ -398,38 +429,38 @@
 (defun print-stack-trace ()
   (loop for frame = (or sb-debug:*stack-top-hint*
                         (sb-di:top-frame))
-          then (sb-di:frame-down frame)
-        for frame-index from 0
-        while frame
-        do (let* ((fn (sb-di:frame-debug-fun frame))
-                  (fn-name (debug-function-name-in-frame frame))
-                  (λ-list (debug-variable-values (sb-di:debug-fun-lambda-list fn) frame))
-                  (λ-list-names (mapcar #'car λ-list) )) 
-             (format t "~3%~:(~[Top Frame~:;~:*~:r Calling Frame~]: ~a~)~
+     then (sb-di:frame-down frame)
+     for frame-index from 0
+     while frame
+     do (let* ((fn (sb-di:frame-debug-fun frame))
+               (fn-name (debug-function-name-in-frame frame))
+               (λ-list (debug-variable-values (sb-di:debug-fun-lambda-list fn) frame))
+               (λ-list-names (mapcar #'car λ-list) )) 
+          (format t "~3%~:(~[Top Frame~:;~:*~:r Calling Frame~]: ~a~)~
 ~@[~%~a~]
 ~6t~a~@[:~a~]~
 ~@[~% Closure name: ~a~]~
 ~@[~% Kind: ~a~]~
 ~@[~% Starting Location: ~a~]~%" 
-                     frame-index fn-name
-                     (debug-function-decorated fn fn-name)
-                     (debug-file-name-for-function-in-frame frame)
-                     (position-within-file-of-function-in-frame frame)
-                     (sb-di:debug-fun-closure-name fn frame)
-                     (sb-di:debug-fun-kind fn)
-                     (debug-function-start-location fn))
-             (debug-trace-λ-list λ-list)
-             (loop for (name . value) in (remove-if (rcurry #'member λ-list-names)
-                                                    (debug-variable-values  
-                                                     (debug-vars-in-frame frame)
-                                                     frame)
-                                                    :key #'car)
-                   do (print-debug-var-name+value name value)))))
+                  frame-index fn-name
+                  (debug-function-decorated fn fn-name)
+                  (debug-file-name-for-function-in-frame frame)
+                  (position-within-file-of-function-in-frame frame)
+                  (sb-di:debug-fun-closure-name fn frame)
+                  (sb-di:debug-fun-kind fn)
+                  (debug-function-start-location fn))
+          (debug-trace-λ-list λ-list)
+          (loop for (name . value) in (remove-if (rcurry #'member λ-list-names)
+                                                 (debug-variable-values  
+                                                  (debug-vars-in-frame frame)
+                                                  frame)
+                                                 :key #'car)
+             do (print-debug-var-name+value name value)))))
 
 (defun report-error (condition)
   (format t "~&~|~%⁂ An error has been signaled ⁂~%Condition of type ~s~%" (class-name (class-of condition)))
   (terpri)
-  (describe-object condition t)
+  (ignore-errors (describe-object condition t))
   (terpri)
   (print-stack-trace))
 
@@ -444,12 +475,10 @@
 
 
 (defun start-system (system)
-  (handler-case
-      (let ((thread (make-thread (system-thread-runner system) :name (turtlefy (proc-system-name system)))))
-        (setf (gethash system *local-systems-running*) thread))
-    (error (c)
-      (format t "~& Unable to start system ~a: ~a" (proc-system-name system) c) 
-      (report-error c))))
+  (with-signals-trapped (system)
+    (let ((thread (make-thread (system-thread-runner system) 
+                               :name (make-thread-name (proc-system-name system)))))
+      (setf (gethash system *local-systems-running*) thread))))
 
 (define-condition thread-stop-forcibly (error) ())
 
@@ -508,27 +537,17 @@
 
 (defun system-status (system)
   (if (system-running-p system) 
-      (system-thread-name system)
+      (clean-thread-name (system-thread-name system))
       "Not Running"))
 
-(defun report-systems ()
-  (format t "~&~|
-~:(~a~) Systems running locally on node ~a
-\(Cluster: ~a; World: ~a)
-
+(defun report-systems-running-summary ()
+  (format t 
+          "~%
+~:[No systems are currently registered.~;~:*~
 System Name~40tClass
-   Thread~40tLast Dur.~50tComp's.~60tSignals
+  Thread~42tTime~50tComp's.~60tSignals
 ~{~%~a~40t~a
-   ~a~40t~:[—~;~2fs~]~50t~:d~60t~:[—~:;~:d~]~}
-
-Overseer thread~:[ is not running~*~; is running; thread ~a~].
-
-Node ~a on host ~a has ~[no other threads~:;~:*~r other thread~:p~] running,
-for a grand total of ~[no~:;~:*~r thread~:p~] in this ~a ~:(~a~) ~a Lisp Image." 
-          (length (remove-if-not #'system-running-p *local-systems*))
-          (turtar:node-name turtar:*node*)
-          (turtar:cluster-name turtar:*cluster*)
-          (turtar:world-name turtar:*world*)
+  ~:[(not running)~;~:*~a~]~42t~:[—~;~:*~2fs~]~50t~:d~60t~:[—~:;~:*~:d~]~}~]"
           (mapcan (lambda (system) 
                     (list (proc-system-name system)
                           (class-name (class-of system))
@@ -536,7 +555,22 @@ for a grand total of ~[no~:;~:*~r thread~:p~] in this ~a ~:(~a~) ~a Lisp Image."
                           (proc-system-last-transaction-duration system)
                           (proc-system-components/life system)
                           (length (proc-system-signals system)))) 
-                  *local-systems*)
+                  *local-systems*)))
+
+(defun report-systems/header ()
+  (format t "~&~|
+~:(~a~) Systems running locally on node ~a
+\(Cluster: ~a; World: ~a)"
+          (length (remove-if-not #'system-running-p *local-systems*))
+          (turtar:node-name turtar:*node*)
+          (turtar:cluster-name turtar:*cluster*)
+          (turtar:world-name turtar:*world*)))
+
+(defun report-systems/footer ()
+  (format t "~3%Overseer thread~:[ is not running~*~; is running; thread ~a~].
+
+Node ~a on host ~a has ~[no other threads~:;~:*~r other thread~:p~] running,
+for a grand total of ~[no~:;~:*~r thread~:p~] in this ~a ~:(~a~) ~a Lisp Image."
           (overseer-alive-p)
           (when *overseer* (thread-name *overseer*))
           (turtar:node-name turtar:*node*)
@@ -548,3 +582,10 @@ for a grand total of ~[no~:;~:*~r thread~:p~] in this ~a ~:(~a~) ~a Lisp Image."
           (lisp-implementation-type)
           (uiop/os:operating-system)
           (machine-type)))
+
+(defun report-systems ()
+  (assert (boundp 'turtar:*node*) (turtar:*node*) 
+          "Turtar node not started (evaluate (TURTAR:TURTAR) to start)")
+  (report-systems/header)
+  (report-systems-running-summary)
+  (report-systems/footer)  )

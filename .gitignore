@@ -21,3 +21,4 @@ dist/*
 build/
 DEADJOE
 *.fasl
+TAGS
