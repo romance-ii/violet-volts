@@ -1,7 +1,11 @@
 ;;; -*- mode: lisp -*-
 (defpackage turtar/calendar-printer
   (:use :cl :oliphaunt :turtar/day-night)
-  (:export))
+  (:export #:clock
+           #:print-chœrogryllum-calendar
+           #:print-chœrogryllum-calendar-for
+           #:print-chœrogryllum-week-planner
+           #:print-chœrogryllum-week-planner-for))
 
 (in-package :turtar/calendar-printer)
 
@@ -23,28 +27,34 @@
 (defun print-chœrogryllum-week-planner-for (year month dd)
   (format t "~2%~42:@<Week of ~d ~a, ~4d~>" dd (elt +months+ month) year)
   
-  (loop for dow from 0 upto 8
-        for d = (1+ (mod (1- (+ dd dow)) 30))
-        for m = (mod (+ month (floor (1- (+ dd dow)) 30)) 30)
-        do (format t "~2%  ~13<~a~>, ~d ~a, ~d" (elt +days-of-week+ dow)
-                   d (elt +months+ m) year)
-           
-        do (loop for (label offset) in +named-times+
-                 for then = (round (+ (find-day-start year m d)
-                                      (/ (* 60 60 (* (round offset) 1/18 24))
-                                         +chœrogryllum-earth-ratio+)))
-                 do (format t "~%~12t~15<~a ~>~{~2,'0d:~2,'0d~}  —  ~a"
-                            label
-                            (multiple-value-bind (hour sub-hour)
-                                (floor offset)
-                              (list hour (* sub-hour 60))) 
-                            (local-time:format-timestring
-                             nil (local-time:universal-to-timestamp then)
-                             :format '((:hour 2) #\: (:min 2) #\comma #\space
-                                       :short-weekday #\comma #\space
-                                       :day #\space :long-month #\comma #\space :year)))))
+  (assert (= 0 (date->day-of-week year month dd)) (year month dd)
+          "The weekly planner must start on a Lighteningsday;
+~d-~2,'0d-~2,'0d is a ~a"
+          year month dd (elt +days-of-week+ (mod (date->julian year month dd) 9)))
   
-  (format t "~2%The week of ~d ~a, ~d, on Chœrogryllum is related to the Earth dates ranging from "
+  (loop for dow from 0 upto 8
+     for d = (1+ (mod (1- (+ dd dow)) 30))
+     for m = (mod (+ month (floor (1- (+ dd dow)) 30)) 30)
+     do (format t "~2%  ~13<~a~>, ~d ~a, ~d" (elt +days-of-week+ dow)
+                d (elt +months+ m) year)
+       
+     do (loop for (label offset) in +named-times+
+           for then = (round (+ (find-day-start year m d)
+                                (/ (* 60 60 (* (round offset) 1/18 24))
+                                   +chœrogryllum-earth-ratio+)))
+           do (format t "~%~12t~15<~a ~>~{~2,'0d:~2,'0d~}  —  ~a"
+                      label
+                      (multiple-value-bind (hour sub-hour)
+                          (floor offset)
+                        (list hour (* sub-hour 60))) 
+                      (local-time:format-timestring
+                       nil (local-time:universal-to-timestamp then)
+                       :format '((:hour 2) #\: (:min 2) #\comma #\space
+                                 :short-weekday #\comma #\space
+                                 :day #\space :long-month #\comma #\space :year)))))
+  
+  (format t "~2%The week of ~d ~a, ~d, on Chœrogryllum is related to
+the Earth dates ranging from "
           dd (elt +months+ month) year)
   (let ((start (local-time:universal-to-timestamp (find-day-start year month dd)))
         (end (local-time:universal-to-timestamp (find-day-start year month (+ 9 dd)))))
@@ -71,22 +81,24 @@
                    start-week-day start-date start-month start-year
                    end-week-day end-date  end-month end-year))))))
 
-(defun print-chœrogryllum-week-planner () 
+(defun print-chœrogryllum-week-planner (&optional (week-delta 0))
   (multiple-value-bind (seconds minutes hours date month year week-day day-of-year)
       (decode-chœrogryllum-time)
     (declare (ignore seconds minutes hours date month))
-    (let ((day-starting-week (- day-of-year week-day)))
+    (let ((day-starting-week (- day-of-year (+ week-day (* 9 week-delta)))))
       (print-chœrogryllum-week-planner-for year 
                                            (1+ (floor day-starting-week 30)) 
                                            (1+ (mod day-starting-week 30))))))
 
 (defun print-one-week-calendar (&optional (start-time (get-universal-time)))
   (loop for i from 0 upto (* 24 7)
-        do (multiple-value-bind (seconds minutes hours date month year week-day)
-               (decode-chœrogryllum-time (+ start-time (* 60 60 i))) 
-             (sb-int:format-universal-time t (+ start-time (* 60 60 i)))
-             (format t " ~40t ")
-             (format-chœrogryllum-time seconds minutes hours date month year week-day))))
+     do (multiple-value-bind (seconds minutes hours date month year week-day)
+            (decode-chœrogryllum-time (+ start-time (* 60 60 i))) 
+          (sb-int:format-universal-time t (+ start-time (* 60 60 i)))
+          (format t " ~40t ")
+          (format-chœrogryllum-date&time t
+                                         seconds minutes hours
+                                         date month year week-day))))
 
 (defun print-calendar-lead-in (day-of-week-of-1st-of-month &key (extra-days-p t))
   (unless (zerop day-of-week-of-1st-of-month)
@@ -123,43 +135,108 @@
   (format t "~2%~{~a ~}" (subseq +dow+ 0 9)))
 
 (defun print-chœrogryllum-monthly-calendar (year month &key ((:highlight-day dd))
-                                                            (yearp t) (extra-days-p t))
+                                                         (yearp t) (extra-days-p t))
   (print-calendar-month-header month year :yearp yearp)
   (print-days-of-week-header)
-  (multiple-value-bind (_seconds _minutes _hours
-                        _date _month _year day-of-week-of-1st-of-month)
-      (decode-chœrogryllum-time (find-day-start year month 1))
-    (declare (ignore _seconds _minutes _hours _date _month _year))
+  (let ((day-of-week-of-1st-of-month (date->day-of-week year month 1)))
     (terpri) 
     (print-calendar-lead-in day-of-week-of-1st-of-month :extra-days-p extra-days-p)
     (print-calendar-actual-days day-of-week-of-1st-of-month dd)
     (print-calendar-trailer day-of-week-of-1st-of-month :extra-days-p extra-days-p)) 
   (finish-output))
 
-
-
-(defun print-chœrogryllum-annual-calendar (year)
+(defun print-chœrogryllum-annual-calendar (&optional year)
   (multiple-value-bind (seconds minutes h today this-month this-year)
       (decode-chœrogryllum-time)
     (declare (ignore seconds minutes h))
-    (loop for month from 1 upto (months-in-year year) by 2
-          for left = (with-output-to-string (*standard-output*)
-                       (print-chœrogryllum-monthly-calendar year month
-                                                            :highlight-day (if (and (= year this-year)
-                                                                                    (= month this-month))
-                                                                               today)
-                                                            :yearp nil :extra-days-p nil))
-          for right = (with-output-to-string (*standard-output*)
-                        (print-chœrogryllum-monthly-calendar year (1+ month)
+    (unless year
+      (setf year this-year))
+    (format t "~80<~;Chœrogryllum Calendar, Year ~d~;~>" year)
+    (loop for month from 1 upto 11 by 2
+       for left = (with-output-to-string (*standard-output*)
+                    (print-chœrogryllum-monthly-calendar year month
+                                                         :highlight-day (if (and (= year this-year)
+                                                                                 (= month this-month))
+                                                                            today)
+                                                         :yearp nil :extra-days-p nil))
+       for right = (with-output-to-string (*standard-output*)
+                     (print-chœrogryllum-monthly-calendar year (1+ month)
+                                                          :yearp nil :extra-days-p nil
+                                                          :highlight-day (if (and (= year this-year)
+                                                                                  (= (1+ month) this-month))
+                                                                             today)))
+       do (loop for left-column in (split-sequence #\newline left)
+             for right-column in (split-sequence #\newline right)
+             do (format t "~&~40<~a~;~>   ~a" left-column right-column)))
+    (when (leap-year-p year)
+      (let ((tartarus (with-output-to-string (*standard-output*)
+                        (print-chœrogryllum-monthly-calendar year 13
                                                              :yearp nil :extra-days-p nil
                                                              :highlight-day (if (and (= year this-year)
-                                                                                     (= month this-month))
-                                                                                today)))
-          do (loop for left-column in (split-sequence #\newline left)
-                   for right-column in (split-sequence #\newline right)
-                   do (format t "~&~40<~a~;~>   ~a" left-column right-column)))))
+                                                                                     (= 13 this-month))
+                                                                                today)))))
+        (dolist (line (split-sequence #\newline tartarus))
+          (format t "~&~21t~a" line))))))
 
+(defun print-seasonal-almanack (&key (year (chœrogryllum-year))
+                                  (verbose t))
+  (format t "~&Almanack of Seasons for the year ~d~%" year)
+  
+  (loop for (label value)
+     in (list (list "Vernal Equinox" (day-of-vernal-equinox year))
+              (list "Summer Solstice" (day-of-summer-solstice year))
+              (list "Autumnal Equinox" (day-of-autumnal-equinox year))
+              (list "Winter Solstice" (day-of-winter-solstice year)))
+     do (multiple-value-bind (year month date day)
+            (julian->date year value)
+          (format t "~%~20<~a:~> ~a"
+                  label
+                  (format-chœrogryllum-date nil year month date day))
+          (when verbose
+            (terpri)
+            (print-chœrogryllum-calendar-for year month date)
+            (terpri)))))
 
+(defun print-tourist-guide ()
+  (format t "~&~|~2%This report was generated at:~%~5t")
+  (format-current-chœrogryllum-time)
+  (format t "~&(On Earth: ~a)" 
+          (format-timestring nil (universal-to-timestamp (get-universal-time))
+                             :format '(:long-weekday #\Comma #\Space
+                                       :day #\Space :long-month #\Comma
+                                       #\Space :year)))
+  (format t "~4% This month, at a glance:")
+  (print-chœrogryllum-calendar)
+  (format t "~4%
+
+Planning to visit from Earth?  Here's a time comparison. 
+
+Remember, Chœrogryllum's days last  18 hours*, but our nine-day
+week is about the same length as your seven-day week.
+
+Typical meal and event times are listed for your convenience.
+
+*** SORRY ***
+
+Due to problems with the observatory, ephemera such as sunrise 
+and eclipses are NOT appearing on this planner currently, nor are 
+tides, market day events, holidays, or seasons.
+
+Market Day is Blanksday in all major cities.
+
+")
+  (print-chœrogryllum-week-planner)
+  (print-chœrogryllum-week-planner -1)
+  
+  (format t "~2%
+*(our hours, minutes, and seconds are slightly longer than yours, too, 
+but you probably won't notice the difference.)
+
+")
+  (print-seasonal-almanack :verbose nil)
+  (terpri)
+  (terpri)
+  (print-chœrogryllum-annual-calendar))
 
 (defun print-chœrogryllum-calendar-for (year &optional month dd)
   (if month
@@ -175,4 +252,5 @@
 (defun clock ()
   (loop
      (format-current-chœrogryllum-time)
-     (sleep 5)))
+     (terpri)
+     (sleep 5))) 
