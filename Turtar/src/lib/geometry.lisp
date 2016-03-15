@@ -1,29 +1,13 @@
 ;;; -*- lisp -*-
 (defpackage turtar/geometry
   (:use :cl :oliphaunt)
-  (:export #:vec3 
-           #:vec3+
-           #:vec3-
-           #:vec3=
-           #:vec3-zerop
-           #:vec3-vector
-           #:rot3
-           #:rot3+
-           #:rot3-
-           #:rot3=
-           #:rot3-zerop
-           #:rot3-matrix
-           #:rot3-quaternion
-           #:rot3°
-           #:rot3-degrees
-           #:rad-deg
-           #:deg-rad
-           #:distance-between
-           #:body
-           #:body-intersects-p
-           #:body-equal
-           #:body-bounding-box
-           #:body-bounding-sphere))
+  (:export
+   #:vec3 #:vec3* #:vec3+ #:vec3- #:vec3= #:vec3-zerop #:vec3-vector
+   #:rot3 #:rot3+ #:rot3- #:rot3* #:rot3= #:rot3-zerop #:rot3-matrix #:rot3-quaternion #:rot3° #:rot3-degrees
+   #:rad-deg #:deg-rad
+   #:distance-between
+   #:body #:body-intersects-p #:body-equal #:body-bounding-box #:body-bounding-sphere
+   #:spherical-body))
 (in-package :turtar/geometry)
 
 ;;; Geometry

@@ -186,34 +186,14 @@ $\\log\\       e^*\\       =       -7.90298(T_\\mathrm{st}/T-1)\\       +\\     
   (let* ((x (humidity-ratio (vapor-partial-pressure humidity)
                             (temperature humidity)))
          (x_s (humidity-ratio (temp->saturation-vapor-pressure (temperature humidity))
-                              (temperature humidity))))
+                              (temperature humidity)))
+         (ρ 1.202 #| air density kg/m³ |#)
+         (q (wind-velocity humidity)))
     
     (let ((evaporated-kg/s (* +Θ/s+ (surface-area water-body) (- x_s x)))
-          ;; heat taken in kJ/s = kW
-
-          (heat-taken (* evaporated-kg/s +H_vap+)))
+          (heat-taken-kW (* evaporated-kg/s +H_vap+))
+          (latent-heat-flow-kW (* +H_vap+ ρ q (/ x x_s))))
       
-      (values evaporated-kg/s heat-taken))))
-
-#|
-Latent Heat Flow - SI-Units
-
-The latent heat flow can be expressed in SI-units (metric) as
-
-Ql = hwe ρ q Δx / 3600         (2)
-
-where
-
-Ql = latent heat flow (kW)
-
-hwe = 2465.56 - latent heat of vaporization of water (kJ/kg)
-
-ρ = 1.202* - air density at standard conditions (kg/m3)
-
-q = air flow (m3/hr)
-
-Δx = humidity ratio difference (kg water/kg dry air)
-
-Sensible Heat
-
-|#
+      (values evaporated-kg/s (+ heat-taken-kw latent-heat-flow-kw)))))
+  
+  

@@ -11,6 +11,7 @@
   :depends-on (:alexandria
                :closer-mop
                :uuid
+               :stdutils
                
                :oliphaunt)
   
@@ -18,8 +19,11 @@
   
   :components
   ((:file "turtar")
-   (:module "entities"
+   (:module "lib"
     :depends-on ("turtar")
+    :components ((:file "geometry")))
+   (:module "entities"
+    :depends-on ("turtar" "lib")
     :components ((:file "core-entity")
                  (:file "creature" :depends-on ("core-entity" 
                                                 "thing"))
@@ -53,12 +57,16 @@
    (:module "systems"
     :depends-on ("turtar" "entities")
     :components ((:file "physics" :depends-on ("base-system"))
+                 (:file "day-night" :depends-on ("base-system"))
                  (:file "player-movement" :depends-on ("base-system"))
                  (:file "player-sensor" :depends-on ("base-system"))
                  (:file "scripted-movement" :depends-on ("base-system"))
                  (:file "scripted-sensor" :depends-on ("base-system"))
                  (:file "talking" :depends-on ("base-system"))
                  (:file "weather" :depends-on ("base-system"))
-                 (:file "base-system")))))
+                 (:file "base-system")))
+   (:module "tools"
+    :depends-on ("entities" "interfaces" "systems")
+    :components ((:file "calendar-printer")))))
 
 

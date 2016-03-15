@@ -1,13 +1,11 @@
-;;; -*- lisp -*-
+ ;;; -*- lisp -*- 
 (defpackage turtar/scripted-movement
-  (:use :cl :oliphaunt)
+  (:use :cl :oliphaunt :turtar)
   (:export #:scripted-movement))
 (in-package :turtar/scripted-movement)
 
 ;;; scripted-movement
-;;;
 ;;; Part of Turtar
-;;;
 ;;; Copyright © 2016, Bruce-Robert Fenn Pocock
 ;;;
 ;;; This program is free software: you can redistribute it and/or modify

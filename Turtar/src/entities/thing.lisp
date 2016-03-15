@@ -38,16 +38,16 @@
    (lock :type vec3 :initarg :lock :initform (vec3 0 0 0) :reader thing-lock)
    (drop :type vec3 :initarg :drop :initform (vec3 0 0 0) :reader thing-drop)
    ;;; — Rotation and its derivatives
-   (rotation :type rot2 :initarg :rotation :initform (rot2 0 0) :reader thing-rotation)
-   (angular-velocity :type rot2 :initarg :angular-velocity :initform (rot2 0 0) :reader thing-angular-velocity)
-   (angular-acceleration :type rot2 :initarg :angular-acceleration :initform (rot2 0 0)
+   (rotation :type rot3 :initarg :rotation :initform (rot3 0 0 0) :reader thing-rotation)
+   (angular-velocity :type rot3 :initarg :angular-velocity :initform (rot3 0 0 0) :reader thing-angular-velocity)
+   (angular-acceleration :type rot3 :initarg :angular-acceleration :initform (rot3 0 0 0)
                          :reader thing-angular-acceleration)
-   (angular-jerk :type rot2 :initarg :angular-jerk :initform (rot2 0 0) :reader thing-angular-jerk)
-   (angular-snap :type rot2 :initarg :angular-snap :initform (rot2 0 0) :reader thing-angular-snap)
-   (angular-crackle :type rot2 :initarg :angular-crackle :initform (rot2 0 0) :reader thing-angular-crackle)
-   (angular-pop :type rot2 :initarg :angular-pop :initform (rot2 0 0) :reader thing-angular-pop)
-   (angular-lock :type rot2 :initarg :angular-lock :initform (rot2 0 0) :reader thing-angular-lock)
-   (angular-drop :type rot2 :initarg :angular-drop :initform (rot2 0 0) :reader thing-angular-drop)
+   (angular-jerk :type rot3 :initarg :angular-jerk :initform (rot3 0 0 0) :reader thing-angular-jerk)
+   (angular-snap :type rot3 :initarg :angular-snap :initform (rot3 0 0 0) :reader thing-angular-snap)
+   (angular-crackle :type rot3 :initarg :angular-crackle :initform (rot3 0 0 0) :reader thing-angular-crackle)
+   (angular-pop :type rot3 :initarg :angular-pop :initform (rot3 0 0 0) :reader thing-angular-pop)
+   (angular-lock :type rot3 :initarg :angular-lock :initform (rot3 0 0 0) :reader thing-angular-lock)
+   (angular-drop :type rot3 :initarg :angular-drop :initform (rot3 0 0 0) :reader thing-angular-drop)
    ;;; — Simple self-update of motion without interaction
    (position+rotation-updated :type real :initform (get-internal-real-time) 
                               :reader thing-position+rotation-updated)
@@ -97,7 +97,7 @@
        (every #'identity (mapcar #'vec3= 
                                  (coerce (thing-position-and-derivatives a) 'list)
                                  (coerce (thing-position-and-derivatives b) 'list)))
-       (every #'identity (mapcar #'rot2= 
+       (every #'identity (mapcar #'rot3= 
                                  (coerce (thing-rotation-and-derivatives a) 'list)
                                  (coerce (thing-rotation-and-derivatives b) 'list)))
        (= (thing-position+rotation-updated a) (thing-position+rotation-updated b))
@@ -111,7 +111,7 @@
 
 (defmethod thing-resting-p (thing)
   (and (every #'vec3-zerop (subseq (thing-position-and-derivatives thing) 1))
-       (every #'rot2-zerop (subseq (thing-rotation-and-derivatives thing) 1))))
+       (every #'rot3-zerop (subseq (thing-rotation-and-derivatives thing) 1))))
 
 
 
@@ -123,8 +123,8 @@
                 (vec3+ (aref position-derivatives derivative) 
                        (vec3* Δt (aref position-derivatives (1+ derivative)))))
        do (setf (aref rotation-derivatives derivative)
-                (rot2+ (aref rotation-derivatives derivative) 
-                       (rot2* Δt (aref rotation-derivatives (1+ derivative))))))
+                (rot3+ (aref rotation-derivatives derivative) 
+                       (rot3* Δt (aref rotation-derivatives (1+ derivative))))))
     (values position-derivatives rotation-derivatives)))
 
 (defun mutate-position+rotation-derivatives (thing position-derivatives rotation-derivatives)
