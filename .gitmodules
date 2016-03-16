@@ -11,9 +11,6 @@
 [submodule "glitch-avatars"]
 	path = art/game/glitch/avatars
 	url = git@github.com:romance-ii/glitch-avatars.git
-[submodule "parenthetical"]
-	path = Parenthetical
-	url = git@github.com:romance-ii/parenthetical.git
 [submodule "glitch-items"]
 	path = art/game/glitch/items
 	url = git@github.com:romance-ii/glitch-items.git
