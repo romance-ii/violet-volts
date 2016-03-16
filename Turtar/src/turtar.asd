@@ -36,6 +36,8 @@
                  (:file "place" :depends-on ("core-entity"))
                  (:file "sound" :depends-on ("core-entity"))
                  (:file "thing" :depends-on ("core-entity"))
+                 (:file "schrödinger" :depends-on ("core-entity"
+                                                   "thing"))
                  (:file "utterance" :depends-on ("core-entity"))
                  (:file "humidity" :depends-on ("core-entity"))))
    (:module "interfaces"
@@ -57,6 +59,8 @@
    (:module "systems"
     :depends-on ("turtar" "entities")
     :components ((:file "physics" :depends-on ("base-system"))
+                 (:file "gross-collision" :depends-on ("base-system"))
+                 (:file "collision" :depends-on ("base-system"))
                  (:file "day-night" :depends-on ("base-system"))
                  (:file "player-movement" :depends-on ("base-system"))
                  (:file "player-sensor" :depends-on ("base-system"))
