@@ -208,7 +208,7 @@ and  acted upon.  The set  merges creating  parties have  determined all
 possible bodies  which may have been  involved (during this tick)  in an
 interaction, so these computations can be distributed as needed.
 
-
+@chapter Distribution 
 
 
 @node Copying This Manual
