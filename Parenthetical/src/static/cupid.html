@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cupid's Arrow</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./donder.css" type="text/css">
+
+    <script src="https://fb.me/react-0.14.7.js"></script>
+    <script src="https://fb.me/react-dom-0.14.7.js"></script>
+    <!-- 
+     - <script src="https://fb.me/react-0.14.7.min.js"></script>
+     - <script src="https://fb.me/react-dom-0.14.7.min.js"></script>
+      -->
+    <script src="/client/parenthetical.js" language="javascript"></script>
+
+  </head>
+  <body>
+    <h1>Cupid's Arrow</h1>
+
+    <nav id="control-panel">
+      <button onclick="volume()">Volume</button>
+      <button onclick="paues()">Pause</button>
+    </nav>
+
+    <nav id="volume">
+    </nav>
+    
+    <section id="log-in">
+      <h2> Log In </h2>
+      <div class="hint">
+        <ul class="side-by-side">
+          <li> <big>New User?</big> Enter your e-mail address, and pick a character name and password to sign up. </li>
+          <li> <big>Returning User?</big> Enter your e-mail address <em>or</em> character name, and password. </li>
+        </ul>
+      </div>
+
+      <form name="log-in" id="log-in-form" onsubmit="return false;">
+        <div>
+          <label>
+            Your e-mail address:
+            <input type="email" id="log-in-e-mail" name="e-mail"
+                   autocomplete="email"
+                   value="" placeholder="your.name@example.com">
+          </label>
+        </div>
+        <div>
+          <label>
+            Character name:
+            <input type="text" id="log-in-char-name" name="char-name"
+                   autocomplete="username"
+                   value="" placeholder="Cool-Turtle"
+                   max-length="32">
+          </label>
+        </div>
+        <div>
+          <label>
+            Password:
+            <input type="password" id="log-in-password" name="password"
+                   autocomplete="current-password"
+                   value="" on>
+          </label>
+        </div>
+        <button id="play-now" onclick="playNow()">
+            Play Now
+          </button>
+          <hr>
+          <a id="log-in-help" onclick="logInHelp()" href="#">
+            Need help logging in?
+          </a>
+      </form>
+      
+      <div class="hint">
+        <big>Using a gamepad?</big> Press <samp>Start</samp> instead of clicking <samp>Play Now</samp> to dive right in.
+      </div>
+    </section>
+    
+    <section id="game">
+    </section>
+
+    <section id="footer">
+      Copyright © 2016, Bruce-Robert Fenn Pocock. This program is
+      <a href="license" target="license">free software</a>.
+      Romance Game System, Turtar Edition 2.0 α
+    </section>
+
+  </body>
+</html>

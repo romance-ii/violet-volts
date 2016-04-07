@@ -1,0 +1,60 @@
+;;; -*- lisp -*- Parenscript
+
+(defvar *game-state* :connecting)
+
+(defun start-game ()
+  (unless (= *game-state* :play-now) 
+    (return-from start-game))
+  (setf (@ ((@ document get-element-by-id) "game") inner-h-t-m-l)
+        "<div class='hint'>Let's get started…</div>")
+  (setf *game-state* :connecting)
+  (set-up-react))
+
+(defun use-primary ())
+(defun use-alternate ())
+
+(defun game-component (props)
+  ((@ *react create-class)
+   (create render (lambda ()
+                    (lambda ()
+                      ((@ *react create-element) :div (create :style (create :color "white"))
+                       "Hello, " ;; (@ this props name)
+                       ))))))
+
+(defvar *game* (create))
+
+(defun set-up-react ()
+  (setf *game-box* ((@ document get-element-by-id) "game"))
+  (unless *game-box*
+    (alert (+ "Can't find #game: " ((@ document get-element-by-id) "game")))
+    (return-from set-up-react nil)) 
+  ((@ *react-d-o-m render)
+   ((@ *react create-element) game-component *game*) *game-box*))
+
+(defun hide-log-in ()
+  (setf (@ ((@ document get-element-by-id) "log-in") style "max-height") "0px")
+  (setf (@ ((@ document get-element-by-id) "log-in") style "opacity") "0"))
+
+(defun show-log-in ()
+  (setf (@ ((@ document get-element-by-id) "log-in") style "max-height") "100vh")
+  (setf (@ ((@ document get-element-by-id) "log-in") style "opacity") "1"))
+
+(defun log-in (e-mail nick password)
+  (hide-log-in) 
+  ((@ smackjack log-in) e-mail nick password
+   (lambda (x) (alert (+ "OK, got " x)))
+   (lambda (e) (alert-ajax-error "log-in" (list e-mail nick password) e))))
+
+(defun play-now ()
+  (log-in (@ ((@ document get-element-by-id) "log-in-e-mail") value)
+          (@ ((@ document get-element-by-id) "log-in-char-name") value)
+          (@ ((@ document get-element-by-id) "log-in-password") value)) 
+  ;;(set-up-react) 
+  (case *game-state*
+    (:connecting (alert "Still connecting … just a moment …"))
+    (:play-now (start-game))))
+
+(set-up-gamepads)
+
+(setf *game-state* :play-now)
+

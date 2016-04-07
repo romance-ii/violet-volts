@@ -1,0 +1,70 @@
+;;; -*- lisp -*- Parenscript
+
+(defun gamepad-primary-button ()
+  (use-primary))
+(defun gamepad-secondary-button ()
+  (use-secondary))
+(defun select-button ())
+(defun start-button ()
+  (case *game-state*
+    (:play-now (start-game))
+    (:playing (pause-game))
+    (:paused (unpause-game))))
+
+(defun gamepad-button-pressed (button)
+  (if (= "object" (typeof button))
+      (@ button pressed)
+      (< .75 button)))
+
+(defvar *gamepads* (create))
+
+(defun handle-gamepad-disconnection (event)
+  ((@ console log) "Gamepad disconnected (# %d) = %s"
+   (@ event gamepad id))
+  (delete (getprop *gamepads* id)))
+
+(defun handle-gamepad-connection (event)
+  ((@ console log) "Gamepad connected (# %d) = %s (%d axēs, %d buttons)"
+   (@ event gamepad index) (@ event gamepad id)
+   (@ event gamepad axes length) (@ event gamepad buttons length))
+  (setf (getprop *gamepads* (@ event gamepad id)) t) 
+  (set-interval read-gamepads 100)
+  (start-game))
+
+(defun set-up-gamepads ()
+  ((@ window add-event-listener) "gamepadconnected" handle-gamepad-connection)
+  ((@ window add-event-listener) "gamepaddisconnected" handle-gamepad-disconnection))
+
+(defvar +button-names+
+  #("B" "A" "X" "Y"
+    "L1" "R1" "L2" "R2"
+    "Select" "Start" "L3" "R3"
+    "D-Up" "D-Down" "D-Left" "D-Right" "Home"))
+(defvar +axis-names+ #("Lx" "Ly" "Rx" "Ry"))
+
+(defun read-one-gamepad (gamepad)
+  (when (gamepad-button-pressed (elt (@ gamepad buttons) 0))
+    (use-primary))
+  (when (gamepad-button-pressed (elt (@ gamepad buttons) 1))
+    (use-alternate))
+  (when (gamepad-button-pressed (elt (@ gamepad buttons) 8))
+    (select-button))
+  (when (gamepad-button-pressed (elt (@ gamepad buttons) 9))
+    (start-button))
+  (let ((d-x (+ (if (gamepad-button-pressed (elt (@ gamepad buttons) 14)) -.75 0)
+                (if (gamepad-button-pressed (elt (@ gamepad buttons) 15)) .75 0)
+                (elt (@ gamepad axes) 0)
+                (elt (@ gamepad axes) 2)))
+        (d-y (+ (if (gamepad-button-pressed (elt (@ gamepad buttons) 12)) -.75 0)
+                (if (gamepad-button-pressed (elt (@ gamepad buttons) 13)) -.75 0)
+                (elt (@ gamepad axes) 1)
+                (elt (@ gamepad axes) 3))))))
+
+(defun read-gamepads ()
+  (let ((gamepads (if (@ navigator get-gamepads)
+                      ((@ navigator get-gamepads))
+                      (if (@ navigator webkit-get-gamepads)
+                          ((@ navigator webkit-get-gamepads))
+                          #()))))
+    (dolist (gamepad gamepads)
+      (read-one-gamepad gamepad))))

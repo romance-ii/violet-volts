@@ -1,0 +1,9 @@
+;;; -*- lisp -*- Parenscript
+
+(defun alert-ajax-error (fn args ajax)
+  (alert (+ "Error: Call to " fn " failed. See Web Console."))
+  ((@ console log) (+ "Called host function " fn " with args " args " and got error " ajax))
+  ((@ console log) ajax))
+
+
+

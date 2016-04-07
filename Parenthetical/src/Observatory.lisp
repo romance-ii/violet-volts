@@ -126,12 +126,10 @@ the Earth dates ranging from "
               (format t "[~2,' d] " day)
               (princ "     ")))))
 
-
-
 (defun print-calendar-month-header (month year &key (yearp t))
-  (if yearp
-      (format t "~2%~35,,,'-:@< ~:@r. ~a ~> ~4d" month (elt +months+ month) year)
-      (format t "~2%~40,,,'-<~:@r. ~a  ~;~>" month (elt +months+ month))))
+  `(:h2 ,(if yearp
+             (format t "~2%~35,,,'-:@< ~:@r. ~a ~> ~4d" month (elt +months+ month) year)
+             (format t "~2%~40,,,'-<~:@r. ~a  ~;~>" month (elt +months+ month)))))
 
 (defun print-days-of-week-header ()
   (format t "~2%~{~a ~}" (subseq +dow+ 0 9)))
