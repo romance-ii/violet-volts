@@ -19,3 +19,11 @@
 [submodule "UnrealEngine"]
 	path = UnrealEngine
 	url = git@github.com:EpicGames/UnrealEngine
+[submodule "jscl"]
+	path = src/lib/jscl
+	url = git@github.com:romance-ii/jscl
+	branch = toots
+[submodule "babylon.js"]
+	path = src/lib/babylon.js
+	url = git@github.com:romance-ii/Babylon.js
+	branch = toots
