@@ -1,16 +1,6 @@
-[submodule "Romance"]
-	path = Romance-II
-	url = git@github.com:romance-ii/romance-ii
-	branch = Romance-2
-[submodule "talos"]
-	path = Talos-Tortoise/Talos
-	url = git@github.com:romance-ii/talos
 [submodule "glitch-avatars"]
 	path = art/game/glitch/avatars
 	url = git@github.com:romance-ii/glitch-avatars.git
-[submodule "parenthetical"]
-	path = Parenthetical
-	url = git@github.com:romance-ii/parenthetical.git
 [submodule "glitch-items"]
 	path = art/game/glitch/items
 	url = git@github.com:romance-ii/glitch-items.git
