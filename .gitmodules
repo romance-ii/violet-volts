@@ -5,9 +5,6 @@
 [submodule "talos"]
 	path = Talos-Tortoise/Talos
 	url = git@github.com:romance-ii/talos
-[submodule "proserpina"]
-	path = Proserpina
-	url = git@github.com:romance-ii/proserpina
 [submodule "glitch-avatars"]
 	path = art/game/glitch/avatars
 	url = git@github.com:romance-ii/glitch-avatars.git
