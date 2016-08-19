@@ -1,0 +1,45 @@
+#!/bin/sh
+
+if [ "$1x" = "x" ] 
+then
+    echo "Usage: $0 SWFDIR" >&2
+    exit -2
+fi
+
+export SWFDIR=$1
+
+find $SWFDIR -type f -name \*.swf -print0 | \
+    perl -0 -e '
+   while (my $swf = <>)
+    { chomp $swf;
+      $swf =~ s, ,\\ ,g;
+      my $svg = $swf;
+      $svg =~ s,\Q$ENV{SWFDIR}\E/*,build/art/,g; 
+      $svg =~ s,\.swf$,\.min\.svg,;
+      print "$svg:\t\\\n\t\t$swf\n\n$svg:\t\\\n\t\t$swf\n\n" }'
+
+#find $SWFDIR -type f -name \*.ttf -o -name \*.mp3 -print0 | \
+#    perl -0 -e 'while (my $src = <>) { chomp $src;
+#  my $dest = $src; $dest =~ s,\Q$ENV{SWFDIR}\E/*,build/assets.bin/,g; 
+#  print "$dest:\t\\\n\t\t$src\n\n" }' \
+#    > assets.mak
+
+find $SWFDIR -type d -print0 | \
+     perl -0 -e 'while (my $d = <>) { chomp $d; $d =~ s,\Q$ENV{SWFDIR}\E/*,build/art/,g; mkdir $d }'
+
+echo -e '\n\n\n'
+
+echo 'VERSIONEDASSETS=\'
+
+find $SWFDIR -type f -name \*.swf -print0 | \
+    perl -0 -e '
+   while (my $swf = <>)
+    { chomp $swf;
+      $swf =~ s, ,\\ ,g;
+      my $svg = $swf;
+      $svg =~ s,\.swf$,\.svg,;
+      $svg =~ s,\Q$ENV{SWFDIR}\E/*,build/\$(PROJECT)-assets/,g; 
+      print "\t $svg \\\n" }'
+
+
+

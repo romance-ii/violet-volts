@@ -1,0 +1,50 @@
+/* Violet Volts 
+ * Stylesheet for text-related styles */
+
+h1 { 
+    color: #969; 
+    display: inline-block; 
+    width: 30%;
+    max-height: 24pt; 
+    font-size: 24pt; 
+    text-align: center;
+}
+
+h2 { 
+    color: #666; 
+    display: inline-block; 
+    width: 60%;
+    max-height: 18pt; 
+    font-size: 18pt; 
+    text-align: center;
+    overflow: hidden;
+}
+
+section { 
+    margin: 1em;
+}
+
+section>h3 { 
+    display: inline; 
+    text-align: justify;
+}
+p { 
+    text-align: justify;
+}
+
+h4 { 
+    display: inline-block;
+} 
+
+
+pre {
+    background-color: black;
+    color: green;
+    font-size: 8pt; 
+    line-height: 8pt;
+    border: 2pt solid #cfc;
+    text-decoration: none;
+}
+
+
+

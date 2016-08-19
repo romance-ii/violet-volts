@@ -1,0 +1,30 @@
+/* Violet Volts
+ * Stylesheet for basics (html, body) */
+
+html { 
+    margin: 1ex; 
+    background-color: #333
+}
+
+body { 
+    margin-top: 1ex; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border-radius: 1ex;
+    margin-bottom: 3em;
+    background-color: #333; 
+    color: #ccc;
+    width: 100%;
+}
+
+a:link { color: #ccf }
+a:visited { color: #ecf }
+a:active { color: red }
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    border: 0;
+}
+
+

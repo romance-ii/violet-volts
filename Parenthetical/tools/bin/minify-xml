@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Warning: NOT really minifying $1 to $2" >&2
+cp "$1" "$2"

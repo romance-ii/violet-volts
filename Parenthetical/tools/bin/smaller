@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SMALLEST=999999999
+SMALLESTFILE=
+for file in "$@"
+do
+    SIZE=$(stat -c %s "$file")
+    if [ $SIZE -lt $SMALLEST ]
+    then
+        SMALLESTFILE=$file
+    fi
+done
+
+echo " Compared these files: $@ " >&2
+du -sh "$@" >&2
+echo " *** Smallest of them was: $SMALLESTFILE " >&2
+echo $SMALLESTFILE
+

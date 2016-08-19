@@ -1,0 +1,192 @@
+/* Violet Volts
+ * Stylesheet for game UI elements */
+
+
+button { 
+    margin: 2px; 
+    padding: 2px; 
+    background-color: #ddd;
+    border: 3px solid #333; 
+    border-radius: 9px;
+    size: 12pt;
+    box-shadow: 2pt 2pt 1pt #444; 
+}
+
+button:hover {
+    box-shadow: 2pt 2pt 1pt #448;
+}
+
+button:active { 
+    position:relative; 
+    top: 1pt; 
+    left: 1pt; 
+    box-shadow: 1pt 1pt .5pt #444;
+    background-color: #ccf; 
+}
+
+#notifications {
+    position: absolute;
+    height: 32px;
+    width: 128px;
+    text-align: right;
+    top: -64px;
+    right: 0;    
+}
+
+#notifications #webgl_slow>img {
+    height: 64px;
+    width: 64px;
+    top: -32px;
+}
+
+#framerate {
+    position: absolute; 
+    right: 10px;
+    top: 20px; 
+    background-color: rgba(64,64,64,.5); 
+    height: 14px; 
+    font-size: 12px;
+    color: white;
+    width: 130px; 
+    border-radius: 8px; 
+    border: 1px solid #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#framerate>big {
+    font-size: 28px;
+    display: inline-block;
+    position: absolute;
+    top: 18px;
+    vertical-align: middle;
+}
+
+#container {
+    margin-top: 8px; 
+    margin-bottom: 8px;
+    width: auto;
+    margin-left: 16px; 
+    margin-right: 16px;
+    background-color: #333; 
+    border: 4px solid #222;
+    position: relative;
+    border-radius: 16px;
+}
+
+#canvas {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border: 4px solid #383838;
+    border-radius: 16px;
+    background-color: #444;
+    position: relative;
+}
+
+#getfirefox {
+    display: block;
+    margin: 1em;
+    background-color: white;
+    width: 75%;
+    border-radius: 2em;
+    padding: 1em;
+}
+
+#getfirefox img { 
+    display: inline-block;
+    max-width: 45%; 
+    width: 3in; 
+    height: auto; 
+    vertical-align: middle;
+}
+
+#getfirefox span.plaintext {
+    color: black; 
+    text-decoration: none; 
+    font-family: sans-serif; 
+    display: inline-block;
+    width: 45%;
+    margin-left: 4%;
+    text-align: justify;
+    vertical-align: middle;
+} 
+
+#html5logo {
+    display: inline-block;
+    max-width: 25%;
+    height: auto;
+    vertical-align: middle;
+}
+
+#glgelogo
+{
+    display: inline-block;
+    height: 18pt;
+    vertical-align: middle;
+    color: rgb(25, 51, 24);
+    background-color: rgb(21, 66, 18);
+    border-radius: 5px 5px 5px 5px;
+    width: auto;
+    text-align: center;
+    font-family: sans-serif;
+    line-height: 20pt;
+    font-size: 18pt;
+    margin-top: 4pt;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2), -1px -1px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 5px rgb(51, 51, 51);
+    background-image: -moz-linear-gradient(center bottom , rgb(73, 145, 25) 50%, rgb(74, 109, 71) 75%, rgb(255, 255, 255) 100%);
+}
+
+#webgllogo { display: inline-block; }
+
+#legal {
+    clear: both;
+    font-size: 8.5pt;
+    font-family: serif;
+    color: #aaa;
+}
+
+#footer { 
+    margin-left: 2em; 
+    margin-right: 2em; 
+    margin-top: 4em;
+    margin-bottom: 4em; 
+    padding: .5ex;
+    border-top: 1px solid white; 
+    border-bottom: 1px
+    solid white; 
+}
+
+#loader-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 25px;
+    text-align: center;
+    line-height: 50px;
+    background: #003458;
+    color: white;
+    display: none;
+}
+
+#loader-bar:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: attr(loader-value %, 0);
+    content: 'loading ';
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#loader-bar:after {
+    content: attr(loader-value) "%";
+}
+

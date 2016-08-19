@@ -1,0 +1,50 @@
+# Legacy Subversion directories
+.svn
+
+# Temporary files
+.#*
+*#
+*.tmp
+*.temp
+tmp.*
+
+# Backup files
+*~
+*.bak
+*.orig
+
+# Compilation artefacts
+*.fasl
+*.fas
+*.dxl
+*.a
+
+build/*
+
+# Distribution files
+dist/*
+
+# Rendered documentation
+doc/*/*dvi
+doc/*/*ps
+doc/*/*pdf
+
+# Editor crash files
+DEADJOE
+
+# (La)TeX intermediate files
+*.aux
+*.log
+*.out
+*.toc
+
+# Shouldn't be present
+src/romans/build
+
+# Java-type junk
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear

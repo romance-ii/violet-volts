@@ -1,0 +1,342 @@
+;; -*- sibilant -*-
+
+(console.log (concat "
+
+
+     ***** Violet Volts
+
+     ***** Game client test/demo
+
+Starting Violet Volts: Version " document.version))
+
+(var goatStare (= -1 (window.location.hash.indexOf "nogoat"))
+     assetPrefix "./")
+
+(console.log (concat "Asset Prefix: " assetPrefix))
+
+(var canvas (document.get-element-by-id 'canvas))
+
+(assign  canvas.width   canvas.client-width 
+         canvas.height  (* 9/16 canvas.width)) 
+(let ((max-height (- screen.height (min 150 (* 1/10 screen.height)))))
+  (when (> canvas.height max-height)
+  (assign canvas.height max-height
+          canvas.width (* 16/9 max-height)))
+  (console.log (concat "Canvas size = " canvas.width "✕" canvas.height)))
+
+(var start-time (+ (new Date)))
+
+(var game-state {
+     logged-in          false
+     player-name       "FrameTestUser"
+     save-auth-token   true
+     sidekick-bound    false })
+
+(assign document.loaders {})
+
+(def update_loading ()
+  (var loaded 0 count 0)
+  (each (key) (Object.keys document.loaders)
+        (+= loaded (get document.loaders key))
+        (++ count))
+  (var loader-bar (document.get-element-by-id "loader-bar"))
+  (if (= 0 count)
+      (progn (assign loaderBar.style.display 'none)
+          (console.log "Done loading everything"))
+      (progn
+        (assign loader-bar.style.display 'block)
+        (var per-cent (Math.round (* 100 (/ loaded count))))
+        (loaderBar.setAttribute 'loader-value per-cent)
+        (console.log (concat "Loading " count " assets, overall status "
+                             per-cent "%")))))
+
+(def start-loading (key)
+  (set document.loaders key 0)
+  (console.log (concat "Started loading asset: " key))
+  (update-loading))
+
+(def done-loading (key)
+  (delete document.loaders key)
+  (console.log (concat "Done loading asset: " key))
+  (update-loading))
+
+(def report (message)
+  (alert message))
+
+(def y-or-n-p (prompt)
+  (confirm prompt))
+
+(def paperdoll ()
+  (report "Paperdoll function")
+  'TODO)
+
+(def show-help ()
+  (report "Help goes here.")
+  'TODO)
+
+(var msg
+
+(def explain-slow ()
+  (report "When you see the sad turtle, it means your computer's graphics are
+displaying \"slowly.\"
+
+You might see that characters do not move smoothly, or things appear
+to be \"jerky.\"
+
+This might happen sometimes when you switch to another program, and
+then go away after a minute or so.
+
+If you see it a lot, it could be a problem with your computer
+or device.")
+  (when (y-or-n-p "Would you like to learn more about
+how to improve the graphics speed
+of your computer/device?")
+    (report "I wish I could help. Sorry.")
+    'TODO))
+
+(def log-in ()
+  (if-else
+   
+   navigator.probably-bad (when (y-or-n-p "Your web browser might not
+be able to play this game.
+
+Would you like to download
+Firefox first?")
+                            (window.open "http://getfirefox.com/")
+                            false)
+   
+   game-state.logged-in        false
+   
+   (progn
+     (set game-state 'player-name  
+          (prompt   "Player name?" (get game-state 'player-name)))
+     (when store.enabled (store.set 'player-name (get game-state 'player-name)))
+     (if (< 2 (length game-state.player-name))
+         (progn (set game-state 'logged-in true)
+                (set (get (document.get-element-by-id 'log-in) 'style) 'visibility 'hidden)
+                (set (get (document.get-element-by-id 'add-sidekick) 'style) 'visibility 'visible)
+                (set (get (document.get-element-by-id 'log-out) 'style) 'visibility 'visible)
+                (console.log (concat "Logged in as " (get game-state 'player-name)))
+                (start-render))
+         (report "OK, not logging in then.")))))
+
+(def add-sidekick () (report "Sorry, you can't have a sidekick help you today."))
+(def drop-sidekick () (report "Right. YOU have a SIDEKICK?"))
+
+(def log-out ()
+  (if (get game-state 'logged-in)
+      (progn (set game-state 'loggedIn false)
+    (set (get (document.get-element-by-id 'log-in) 'style) 'visibility 'visible)
+    (set (get (document.get-element-by-id 'add-sidekick) 'style) 'visibility 'hidden)
+    (set (get (document.get-element-by-id 'log-out) 'style) 'visibility 'hidden)
+    (report "Bye")
+    (window.location.reload true)
+    true))
+    
+  (progn (report "You're not logged in.")
+         false))
+
+(def look-at (origin point)
+  (var
+   coord (list (- (get origin 0)
+                  (get point 0))
+               (- (get origin 1)
+                  (get point 1))
+               (- (get origin 2)
+                  (get point 2)) )
+   zvec   (GLGE.toUnitVec3 coord)
+   xvec   (GLGE.toUnitVec3 (GLGE.crossVec3 (list 0 1 0) zvec))
+   yvec   (GLGE.toUnitVec3 (GLGE.crossVec3 zvec xvec)))
+  (list (get xvec 0)   (get yvec 0)   (get zvec 0)  0
+        (get xvec 1)   (get yvec 1)   (get zvec 1)  0
+        (get xvec 2)   (get yvec 2)   (get zvec 2)  0
+        0              0              0             1))
+
+(def  check-keys () 
+  (var keys ( new GLGE.KeyInput))
+  (when (keys.isKeyPressed GLGE.KI_ESCAPE) (paperdoll))
+  (when (keys.isKeyPressed GLGE.KI_F1)) (show-help)
+  (when (keys.isKeyPressed GLGE.KI_F3)) (or (log-in) (log-out)))
+
+(var game-scene null
+     game-renderer null
+     camera-position (list 0 20)
+     )
+
+(def  start_render ()
+  (assign    game-renderer (new GLGE.Renderer canvas))
+  (var xml (new GLGE.Document ())
+       camera nil
+       camera-offset nil)
+  (assigt xml.onLoad (thunk
+                      (assign game-scene ( xml.getElement 'mainne))
+                      (assign         camera ( xml.getElement  'mainCamera))
+                      (assign camera-offset (xml.getElement 'camera-offset))
+        (var model (xml.getElement 'model))
+
+        ;; set the camera rotation
+        (camera.set-rot-matrix (look-at (list 0 (get camera-position 1) 0)
+                                        (list 0 2 (- (get camera-position 2)))))
+        ;; load animations after model 
+        (model.addEventListener 'loaded (lambda (data)))
+            
+        ;; draw grid
+        (var positions [])
+
+        (loop-range (x -50 50 1)
+                    (when (not (zerop x))
+                      (appendf positions
+                               (list x 0 -50 x 0 50 50 0 x -50 0 x))))
+	    
+        (var line  (chain (new GLGE.Object) (set-draw-type GLGE.DRAW_LINES)))
+        (line.set-mesh (chain (new GLGE.Mesh) (set-positions positions)))
+        (line.set-material (xml.getElement 'lines))
+        (game-scene.add-object line)
+        
+        (var last-frame-time 0
+             accumulator-count 0
+             frame-rate-accumulator 0)
+        (assign start-time     (parse-int (chain (new Date) get-time )))
+        
+        (def render () 
+          (var now  (parse-int (chain (new Date ()) get-time)))
+          (when (zerop (Math.round (mod (- now last-frame-time) 10) ))
+            (assign frame-rate-accumulator
+                    (Math.round (+ (/ 1000 (- now last-frame-time) 10)
+                                   (* 9 frame-rate-accumulator)))))
+          ;; Don't slow down the worst-case by overwriting these
+          ;; values. Let the faster ones get slowed down a
+          ;; bit, instead.
+          (var rate  "<big>😦</big> Poor"
+               rate-colour "#f88"
+               slow  true)
+          (if-else
+           (<= 60 frame-rate-accumulator) 
+           (assign rate "<big>😎</big> Great!"
+                   rate-colour "#88f"
+                   slow false)
+           
+            (<= 24 frame-rate-accumulator)
+            (assign rate  "<big>😃</big> Good"
+                    rate-colour "#8f8"
+                    slow  false)
+                    
+            (<= 12 frame-rate-accumulator)
+            (assign rate "<big>😶</big> Fair"
+                    rate-colour  "#ff8"
+                    slow false))
+          
+          (var el (document.get-element-by-id "framerate"))
+          (if (< accumulator-count 50) 
+            (progn (incf accumulator-count)
+                   (assign el.innerHTML "Warming up…"
+                           slow false)) ; Probably just warming up the
+                                        ; accumulator
+            (assign el.innerHTML (concat "Graphics: " rate)))
+          (set (get el 'style) 'color rate-colour)
+          (style-by-id "webgl_slow" 'visibility (if slow 'visible 'hidden))
+          (assign last-frame-time now)
+          (game-renderer.render))
+          
+        (game-renderer.set-scene game-scene)
+
+        (set-interval render 1)
+        (set-interval check-keys 1)
+
+        (done-loading 'xml)
+            
+        (set window 'stared-at-goats
+             (lambda ()
+               (report alert "If you would eMail this report, we would appreciate it.");
+               (var p  (document.createElement 'p);
+                    gl (getWebGL)
+                    canvas (document.get-element-by-id 'canvas)
+                    dur (- (new Date) start-time))
+               (var report (concat  "Results of frametest.
+
+  (Feel free to leave me a note above this line!)
+
+--------------------
+
+duration=" dur "ms
+
+demo version=" (get document 'version) "
+
+player name=" (get game-state 'player-name) "
+
+appCodeName=" (get navigator 'app-code-name) "
+
+window size=" (get window 'inner-width) "×" (get window 'inner-height) "
+
+screen size=" (get screen 'width) "×" (get screen 'height) "
+
+canvas size=" (get canvas 'width) "×" (get canvas 'height) "
+
+platform=" (get navigator 'platform) "
+
+WebGL vendor=" (gl.get-parameter gl.VENDOR) "
+
+WebGL version=" (gl.get-parameter gl.VERSION) "
+
+WebGLSL version=" (gl.get-parameter gl.SHADING_LANGUAGE_VERSION) "
+
+WebGL renderer=" (gl.get-parameter gl.RENDERER) "
+
+frameRate=" frame-rate-accumulator  " f/s
+
+user agent string=("  (get navigator 'user-agent)  ")"))
+               (assign p.innerHTML (concat "You have run this test for " 
+                                           Math.round(dur / 1000) + " seconds.
+<a href=\"mailto:violetvolts-frametest@star-hope.org?subject=Frametest%20results%20for%20"
+                                           (encode-URI-component
+                                            (concat (get navigator 'app-code-name) 
+                                                    " browser on "
+                                                    (get navigator 'platform)))
+                                           "&body="
+                                           (encode-URI-component report)
+                                           "\">Click here to eMail your results</a> <pre>"
+                                           report
+                                           "</pre>"))
+               (chain (document.get-element-by-id "container") (append-child p)))
+               
+
+             (when goat-stare
+               (setTimeout (lambda ()
+                             (var button (document.create-element 'div))
+                             (assign button.innerHTML "<button onClick=\"staredAtGoats();\">Report Test Results</button>")
+                             (chain (document.get-element-by-id 'container) (append-child button)))
+                           60000)))))
+
+  (start-loading 'xml)
+  (xml.parseScript "glge_document"))
+
+(assign window.onbeforeunload
+        (lambda (evt)
+          (var message 
+               (if (get game-state 'logged-in) 
+                 (if (get game-state 'sidekick-bound)
+                   "If you leave, you and your sidekick will leave Violet Volts.
+Are you sure?"
+                   "If you leave, you will leave Violet Volts.
+Are you sure?")
+                 null))
+          (var evt (or evt window.event))
+          (when (and message evt)
+            (assign evt.returnValue message))
+          message))
+
+(set game-state 'player-name
+     (if (and store store.enabled)
+       (store.get 'player-name)
+       ""))
+
+(console.log "Done with initial bootstrap")
+
+(if goat-stare
+  (report "This is a simple framerate test; you won't see much.\n\
+\n\
+Click \"log in,\" and then wait about a minute.\n\
+\n\
+Thanks for participating!"))
+
+

@@ -1,0 +1,43 @@
+[submodule "tools/yuicompressor"]
+	path = tools/yuicompressor
+	url = git@github.com:romance-ii/yuicompressor.git
+[submodule "glitch-avatars"]
+	path = src/art/glitch/avatars
+	url = git@github.com:romance-ii/glitch-avatars.git
+[submodule "glitch-locations"]
+	path = src/art/glitch/locations
+	url = git@github.com:romance-ii/glitch-locations.git
+[submodule "glitch-overlays"]
+	path = src/art/glitch/overlays
+	url = git@github.com:romance-ii/glitch-overlays.git
+[submodule "glitch-items"]
+	path = src/art/glitch/items
+	url = git@github.com:romance-ii/glitch-items.git
+[submodule "src/tools/closure-compiler"]
+	path = src/tools/closure-compiler
+	url = git@github.com:romance-ii/closure-compiler.git
+[submodule "src/js-lib/glge"]
+	path = src/js-lib/glge
+	url = git@github.com:romance-ii/GLGE.git
+[submodule "src/tools/yuicompressor"]
+	path = src/tools/yuicompressor
+	url = git@github.com:romance-ii/yuicompressor.git
+[submodule "src/tools/buildapp"]
+	path = src/tools/buildapp
+	url = git@github.com:romance-ii/buildapp.git
+[submodule "bullet3"]
+	path = src/romans/lib/bullet3
+	url = git@github.com:romance-ii/bullet3.git
+[submodule "lost-garden"]
+	path = src/art/lost-garden
+	url = git@github.com:romance-ii/lost-garden.git
+
+[submodule "bullet2"]
+	path = src/romans/lib/bullet2
+	url = git@github.com:romance-ii/bullet2.git
+[submodule "cl-bullet2l"]
+	path = src/romans/lib/cl-bullet2l
+	url = git@github.com:romance-ii/cl-bullet2l
+[submodule "yuglify"]
+	path = src/tools/yuglify
+	url = git@github.com:romance-ii/yuglify.git

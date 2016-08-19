@@ -1,0 +1,344 @@
+#!/usr/bin/perl -W
+# -*- cperl -*-
+
+use strict;
+
+my ($swfdir) = $ENV{SWFDIR} || '';
+
+for my $file (@ARGV) {
+  my $dump = $file;
+  if ($dump =~ /\.swf$/) {
+    $dump .= '.dump';
+    $dump =~ s,\Q$swfdir\E,build/svg/,g;
+    system sh => -c => "mkdir -p \$(dirname $dump)";
+    system sh => -c => "swfdump -tsFpBbd '$file' > '$dump'";
+  }
+
+  my  (%shape)= ();
+  open DUMP, '<', $dump and do {
+    print q[<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink= "http://www.w3.org/1999/xlink"
+  version="1.1">
+<title>], "$dump</title>\n";
+
+    my %frame = ();
+    my $in_script = 0;
+    my $in_sprite = 'timeline';
+    my %frame_no = ( timeline => 1 );
+    my $time = 0;
+    my $frame_slice = 1/24;
+
+    sub read_matrix ($$) {
+      my ($id, $depth) = @_;
+      my ($a, $b, $c, $d, $e, $f);
+      my $line = <DUMP>;
+      die unless $line =~ /\|\s*(-?[\d\.]+)\s*(-?[\d\.]+)\s*(-?[\d\.]+)/;
+      ($a, $b, $c) = (0+ $1, 0+ $2, 0+ $3);
+      $line = <DUMP>;
+      die unless $line =~ /\|\s*(-?[\d\.]+)\s*(-?[\d\.]+)\s*(-?[\d\.]+)/;
+      ($d, $e, $f) = (0+ $1, 0+ $2, 0+ $3);
+      $frame{ $depth } = [ "#shape$id", "matrix($a,$b,$c,$d,$e,$f)" ];
+    }
+    
+  READFILE:
+    while (my $line = <DUMP>) {
+      #print STDERR "$dump:$.:$in_sprite\n";
+      if ($in_script) {
+        if ($line =~ /^\[[0-9][0-9][0-9]\]/) {
+          print STDERR " script done, skipped $in_script lines, continuing\n";
+          $in_script = 0;
+        } else {
+          ++$in_script; next;
+        }
+      }
+      if ($line =~ /^\[HEADER\]\s*Frame rate:\s*(\d+\.\d+)/) {
+        my $fps = 0+ $1;
+        $frame_slice = (1 / $fps);
+        print STDERR " Frame rate ${fps}f/s = 1s/${fps}f = ${frame_slice}s/f\n"
+      } elsif ($line =~ /^\[HEADER\]/) {
+        print STDERR $line;
+      } elsif ($line =~ /^\[(045|009)\]/) {
+        print STDERR $line;
+      } elsif ($line =~ /^\[052\]/) {
+        print STDERR "Skipping ActionScript3 Code …";
+        ++$in_script; next;
+      } elsif ($line =~ /^\[056\]\s*\d+\s*SCENEDESCRIPTION/) {
+        my $desc = '';
+        while ($line = <DUMP>) {
+          unless ($line =~ /-=> (([a-f0-9]{2}\s*){1,16})/) {
+            if ($desc =~ /\001\000([ -\x7e]*)\000/) {
+              print "<desc>$1</desc>\n"; redo READFILE;
+            } else {
+              die "Description? $desc";
+            }
+          }
+          my $hex = $1;
+          my @hex = split ' ' => $hex;
+          $desc .= chr(hex ($_)) foreach @hex;
+        }
+      } elsif ($line =~ /\s*exports (\d+) as "(.*)"/) {
+        my ($id, $name) = (0+ $1, $2);
+        $name =~ s/\./-/g;
+        if (0 == $id) {
+          print "<!-- TODO: Export main timeline as $name -->\n";
+        } else {
+          print "\n<defs><symbol id='$name'>
+  <use xlink:href='#shape$id' />
+</symbol></defs>\n";
+        }
+      } elsif ($line =~ /^\[(002|016|020|053)\]\s+\d+\s+DEFINESHAPE\d? defines id (\d+)$/ ) {
+        my $id = 0+ $2;
+        my $sub = 0;
+        print "\n<defs><symbol id='shape$id'";
+
+        $line = <DUMP>;
+        die "$dump:$.:bbox?"
+          unless $line =~ /bbox \[(-?\d*\.?\d*), (-?\d*\.?\d*), (-?\d*\.?\d*), (-?\d*\.?\d*)\]/;
+        my ($left, $top, $right, $bottom) = (0+ $1, 0+ $2, 0+ $3, 0+ $4);
+        my ($width, $height) = ($right - $left, $bottom - $top);
+        print " viewBox='$left,$top $width,$height'";
+
+        print ">\n";
+
+        $line = <DUMP>;
+        die "unexpected: $_"
+          unless $line =~ /\| fillstyles\((\d\d)\)\s+linestyles\((\d\d)\)/;
+        my ($fills, $lines) = (0+ $1, 0+ $2);
+
+        my (%fillc, %linec) = ();
+        if ($fills or $lines) {
+          my $fill = 1; my $linum = 1;
+          while ($line = <DUMP>) {
+            last if $line =~ /^\s+\|\s*$/;
+            if ($fill <= $fills) {
+              if ($line =~ /\| $fill ?\) SOLID ([0-9a-f]{6})([0-9a-f]{2})/) {
+                $fillc{ $fill++ } = [ $1, $2 ];
+              } elsif ($line =~ /\| $fill ?\) GRADIENT \((.*)\)/) {
+                $fillc{ $fill++ } = [ 'gradient', 0xff ];
+              } else {
+                die "$dump:$.: fill type? $line";
+              }
+            }
+            if ($linum <= $lines) {
+              if ($line =~ /\s*$linum ?\) (\d*\.?\d+) ([0-9a-f]{6})([0-9a-f]{2})\s*$/) {
+                $linec{ $linum++ } = [ 0+ $1, $2, $3 ];
+              } else {
+                die "$dump:$.: line type? $line";
+              }
+            }
+          }
+        }
+        
+        # print STDERR "Fills: ",
+        #   (map { " $_ => " . (join ',' => @{ $fillc{ $_ } }) . "\n" } (sort keys %fillc));
+        
+        my ($p1, $p2, $ps) = (-1, -1, -1);
+      CURVE: while (1) {
+          $line = <DUMP>;
+          last CURVE unless $line =~ m=\s*
+                                       \|
+                                       \s*
+                                       fill\:
+                                       \s*
+                                       (\d+)/(\d+)
+                                       \s*
+                                       line\:
+                                       \s*
+                                       (\d+)
+                                       \s*-\s*
+                                       (\w+)
+                                       \s*
+                                       (\((-?\d+\.\d+)\s+(-?\d+\.\d+)\))?
+                                       \s*
+                                       (-?\d+\.\d+)
+                                       \s+
+                                       (-?\d+\.\d+)=x;
+          my ($f1, $f2, $l, $verb, undef, $x2, $y2, $x1, $y1) =
+            (0+ $1, 0+ $2, 0+ $3, $4, $5, $6, $7, 0+ $8, 0+ $9);
+
+          if ($p1 != $f1 or $p2 != $f2 or $ps != $l) {
+            # Starting a new shape
+            ($p1, $p2, $ps) = ($f1,$f2,$l);
+            if ($sub++) {
+              print "' />\n";
+            }
+            print "<path id='shape$id.$sub' ";
+            if (0 != $f1) {
+              unless (ref $fillc{ $f1 }) {
+                die "Reference to fill $f1 but valid fills are:
+ (@{[ join ', ' => sort keys %fillc ]})";
+              }
+              my $colour = $fillc{ $f1 }[0];
+              if ($colour ne 'gradient') {
+                print "fill='#$colour' fill-opacity='", (hex ($fillc{ $f1 }[1]) / 0xff),
+                  "' ";
+              }
+            }
+            if (0 != $l) {
+              unless (ref $linec{ $l }) {
+                die "Reference to line $l but valid lines are:
+ (@{[ join ', ' => sort keys %linec ]})";
+              }
+              print "stroke='#", $linec{ $l }[1],
+                "' stroke-opacity='", (hex ($linec{ $l }[2]) / 0xff),
+                  "' stroke-width='", $linec{ $l }[0], "' ";
+            }
+            print "\n  d='";
+          }
+          if (defined $x2) {
+            $x2 += 0; $y2 += 0;
+          } else {
+            $x2 = -1000; $y2 = -1000;
+          }
+          # Leading 0's can be omitted for brevity
+          s/^0\.(.*)/\.$1/ foreach ($x1, $y1, $x2, $y2);
+          if ('moveTo' eq $verb) {
+            # TODO: Suppress entire paths of nothing but M0,0 — But, we
+            # might (?) need/want (?) to preserve M0,0 in other
+            # contexts perhaps?
+            print "M$x1,$y1";
+          } elsif ('lineTo' eq $verb) {
+            print "L$x1,$y1";
+          } elsif ('splineTo' eq $verb) {
+            # space not needed if $x1 is negative
+            print "Q$x2,$y2", ($x1 > 0 ? " " : ""), "$x1,$y1";
+          } else {
+            die;
+          }
+        }
+        print "'/>\n</symbol></defs>\n";
+      } elsif ($line =~ /^\[01c\]\s*\d+\s*REMOVEOBJECT2? removes object from depth (\d+)/) {
+        my ($depth) = (0+ $1);
+        delete $frame{ $depth };
+      } elsif ($line =~ /^\[027\]\s*\d+\s*DEFINESPRITE defines id (\d+)/) {
+        my ($id) = (0+ $1);
+        $in_sprite = "sprite$id";
+        if (exists $frame_no{ $in_sprite }) {
+          die "Duplicate definition of sprite $id attempted";
+        }
+        $frame_no{ $in_sprite } = 1;
+        print "\n<g id='shape$id'>\n";
+      } elsif ($line =~ /^\[02b\]\s*\d+\s*FRAMELABEL "(.*)"/) {
+        $frame{label} = $1;
+      } elsif ($line =~ /^\[(01a|046)\]\s*\d+\s*PLACEOBJECT\d? moves (object|id (\d+)) at depth (\d+)/) {
+        my ($id, $depth) = ($3, 0+ $4);
+        if ('object' eq $2) {
+          $id = $frame{ $depth }[0];
+          $id =~ s/^#shape//g;
+        }
+        $id += 0;
+        { my $pos = tell DUMP;
+          $line = <DUMP>;
+          if ($line =~ /\| Matrix/) {
+            read_matrix ($id, $depth);
+          } else {
+            seek DUMP, $pos, 0;
+          }
+        }
+      } elsif ($line =~ /^\[(01a|046)\]\s*\d+\s*PLACEOBJECT\d? places id (\d+) at depth (\d+)/) {
+        my ($id, $depth) = (0+ $2, 0+ $3);
+        $line = <DUMP>;
+        if ($line =~ /\| Matrix/) {
+          read_matrix ($id, $depth);
+        } elsif ($line =~ /uses IDs:/) {
+          $frame{ $depth } = [ "#shape$id", undef ];
+        } else {
+          die "$dump:$.: Unknown placeobject command type";
+        }
+      } elsif ($line =~ /\[000\]\s*0\s*END/) {
+        if ('timeline' eq $in_sprite) {
+          $in_sprite = 'done';
+          print STDERR "<!--end of timeline-->\n";
+        } elsif ('done' eq $in_sprite) {
+          die "Multiple END blocks? Problem?";
+        } else {
+          $in_sprite = 'timeline';
+          print "</g>\n\n";
+        }
+      } elsif ($line =~ /\[001\]
+                         \s*0\s*
+                         SHOWFRAME\s*
+                         (\d+)\-(\d+)\s*
+                         \((\d+):(\d+):(\d+),(\d+)\-(\d+):(\d+):(\d+),(\d+)\)/x) {
+        my ($frame1, $framen, $start) = (0+ $1, 0+ $2,
+                                         60 * 60 * $3 + 60 * $4 + $5 + ($6 / 1000));
+        if ($frame1 != $frame_no{ $in_sprite }) {
+          die "Sync error,
+I thought I was on frame $frame_no{ $in_sprite } of $in_sprite
+but now it's $frame1 through $framen coming together?";
+        }
+        print "\n<symbol ",
+          (defined $frame{label} ? "id='$frame{label}'" : "id='$in_sprite-frame$frame1'"),
+            ">\n";
+        for my $depth (sort { $a <=> $b } grep {/\d+/} keys %frame) {
+          my ($shape, $xform) = @{ $frame{ $depth } };
+          print "  <use xlink:href='$shape'", ($xform? " transform='$xform'" : ''), "/>\n";
+        }
+        my $frames = 1+ $framen - $frame1;
+        if (0 == $start) {
+          print "  <animate attributeName='display'
+    values='inline;none' keyTimes='$start;@{[$start+$frame_slice*$frames]}' begin='0s'
+    repeatCount='indefinite' />\n"
+        } else {
+          print "  <animate attributeName='display'
+    values='none;inline;none' keyTimes='0;$start;@{[$start+$frame_slice*$frames]}' begin='0s'
+    repeatCount='indefinite' />\n";
+        }
+        print "</symbol>\n";
+        $frame_no{ $in_sprite } = 1+ $framen;
+        delete $frame{label};
+      } elsif ($line =~ /\[001\]\s*0\s*SHOWFRAME (\d+) \((\d+):(\d+):(\d+),(\d+)\)/) {
+        my ($framed, $start) = (0+ $1, 60 * 60 * $2 + 60 * $3 + $4 + ($5 / 1000));
+        if ($framed != $frame_no{ $in_sprite }) {
+          die "Sync error,
+I thought I was on frame $frame_no{ $in_sprite } of $in_sprite
+but now it's $framed";
+        }
+        print "\n<symbol ",
+          (defined $frame{label} ? "id='$frame{label}'" : "id='$in_sprite-frame$framed'"),
+            ">\n";
+        for my $depth (sort { $a <=> $b } grep {/\d+/} keys %frame) {
+          my ($shape, $xform) = @{ $frame{ $depth } };
+          print "  <use xlink:href='$shape'", ($xform? " transform='$xform'" : ''), "/>\n";
+        }
+        if (0 == $start) {
+          print "  <animate attributeName='display'
+    values='inline;none' keyTimes='$start;@{[$start+$frame_slice]}' begin='0s'
+    repeatCount='indefinite' />\n"
+        } else {
+          print "  <animate attributeName='display'
+    values='none;inline;none' keyTimes='0;$start;@{[$start+$frame_slice]}' begin='0s'
+    repeatCount='indefinite' />\n";
+        }
+        print "</symbol>\n";
+        ++$frame_no{ $in_sprite };
+        delete $frame{label};
+      } elsif ($line =~ /^\[04b\]\s*\d+\s*DEFINEFONT\d? defines id (\d+)/) {
+        my ($font_id) = (0+ $1);
+        while ($line = <DUMP>) {
+          redo unless $line =~ /^\s*/;
+          if ($line =~ /name: (.*)/) {
+            print STDERR "<!-- TODO: Font with ID $font_id = “$1” -->\n";
+          }
+        }
+      } elsif ($line =~ /^\s*uses IDs: \d+/
+               or $line =~ /^\s*$/
+               or $line =~ /^\s*\=+\s*$/
+               or $line =~ /^\[04c\]\s*\d+\s*SYMBOLCLASS/
+               or $line =~ /^\[04d\]\s*\d+\s*METADATA/
+               or $line =~ /^\s*\-\=\>/
+               #or $line =~ /^\[01a\]\s*\d+\s*PLACEOBJECT2? moves id (\d+) at depth (\d+)/
+              ) {
+        # silent no-op
+      } else {
+        print STDERR "<!-- Don't understand line:\n$dump:$.:\n$line -->\n";
+      }
+    }
+    print "</svg>\n";
+    close DUMP;
+  };
+}
+
