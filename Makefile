@@ -1,5 +1,5 @@
 all:	tootstest.cgi src/lib/jscl/jscl.js
-tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path '**/lib/**')
+tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -name .\*)
 	PATH=~/bin:${PATH} ~/bin/buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
@@ -8,7 +8,7 @@ tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path '**/li
 		--entry tootstest:fastcgi-entry
 	mv --backup=t tootstest.cgi.new tootstest.cgi
 
-src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -or -name \*.lisp)
+src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*)
 	cd src/lib/jscl; ./make.sh
 
 test:	all

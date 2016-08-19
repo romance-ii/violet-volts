@@ -5,6 +5,11 @@ temp-*
 *~
 *.bak
 *.orig
+*#
+dumper*.lisp
+DEADJOE
+*.fasl
+
 
 # Deployment packages
 *.apk
