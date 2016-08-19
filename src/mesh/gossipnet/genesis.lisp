@@ -1,0 +1,2 @@
+(in-package :gossipnet.genesis)
+
