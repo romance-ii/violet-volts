@@ -14,5 +14,6 @@
                )
   :encoding :utf-8
   
-  :components ((:module "parenthetical"
-                        :components ((:file "comet")))))
+  :components 
+  ((:module "parenthetical"
+            :components ((:file "comet")))))
