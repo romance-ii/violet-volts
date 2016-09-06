@@ -22,7 +22,11 @@
 
                ;; for DB
                :datafly
-               :sxql)
+               :sxql
+               
+               :inotify
+               :cl-uglify-js
+               )
   :components ((:module "src"
                         :components
                         ((:file "main" :depends-on ("config" "view" "db"))
