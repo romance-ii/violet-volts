@@ -28,6 +28,7 @@
                         ((:file "main" :depends-on ("config" "view" "db"))
                          (:file "web" :depends-on ("view"))
                          (:file "gossip" :depends-on ("web"))
+                         (:file "script" :depends-on ("web"))
                          (:file "meta-game" :depends-on ("web"))
                          (:file "characters" :depends-on ("web"))
                          (:file "view" :depends-on ("config"))

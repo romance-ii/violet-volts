@@ -11,8 +11,8 @@
 
 (defun color (red green blue)
   (cond 
-    ((and (integerp red) (integerp green) (intergerp blue)
-          (<= 0 red #xff) (<= 0 green #xff) (<= 0 blue #ff))
+    ((and (integerp red) (integerp green) (intergerp )
+          (<= 0 red #xff) (<= 0 green #xff) (<= 0 blue #xff))
      (make-new #j:BABYLON:Color3 (/ red #xff) (/ green #xff) (/ blue #xff)))
     ((and (<= 0 red 1) (<= 0 green 1) (<= 0 blue 1))
      (make-new #j:BABYLON:Color3 red green blue))
@@ -26,11 +26,17 @@
 (defvar *scene* nil)
 (defvar *camera* nil)
 
+(defun make-camera (name position)
+  (let ((new-camera (make-new #j:BABYLON:FreeCamera name position *scene*)))
+    (unless *camera*
+      (setf *camera* new-camera))
+    new-camera))
+
 (defun make-scene ()
   (unless (and *canvas* *engine*)
     (init))
   (let* ((scene (make-new #j:BABYLON:Scene *engine*))
-         (camera (make-new #j:BABYLON:FreeCamera "Camera 1" (vector3 0 5 -10) scene)))
+         (camera (make-camera "Camera 1" (vector3 0 5 -10))))
     (setf (oget scene "clearColor") (color 0.7 0.3 0.8))
     ((oget camera "setTarget") (vector3 0 0 0))
     ((oget camera "attachControl") *canvas*)))
