@@ -1,10 +1,104 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>tootstest</title>
-  </head>
-  <body>
-    <h1>tootstest</h1>
+{% extends "layouts/default.html" %}
+{% block title %}Play Now{% endblock %}
+{% block game %}
+{% endblock %}
+{% block overlay %}
+<div id="login-overlay">
+  <h1> Play Now: tootstest </h1>
 
-  </body>
-</html>
+    <p>  Sign  in  here  to   begin,  whether  or  not  you've  played
+      before. Sign in to your Google or Facebook account, then click or tap
+      the <strong>Start</strong> button. </p>
+  
+  <section id="google-sign-in-box" class="sign-in-box">
+    <center  style="min-height: 2em">
+      &nbsp; <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
+    </center>
+  </section>
+    
+  <section id="facebook-sign-in-box" class="sign-in-box">
+    <center style="min-height: 2em">
+      &nbsp; <div class="fb-login-button" data-max-rows="1"
+       data-size="large" data-show-faces="true"></div>
+    </center>
+  </section>
+
+  <p> Remember,  your use is  subject to our  <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
+                                                 target="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS">Terms    of   Service</a>.    We   protect
+    your <a  href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy" target="privacy">privacy</a> in
+    meaningful ways. </p>
+
+  <h4> Under 13? </h4>
+  <p> If you aren't yet 13 years old, you'll need a parent or guardian
+    to       sign       in       for       you.       Ask       them
+    to <a  href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Parents">look at these  instructions for
+      parents</a> before signing in. </p>
+
+  <h4> Sign-in account questions? </h4>
+
+  <p>   Manage  your   <a  href="https://myaccount.google.com/"
+  target="googleAccount">Google
+      Account at MyAccount.Google.com</a>, or your <a
+      target="facebookAccount"
+      href="http://facebook.com/">Facebook Account at Facebook.com</a></p>
+</div>
+<div id="game-welcome">
+  <h1> Welcome </h1>
+  <section id="welcome-signin">
+  
+  
+
+    <center>
+      <button onClick="signInToGame()">Join Game</button>
+      <button onClick="quit()">Quit</button>
+    </center>
+
+  
+    <div class="sign-in-box">
+
+    <div id="google-signed-in">
+    <h3> Signed in with Google </h3>
+    <p>Manage your account <a target="oauthAccountManager"
+                              href="https://myaccount.google.com/">at Google.com</a> </p>
+
+    <img id="welcome-photo" align="middle"> <span id="welcome-name">???</span>
+    <button onclick="quitFromGoogle();">Sign out</button>
+    </div>
+    <div id="google-not-signed-in">
+    <h3> Sign in with Google </h3>
+    <center  style="min-height: 2em">
+      &nbsp; <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
+    </center>
+    </div>
+    </div>
+    
+    <div class="sign-in-box">
+    <div id="facebook-signed-in">
+    <h3> Signed in with Facebook </h3>
+    <p>Manage your account <a target="oauthAccountManager"
+                              href="https://facebook.com/">at Facebook.com</a> </p>
+
+    <img id="facebook-photo" align="middle"> 
+    <span id="facebook-name">???</span>
+    <button onclick="quitFromFacebook();">Sign Out</button>
+    </div>
+    <div id="facebook-not-signed-in">
+    <h3> Sign in with Facebook </h3>
+       <i> Probably still broken </i>
+        <center style="min-height: 2em">
+        <button onclick="signInToFacebook();">Sign In</button>
+    </center>
+    </div>
+    </div>
+    
+    <hr>
+    <h4> Child Accounts </h4>
+    <p>
+    <a   href="http://wikiwiki.tootsville.adventuring.click/wikiwiki/Builder:Child_Account_Creation"
+    target="apologyChild">Child Account creation is not available</a></p>
+  </section>
+  <section id="welcome-news">
+    <iframe src="https://wikiwiki.tootsville.adventuring.click/index.php?title=Core:News&action=render"></iframe>
+  </section>
+</div>
+{% endblock %}

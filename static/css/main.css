@@ -1,0 +1,240 @@
+@import "common.css";
+@import "main-nav.css";
+@charset "UTF-8";
+
+html {
+    background: -webkit-repeating-linear-gradient(45deg, #606dbc, #606dbc 10px, #465298 10px, #465298 20px);
+    background: repeating-linear-gradient(45deg, #606dbc, #606dbc 10px, #465298 10px, #465298 20px);
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Cantarell, serif;
+    width: 60em; /* FIXME */
+    height: 36em;
+    margin: auto auto auto auto;
+    background-color: #333;
+    color: white;
+    border-radius: 0 0 2em 2em;
+    border: 1pt solid #666;
+}
+
+a:link {
+    color: #005585;
+}
+a:visited {
+    color: #485270;
+}
+a:hover {
+    color: #b83800;
+    text-decoration: underline;
+}
+
+#main {
+    text-align: center;
+    background-color: rgba(200,200,200,.8);
+    color: #333;
+    border-radius: 0 0 1em 1em;
+    border-width: 0 1pt 1pt 1pt;
+    border-color: white;
+    border-style: solid;
+    width: 50rem;
+    position: fixed;
+    left: calc(50vw - 25em);
+    top: -4rem;
+    height: 5.5rem;
+    transition: top 1s;
+    padding: 0;
+}
+
+#main:hover {
+    top: 0;
+}
+
+#main > ul {
+    display: block;
+    height: 1rem;
+    margin: .25rem;
+    padding: 0;
+}
+
+#main > ul > li {
+    display: inline-block;
+    margin-left: .75rem;
+    margin-right: .75rem;
+}
+
+nav a {
+    border: 1pt solid black;
+    background-color: rgb(200,200,200);
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    border: 1pt solid white;
+    background-color: rgb(230,230,230);
+    text-decoration: none;
+    color: #222;
+}
+
+#watermark {
+    height: 3rem;
+    width: auto;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    color: white;
+    padding: 2rem;
+    font-size: .666rem;
+    background-color: rgba(0,0,0,.25);
+    border-radius: 2rem 0 0 0;
+}
+
+#overlay {
+    top: 3em;
+    background-color: rgba(220,200,230,.8);
+    color: #333;
+    border-radius: 1rem;
+    border-width: 0 1pt 1pt 1pt;
+    border-color: white;
+    border-style: solid;
+    width: 50rem;
+    position: absolute;
+    left: calc(50vw - 25rem);
+    transition: top 1s;
+    padding: 1.5rem;
+}
+
+#overlay > h1 {
+    position: relative;
+    left: 1rem;
+    top: -1rem;
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+
+#overlay button {
+    background-color: #336;
+}
+
+#overlay > h2 {
+    left: 2rem;
+    font-size: 2rem;
+}
+
+#login-overlay {
+    display: block;
+}
+
+.sign-in-box {
+    background-color: #ddd;
+    color: #222;
+    border: 2pt solid blue;
+    min-width: 12rem;
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    padding: 1rem;
+}
+
+#game-welcome {
+    display: none;
+}
+
+#welcome-photo {
+    border: 0px solid black;
+    border-radius: 1.25rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    overflow: hidden;
+}
+
+#game-welcome>section {
+    border: 1pt solid #ddd;
+    padding: .25rem;
+    margin: .25rem;
+    width: calc(50% - 2rem);
+    display: inline-block;
+    height: max(10rem, calc(100vh - 5rem));
+}
+
+.info-box {
+    display: inline-block;
+    width: calc(100% / 3 - 2rem);
+    border: 2pt solid #111;
+    margin: .25rem;
+    padding: 0;
+    height: 10rem;
+}
+
+.info-box>h3 {
+    background-color: #333;
+    color: #ddd;
+    text-align: center;
+    padding: 1rem;
+    text-height: 2rem;
+    width: calc(100% - 2rem);
+    height: 2rem;
+    margin: 0;
+}
+
+.info-box>p {
+    color: #333;
+    padding: 1rem;
+    text-indent: none;
+    text-align: center;
+    margin: 0;
+}
+
+.info-box>a:link {
+    color: #339;
+    font-weight: bold;
+}
+
+section>iframe:first-child {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+button, input[type=button], input[type=submit], input[type=clear] {
+    border: 2pt solid #ddd;
+    background-color: rgba(128,128,192,0);
+    color: #ddd;
+    font: Roboto, Cantarell, Charcoal, Chicago, sans-serif;
+    transition: .5s;
+    margin: .25rem;
+    min-width: 1cm;
+    min-height: 1cm;
+}
+
+button:hover,
+input[type=button]:hover,
+input[type=submit]:hover,
+input[type=clear]:hover,
+button:active,
+input[type=button]:active,
+input[type=submit]:active,
+input[type=clear]:active
+                      {
+                          border: 2pt solid white;
+                          background-color: rgba(128,128,192,0.5);
+                          color: white;
+                      }
+
+#welcome-signin {
+    display: inline-block;
+    height: min(90vh, 14rem);
+    width: calc(50% - 2rem);
+}
+
+#welcome-news {
+    display: inline-block;
+    height: min(90vh, 14rem);
+    width: calc(50% - 2rem);
+}

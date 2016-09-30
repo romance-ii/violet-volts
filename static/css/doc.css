@@ -1,0 +1,42 @@
+@import "main-nav.css";
+@import "common.css";
+@charset "UTF-8";
+
+* {
+    box-model: border-box;
+}
+
+html {
+    background-color: black;
+    background-attachment: fixed;
+    background-width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Cantarell, serif;
+    max-width: 60rem;
+    min-width: 25rem;
+    height: auto;
+    margin: auto auto auto auto;
+    background-color: #eee;
+    color: #222;
+    border-radius: 0 0 2rem 2rem;
+    border: 1pt solid #666;
+}
+
+#doc {
+    padding: 1rem;
+    margin-top: 1.5rem;
+}
+
+
+#footer {
+    margin-top: 3em;
+    font-size: .75rem;
+    color: #555;
+    margin-left: 3rem; 
+    margin-right: 3rem; 
+    text-align: center;
+}

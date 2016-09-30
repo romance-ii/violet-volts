@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} / tootstest </title>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="google-signin-client_id"
+          content="1052481910502-sumg845at7g627qdvhhhambm7c7do8e4.apps.googleusercontent.com">
+    <meta property="og:url"                
+          content="https://tootsville.adventuring.click/" />
+    <meta property="og:title"
+          content="Tootsville" />
+    <meta property="og:description"
+          content="A fun multiplayer adventure for the whole family." />
+    <meta property="fb:app_id"
+          content="1265378050154137" />
+    <!--meta property="og:image"              content="" /-->
+    <script src="https://apis.google.com/js/client:platform.js?onload=googleSignInButton"
+            async defer></script>
+    <script src="/js/mesh.js"></script>
+  </head>
+  <body>
+<script>window.fbAsyncInit=function(){FB.init({appId:'1265378050154137',
+xfbml:true,version:'v2.7'});};(function(d,s,id){var
+js,fjs=d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;}
+js=d.createElement(s);js.id=id;js.src="//connect.facebook.net/en_US/sdk.js";
+fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+</script>    
+<div id="fb-root"></div>
+<script>(function(d,s,id){var       js,fjs=d.getElementsByTagName(s)[0];
+if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src=
+"//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1265378050154137";
+fjs.parentNode.insertBefore(js,fjs); }(document,'script','facebook-jssdk'));</script>
+
+    <nav id="main">
+      <ul>
+        <li>read these:</li>
+        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Copyright"
+               >Copyright</a></li>
+        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
+               >Terms of Service</a></li>
+        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy"
+               >Privacy</a></li>
+        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:FOSS"
+               >Our Software</a></li>
+      </ul>
+      <ul><li>tootstest is a work in progress. Many things may not work.</li></ul>
+      <ul>
+        <li><a href="#" onclick="quit()">Quit</a></li>
+      </ul>
+      <ul><li>Tap here or move mouse over toolbar to view options</li></ul>
+    </nav>
+
+    <section id="game">
+      {% block game %}{% endblock %}
+    </section>
+    
+    <section id="overlay">
+      {% block overlay %}{% endblock %}
+    </section>
+    
+    <section id="watermark">
+      tootstest <br> © 2004-2016 <i style="font-face: Chancery, serif">brfp</i>
+    </section>
+
+      <!-- Google Analytics -->
+      <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-80917352-1', 'auto');
+        ga('set', 'transport', 'beacon');	ga('set','appName','tootstest');
+        ga('set','appVersion','0.0.1');
+        if (gameState.playerInfo) {
+          ga('set', 'userId', gameState.playerInfo.playerID);
+        }
+        ga('require', 'linkid');		ga('require', 'eventTracker');
+        ga('require', 'outboundLinkTracker');	ga('require', 'urlChangeTracker');
+        ga('send', 'pageview');
+      </script>
+      <script src="https://www.google-analytics.com/analytics.js" async></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/1.0.0/autotrack.js" async></script>
+      <script src="//www.googleadservices.com/pagead/conversion.js"
+              type="text/javascript" async></script>
+      <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <script src="/js/peering-into-clouds.js" async></script>
+  </body>
+</html>

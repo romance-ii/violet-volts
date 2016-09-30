@@ -7,74 +7,11 @@
 (in-package :tootstest.web)
 (syntax:use-syntax :annot)
 
-(defparameter *mesh-dir* (asdf:system-relative-pathname :tootstest "src/mesh/"))
-(defparameter *work-dir*
-  (merge-pathnames (make-pathname :directory '(:relative ".cache" "jscl" "work"))
-                   (user-homedir-pathname)))
-
-(ensure-directories-exist *work-dir*)
+(defparameter *mesh-dir* (asdf:system-relative-pathname :tootstest "js/"))
 
 (defun mesh.js-pathname ()
   (make-pathname :name "mesh" :type "js" :version :newest
-                 :directory (pathname-directory *work-dir*)))
-
-(defun sort-sources-package-first (a b)
-  (cond
-    ((equal (pathname-name a) "package") t)
-    ((equal (pathname-name b) "package") nil)
-    (t (string-lessp (pathname-name a) (pathname-name b)))))
-
-(defun mesh.js-source-pathnames ()
-  (sort
-   (directory (make-pathname :name :wild :type "lisp"
-                             :version :newest
-                             :directory (pathname-directory *mesh-dir*)))
-   #'sort-sources-package-first))
-
-(defun js-needs-rebuild-p ()
-  (dolist (lisp (mesh.js-source-pathnames))
-    (let ((js (mesh.js-pathname)))
-      (when (or (not (probe-file js))
-                (< (file-write-date js) (file-write-date lisp)))
-        (return-from js-needs-rebuild-p t)))))
-
-(defun rebuild-js ()
-  (format *terminal-io* "~&Rebuilding Javascript (JSCL compilation)…")
-  (ensure-directories-exist (mesh.js-pathname))
-  (tagbody
-   do-over
-     (restart-case
-         (uiop/stream:with-temporary-file (:stream skinny-js
-                                                   :pathname skinny-js-pathname
-                                                   :directory *work-dir*)
-           (load (make-pathname :name "package" :type "lisp" :version :newest
-                                :directory (pathname-directory *mesh-dir*)))
-           (write-string (uglify (with-output-to-string (fat-js)
-                                   (jscl:write-javascript-for-files
-                                    (mesh.js-source-pathnames) fat-js)))
-                         skinny-js)
-           (uiop/filesystem:rename-file-overwriting-target skinny-js-pathname
-                                                           (mesh.js-pathname)))
-       (do-over ()
-         :report "Try the JSCL cross-compilation again"
-         (go do-over)))))
-
-(defun jscl-rebuild-if-needed ()
-  (when (js-needs-rebuild-p)
-    (rebuild-js)))
-
-(defun jscl-rebuild-when-needed ()
-  (inotify:with-inotify
-      (inotify
-       `((,*mesh-dir* ,(logior inotify:in-close-write inotify:in-moved-to))))
-    (loop for event = (inotify:read-events inotify)
-       thereis event
-       do (handler-case 
-              (jscl-rebuild-if-needed)
-            (error (c)
-              (warn "Got error ~s (~:*~a), trying again in 10s…" c)
-              (sleep 10)
-              (invoke-restart 'do-over))))))
+                 :directory (pathname-directory *mesh-dir*)))
 
 (defun join-lines (a b)
   (concatenate 'string a #(#\Newline) b))

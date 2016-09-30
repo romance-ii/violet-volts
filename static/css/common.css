@@ -1,0 +1,52 @@
+* {
+    box-model: border-box;
+}
+
+p {
+    text-indent: 1rem;
+    text-align: justify;
+    margin-left: 3rem;
+    margin-right: 1rem;
+    padding: 0;
+    font-size: 1rem;
+}
+
+strong {
+    font-weight: bold; 
+    color: indigo; 
+}
+
+h1,h2,h3,h4 {
+    padding: 0;
+    color: indigo;
+}
+
+h1,h2,h3 {
+    margin-left: 0;
+    margin-right: 1rem;
+}
+
+h4 {
+    margin-left: 3rem;
+    margin-right: 1rem;
+}
+
+h1 {
+    margin-top: 3rem;
+    font-size: 3rem;
+}
+
+h2 {
+    margin-top: 2rem;
+    font-size: 2rem;
+}
+
+h3, h4 {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h1 + h2, h2 + h3, h3 + h4 {
+    margin-top: 0;
+}
+

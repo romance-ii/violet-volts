@@ -35,6 +35,13 @@
 (defroute "/tootstest/" ()
   (render #p"index.html"))
 
+(defroute "/tootstest/css/:name.css" (&key name)
+  (send-static "text/css;charset=utf-8"
+               (merge-pathnames (make-pathname
+                                 :directory '(:relative "css")
+                                 :name name :type "css")
+                                *static-directory*)))
+
 (defroute "/tootstest/js/:name.js" (&key name)
   (send-static "application/javascript;charset=utf-8"
                (merge-pathnames (make-pathname

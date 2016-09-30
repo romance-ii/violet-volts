@@ -1,0 +1,50 @@
+
+#main {
+    text-align: center;
+    background-color: rgba(200,200,200,.8);
+    color: #333;
+    border-radius: 0 0 1em 1em;
+    border-width: 0 1pt 1pt 1pt;
+    border-color: white;
+    border-style: solid;
+    width: 50rem;
+    position: fixed;
+    left: calc(50vw - 25em);
+    top: -4rem;
+    height: 5.5rem;
+    transition: top 1s;
+    padding: 0;
+    z-index: 100;
+}
+
+#main:hover {
+    top: 0;
+}
+
+#main > ul {
+    display: block;
+    height: 1rem;
+    margin: .25rem;
+    padding: 0;
+}
+
+#main > ul > li {
+    display: inline-block;
+    margin-left: .75rem;
+    margin-right: .75rem;
+}
+
+nav a {
+    border: 1pt solid black;
+    background-color: rgb(200,200,200);
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+nav a:hover {
+    border: 1pt solid white;
+    background-color: rgb(230,230,230);
+    text-decoration: none;
+    color: #222;
+}

@@ -1,10 +1,11 @@
 all:	bin doc test
 
-bin:	tootstest.cgi src/lib/jscl/jscl.js
-tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -name .\*)
+bin:	tootstest.cgi js/mesh.js
+tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\*)
 	buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
+		--load "src/setup.lisp" \
 		--eval '(ql:quickload :tootstest)' \
 		--load-system tootstest \
 		--entry tootstest:entry
@@ -12,6 +13,12 @@ tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -name .\*)
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*)
 	cd src/lib/jscl; ./make.sh
+
+js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
+		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
+	cd src/lib/jscl; sbcl --load jscl.lisp \
+		--load ../../../src/bootstrap-tootstest.lisp \
+		--eval '(jscl::bootstrap-mesh)' --eval '(quit)'
 
 test:	bin
 	cd src/lib/jscl; ./run-tests.sh
