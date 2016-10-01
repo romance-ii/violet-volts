@@ -1,3 +1,6 @@
+(defpackage :violet-volts
+  (:use :cl :jscl/ffi)
+  (:export #:-then->))
 (defpackage :webrepl
   (:use :cl :jscl/ffi)
   (:export #:start-repl))
