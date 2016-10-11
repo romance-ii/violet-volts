@@ -12,6 +12,7 @@ html {
 body {
     font-family: Cantarell, serif;
     width: 60em; /* FIXME */
+    max-width: 100vw;
     height: 36em;
     margin: auto auto auto auto;
     background-color: #333;
@@ -101,9 +102,10 @@ nav a:hover {
     border-width: 0 1pt 1pt 1pt;
     border-color: white;
     border-style: solid;
+    min-width: 20rem;
     width: 50rem;
+    max-width: 95vw;
     position: absolute;
-    left: calc(50vw - 25rem);
     transition: top 1s;
     padding: 1.5rem;
 }
