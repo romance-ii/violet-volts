@@ -1,6 +1,7 @@
 all:	bin doc test
 
-bin:	tootstest.cgi js/mesh.js
+bin:	tootstest.cgi static/js/mesh.js
+
 tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\*)
 	buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
@@ -13,6 +14,18 @@ tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*)
 	cd src/lib/jscl; ./make.sh
+
+static/js/mesh.js:	js/mesh.js
+	closure-compiler --compilation_level SIMPLE \
+		--create_source_map $<.map \
+		--formatting PRETTY_PRINT \
+		--third_party true \
+		--warning_level VERBOSE \
+		--js_output_file $< \
+		--js $@
+
+static/css/main.css:	src/css/main.less
+	lessc src/css/main.less | cleancss -o static/css/main.css
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)

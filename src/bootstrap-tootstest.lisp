@@ -7,6 +7,11 @@
         (*package* (find-package "JSCL"))
         (*default-pathname-defaults* *base-directory*)) 
     (compile-application
-     (directory (source-pathname "*" :directory '(:relative :up :up :up "src" "mesh")
-                                 :type "lisp")))))
+     (cons
+      (source-pathname "package" :directory '(:relative :up :up :up "src" "mesh")
+                                 :type "lisp")
+      (directory (source-pathname "*" :directory '(:relative :up :up :up "src" "mesh")
+                                      :type "lisp")))
+     (source-pathname "mesh" :directory '(:relative :up :up :up "js")
+                             :type "js"))))
 

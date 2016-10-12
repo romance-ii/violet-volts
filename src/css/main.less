@@ -1,41 +1,45 @@
-@import "common.css";
-@import "main-nav.css";
+@import "palette.less";
+@import "common.less";
+@import "main-nav.less";
+@import "https://fonts.googleapis.com/css?family=Acme&name=Acme.css";
 @charset "UTF-8";
 
 html {
-    background: -webkit-repeating-linear-gradient(45deg, #606dbc, #606dbc 10px, #465298 10px, #465298 20px);
-    background: repeating-linear-gradient(45deg, #606dbc, #606dbc 10px, #465298 10px, #465298 20px);
+    background: -webkit-repeating-linear-gradient(45deg, @indigo, @indigo 1rem,
+                                                  @dark-indigo 1rem, @dark-indigo 2rem);
+    background: repeating-linear-gradient(45deg, @indigo, @indigo 1rem,
+                                          @dark-indigo 1rem, @dark-indigo 2rem);
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: Cantarell, serif;
+    font-family: Acme, Cantarell, serif;
     width: 60em; /* FIXME */
     max-width: 100vw;
     height: 36em;
     margin: auto auto auto auto;
-    background-color: #333;
+    background-color: @charcoal;
     color: white;
     border-radius: 0 0 2em 2em;
-    border: 1pt solid #666;
+    border: 1pt solid @grey;
 }
 
 a:link {
-    color: #005585;
+    color: @blue;
 }
 a:visited {
-    color: #485270;
+    color: @violet;
 }
 a:hover {
-    color: #b83800;
+    color: @burgundy;
     text-decoration: underline;
 }
 
 #main {
     text-align: center;
     background-color: rgba(200,200,200,.8);
-    color: #333;
+    color: @charcoal;
     border-radius: 0 0 1em 1em;
     border-width: 0 1pt 1pt 1pt;
     border-color: white;
@@ -71,7 +75,7 @@ nav a {
     background-color: rgb(200,200,200);
     font-weight: bold;
     text-decoration: none;
-    color: #333;
+    color: @charcoal;
 }
 
 nav a:hover {
@@ -97,7 +101,7 @@ nav a:hover {
 #overlay {
     top: 3em;
     background-color: rgba(220,200,230,.8);
-    color: #333;
+    color: @charcoal;
     border-radius: 1rem;
     border-width: 0 1pt 1pt 1pt;
     border-color: white;
@@ -175,7 +179,7 @@ nav a:hover {
 }
 
 .info-box>h3 {
-    background-color: #333;
+    background-color: @charcoal;
     color: #ddd;
     text-align: center;
     padding: 1rem;
@@ -186,7 +190,7 @@ nav a:hover {
 }
 
 .info-box>p {
-    color: #333;
+    color: @charcoal;
     padding: 1rem;
     text-indent: none;
     text-align: center;
@@ -231,12 +235,12 @@ input[type=clear]:active
 
 #welcome-signin {
     display: inline-block;
-    height: min(90vh, 14rem);
+    height: ~'min(90vh, 14rem)';
     width: calc(50% - 2rem);
 }
 
 #welcome-news {
     display: inline-block;
-    height: min(90vh, 14rem);
+    height: ~'min(90vh, 14rem)';
     width: calc(50% - 2rem);
 }

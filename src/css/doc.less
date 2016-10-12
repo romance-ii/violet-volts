@@ -1,5 +1,7 @@
-@import "main-nav.css";
-@import "common.css";
+@import "palette.less"
+@import "main-nav.less";
+@import "common.less";
+@import "https://fonts.googleapis.com/css?family=Acme&name=Acme.css";
 @charset "UTF-8";
 
 * {
@@ -15,15 +17,15 @@ html {
 }
 
 body {
-    font-family: Cantarell, serif;
+    font-family: Acme, Cantarell, serif;
     max-width: 60rem;
     min-width: 25rem;
     height: auto;
     margin: auto auto auto auto;
-    background-color: #eee;
-    color: #222;
+    background-color: @grey;
+    color: @charcoal;
     border-radius: 0 0 2rem 2rem;
-    border: 1pt solid #666;
+    border: 1pt solid @grey;
 }
 
 #doc {
@@ -35,8 +37,9 @@ body {
 #footer {
     margin-top: 3em;
     font-size: .75rem;
-    color: #555;
+    color: @grey;
     margin-left: 3rem; 
     margin-right: 3rem; 
     text-align: center;
 }
+
