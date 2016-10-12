@@ -25,7 +25,7 @@ static/js/mesh.js:	js/mesh.js
 		--js $@
 
 static/css/%.css:	src/css/%.less
-	lessc src/css/%.less | cleancss -o static/css/%.css
+	lessc $< | cleancss -o $@
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
