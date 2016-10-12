@@ -1,6 +1,6 @@
 all:	bin doc test
 
-bin:	tootstest.cgi static/js/mesh.js
+bin:	tootstest.cgi static/js/mesh.js static/css/main.css static/css/doc.css
 
 tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\*)
 	buildapp --output tootstest.cgi.new \
@@ -24,8 +24,8 @@ static/js/mesh.js:	js/mesh.js
 		--js_output_file $< \
 		--js $@
 
-static/css/main.css:	src/css/main.less
-	lessc src/css/main.less | cleancss -o static/css/main.css
+static/css/%.css:	src/css/%.less
+	lessc src/css/%.less | cleancss -o static/css/%.css
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
