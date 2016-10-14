@@ -1,0 +1,18 @@
+<!--#include file="error-header.htmlf"-->
+
+<h1> 404 </h1>
+
+<p> There is no resource at
+  <!--#echo var="REDIRECT_SERVER_NAME"--><!--#echo var="REDIRECT_URL"-->
+</p>
+
+<ul>
+  <li> If you typed the URL, check your spelling. </li>
+  <li> If you  followed a link to get here,  please notify the webmaster
+    of the site that sent you here. </li>
+</ul>
+
+<a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_404">(Learn
+  More…)</a>
+
+<!--#include file="error-footer.htmlf"-->
