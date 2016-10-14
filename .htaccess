@@ -1,8 +1,12 @@
+RedirectMatch ^/wikiwiki/(.*)$ https://wikiwiki.tootsville.adventuring.click/wikiwiki/$1
+RedirectMatch ^/tootsbook/(.*)$ https://www.tootsbook.com/tootsbook/$1
+
 Options ExecCGI SymLinksIfOwnerMatch
 AddHandler fastcgi-script .cgi
 
 AcceptPathInfo On
 RewriteEngine On
+Header always set X-Frame-Options SAMEORIGIN
 
 RewriteCond %{HTTPS} !=on
 RewriteRule (.*) https://tootsville.adventuring.click%{REQUEST_URI} [R=301,L]
@@ -10,7 +14,4 @@ RewriteRule (.*) https://tootsville.adventuring.click%{REQUEST_URI} [R=301,L]
 RewriteRule ^tootstest/(.*)$ tootstest.cgi/%1 [QSA,L]
 RewriteRule ^[Pp][Ll][Aa][Yy].* tootstest.cgi/login [QSA,L]
 
-RewriteRule ^wikiwiki/(.*)$ https://wikiwiki.tootsville.adventuring.click/wikiwiki/%1 [QSA,L]
-
-Header always set X-Frame-Options SAMEORIGIN
 
