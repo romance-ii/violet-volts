@@ -8,13 +8,13 @@
           type="text/css">
 
 
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="https://www.tootsville.org/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="https://www.tootsville.org/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="https://www.tootsville.org/android-chrome-192x192.png" sizes="192x192">
+<link rel="icon" type="image/png" href="https://www.tootsville.org/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="https://www.tootsville.org/manifest.json">
 <meta name="msapplication-TileColor" content="#0082c8">
-<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+<meta name="msapplication-TileImage" content="https://www.tootsville.org/mstile-144x144.png">
 <meta name="theme-color" content="#9669ad">
 
 
