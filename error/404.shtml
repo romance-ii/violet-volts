@@ -1,10 +1,8 @@
 <!--#include file="error-header.htmlf"-->
 
-<h1> 404 </h1>
+<h1> 404: Not Found </h1>
 
-<p> There is no resource at
-  <!--#echo var="REDIRECT_SERVER_NAME"--><!--#echo var="REDIRECT_URL"-->
-</p>
+<p> There is no resource at “<!--#echo var="REDIRECT_URL"-->” </p>
 
 <ul>
   <li> If you typed the URL, check your spelling. </li>

@@ -36,11 +36,6 @@ ErrorDocument 423 /error/423.shtml
 ErrorDocument 424 /error/424.shtml
 ErrorDocument 425 /error/425.shtml
 ErrorDocument 426 /error/426.shtml
-ErrorDocument 427 /error/427.shtml
-ErrorDocument 428 /error/428.shtml
-ErrorDocument 429 /error/429.shtml
-ErrorDocument 431 /error/431.shtml
-ErrorDocument 451 /error/451.shtml
 ErrorDocument 500 /error/500.shtml
 ErrorDocument 501 /error/501.shtml
 ErrorDocument 502 /error/502.shtml
@@ -51,8 +46,6 @@ ErrorDocument 506 /error/506.shtml
 ErrorDocument 507 /error/507.shtml
 ErrorDocument 508 /error/508.shtml
 ErrorDocument 510 /error/510.shtml
-ErrorDocument 511 /error/511.shtml
-
 
 # CGI server action
 Options ExecCGI SymLinksIfOwnerMatch

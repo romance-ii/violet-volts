@@ -1,1 +1,7 @@
-<!--#include file="error-header.htmlf"--> <h1> 403 </h1> <p> Error 403 </p> <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_403">(Learn More…)</a> <!--#include file="error-footer.htmlf"-->
+<!--#include file="error-header.htmlf"-->
+
+<h1> 403: Forbidden </h1>
+
+<p> Access to this resource is forbidden. </p>
+
+<a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_403">(Learn More…)</a> <!--#include file="error-footer.htmlf"-->

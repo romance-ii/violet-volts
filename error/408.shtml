@@ -1,1 +1,6 @@
-<!--#include file="error-header.htmlf"--> <h1> 408 </h1> <p> Error 408 </p> <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_408">(Learn More…)</a> <!--#include file="error-footer.htmlf"-->
+<!--#include file="error-header.htmlf"-->
+<h1> 408: Request Timed Out </h1>
+<p> Your  user agent (web  browser) did not  send a complete  request in
+  time. </p>
+
+<a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_408">(Learn More…)</a> <!--#include file="error-footer.htmlf"-->
