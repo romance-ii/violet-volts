@@ -1,4 +1,6 @@
-Options ExecCGI SymLinksIfOwnerMatch
+RedirectMatch ^/$ https://www.tootsville.org/
+
+Options ExecCGI SymLinksIfOwnerMatch Includes
 AddHandler fastcgi-script .cgi
 
 AcceptPathInfo On
