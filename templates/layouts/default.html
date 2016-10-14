@@ -4,10 +4,25 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %} / tootstest </title>
     <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css">
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <meta name="google-signin-client_id"
-          content="1052481910502-sumg845at7g627qdvhhhambm7c7do8e4.apps.googleusercontent.com">
+
+    <!-- Icon and such -->
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="https://www.tootsville.org/apple-touch-icon.png">
+    <link rel="icon" type="image/png"
+          href="https://www.tootsville.org/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png"
+          href="https://www.tootsville.org/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png"
+          href="https://www.tootsville.org/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest"
+          href="https://www.tootsville.org/manifest.json">
+    <meta name="msapplication-TileColor"
+          content="#0082c8">
+    <meta name="msapplication-TileImage"
+          content="https://www.tootsville.org/mstile-144x144.png">
+    <meta name="theme-color"
+          content="#9669ad">
+
     <meta property="og:url"                
           content="https://tootsville.adventuring.click/" />
     <meta property="og:title"
@@ -16,11 +31,15 @@
           content="A fun multiplayer adventure for the whole family." />
     <meta property="fb:app_id"
           content="1265378050154137" />
-    <!--meta property="og:image"              content="" /-->
+    
+
+    <meta name="google-signin-client_id"
+         content="1052481910502-sumg845at7g627qdvhhhambm7c7do8e4.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/client:platform.js?onload=googleSignInButton"
             async defer></script>
   </head>
   <body>
+    <!-- Facebook API -->
 <script>window.fbAsyncInit=function(){FB.init({appId:'1265378050154137',
 xfbml:true,version:'v2.7'});};(function(d,s,id){var
 js,fjs=d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;}
@@ -32,24 +51,39 @@ fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
 if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src=
 "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1265378050154137";
 fjs.parentNode.insertBefore(js,fjs); }(document,'script','facebook-jssdk'));</script>
+      <!-- Google Analytics -->
+      <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-80917352-1', 'auto');
+        ga('set', 'transport', 'beacon');	ga('set','appName','tootstest');
+        ga('set','appVersion','0.0.1');
+/*      if (gameState.playerInfo) {
+           ga('set', 'userId', gameState.playerInfo.playerID);
+        } */
+        ga('require', 'linkid');		ga('require', 'eventTracker');
+        ga('require', 'outboundLinkTracker');	ga('require', 'urlChangeTracker');
+        ga('send', 'pageview');
+      </script>
 
     <nav id="main">
       <ul>
-        <li>read these:</li>
-        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Copyright"
-               >Copyright</a></li>
         <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
+               target="_new"
                >Terms of Service</a></li>
         <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy"
-               >Privacy</a></li>
-        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:FOSS"
-               >Our Software</a></li>
+               target="_new"
+               >Privacy Policy</a></li>
       </ul>
-      <ul><li>tootstest is a work in progress. Many things may not work.</li></ul>
       <ul>
         <li><a href="#" onclick="quit()">Quit</a></li>
+        <li><a href="https://www.tootsville.org/"
+               target="_new"
+               >Tootsville.org</a></li>
+        <li><a href="https://www.tootsbook.com/"
+               target="_new">Tootsbook</a></li>
+        <li><a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/"
+               target="_new">Tootsville.org</a></li>
       </ul>
-      <ul><li>Tap here or move mouse over toolbar to view options</li></ul>
     </nav>
 
     <section id="game">
@@ -64,24 +98,64 @@ fjs.parentNode.insertBefore(js,fjs); }(document,'script','facebook-jssdk'));</sc
       tootstest <br> © 2004-2016 <i style="font-face: Chancery, serif">brfp</i>
     </section>
 
-      <!-- Google Analytics -->
-      <script>
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', 'UA-80917352-1', 'auto');
-        ga('set', 'transport', 'beacon');	ga('set','appName','tootstest');
-        ga('set','appVersion','0.0.1');
-/*      if (gameState.playerInfo) {
-           ga('set', 'userId', gameState.playerInfo.playerID);
-        } */
-        ga('require', 'linkid');		ga('require', 'eventTracker');
-        ga('require', 'outboundLinkTracker');	ga('require', 'urlChangeTracker');
-        ga('send', 'pageview');
-      </script>
       <script src="https://www.google-analytics.com/analytics.js" async></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/1.0.0/autotrack.js" async></script>
       <script src="//www.googleadservices.com/pagead/conversion.js"
               type="text/javascript" async></script>
       <script src="https://apis.google.com/js/platform.js" async defer></script>
       <script src="/tootstest/js/mesh.js" async></script>
+
+
+      <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "VideoGame",
+      "url": "https://www.tootsville.org/",
+      "gamePlatform": { "@context": "http://schema.org",
+                        "@type": "WebPage",
+                        "url": "http://tootsville.org/"
+                       },
+       "director": { "@context": "http://schema.org",
+                     "@type": "Person",
+                     "gender": "Male",
+                      "givenName": "Bruce-Robert",
+                      "familyName": "Fenn Pocock",
+                      "honorificPrefix": "Mr",
+                      "jobTitle": "Benevolent Dictator",
+                      "name": "Bruce-Robert Fenn Pocock" },
+                     "sourceOrganization": { "@context": "http://schema.org",
+                                      "@type": "Organization",
+                                      "naics": "519130",
+                                      "isicv4": "9321",
+                                      "description": "A not-for-profit volunteer organization responsible for Tootsville V",
+                                      "name": "Violet Volts",
+                                      "url":
+                                      "https://wikiwiki.tootsville.adventuring.click/wikiwiki/Violet_Volts"
+                                      },
+       "name": "Tootsville",
+       "description": "Tootsville is a fun virtual world where anybody can play, build, and explore for free",
+       "playMode": "CoOp",
+       "operatingSystem": "HTML5",
+       "offers": { "@context": "http://schema.org",
+                   "@type": "Offer",
+                   "priceCurrency": "USD",
+                   "price": "0"
+                 },
+       "applicationCategory": "Game, Multimedia",
+       "applicationSubCategory": "Massively Multiplayer Online Role-Playing Game",
+       "softwareHelp":
+       "https://wikiwiki.tootsville.adventuring.click/wikiwiki/",
+       "softwareRequirements":
+       "https://wikiwiki.tootsville.adventuring.click/wikiwiki/Minimum_Requirements",
+       "softwareVersion": "5",
+       "discussionUrl": "https://www.tootsbook.com/tootsbook/",
+       "genre": "non-violent multiplayer",
+       "interactivityType": "active",
+       "inLanguage": "en",
+       "typicalAgeRange": "13-",
+       "gameLocation":
+       "https://wikiwiki.tootsville.adventuring.click/wikiwiki/Tootanga"                      
+    } </script>
+ 
   </body>
 </html>
