@@ -25,3 +25,4 @@ dist/*
 .emacs.desktop.lock
 build/
 tootstest.cgi
+static/css/doc.css static/css/main.css
