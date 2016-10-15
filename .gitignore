@@ -1,6 +1,7 @@
 # Backup, temp files
 tmp.*
 *.tmp
+tmp?
 temp-*
 *~
 *.bak
@@ -9,7 +10,6 @@ temp-*
 dumper*.lisp
 DEADJOE
 *.fasl
-
 
 # Deployment packages
 *.apk
@@ -36,3 +36,5 @@ tootstest.cgi
 
 # Compiled CSS files from LESS sources
 static/css/*.css
+
+
