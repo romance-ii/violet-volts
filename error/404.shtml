@@ -1,5 +1,12 @@
 <!--#include file="error-header.htmlf"-->
 
+<div id="bella-flight">
+  <img src="https://jumbo.tootsville.adventuring.click/Assets/Avatars/Quicksilver/Assets/Bella.png"
+       id="bella">
+  <img src="https://jumbo.tootsville.adventuring.click/Assets/Avatars/Quicksilver/Assets/Bella-Shadow.png"
+       id="bella-shadow">
+</div>
+
 <h1> 404: Not Found </h1>
 
 <p> There is no resource at “<!--#echo var="REDIRECT_URL"-->” </p>
@@ -12,5 +19,38 @@
 
 <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_404">(Learn
   More…)</a>
+
+<style type="text/css">
+#builder-toot { opacity: 0 !important }
+#bella-flight {
+  position:absolute;
+  top: 10rem;
+  left: -3rem;
+  width:10%;
+  animation: bella-across 6s linear forwards;
+  align: center;
+}
+@keyframes bella-across {
+to { transform: translatex(75vw);}
+}
+#bella {
+  position: relative;
+  animation: bella-bob 1s alternate infinite ease-in-out;
+  height: 15vh;
+}
+#bella-shadow {
+  height: 3vh:
+  top: 18vh;
+}
+@keyframes bella-bob {
+  to { transform: translatey(3vh);}
+}
+</style>
+
+<audio onloadeddata="var fiddlesticks = this; setTimeout(function() { fiddlesticks.play(); }, 6000)">
+  <source src="https://jumbo.tootsville.adventuring.click/Assets/Voices/Bella-Fiddlesticks.mp3" />
+  <source src="https://jumbo.tootsville.adventuring.click/Assets/Voices/Bella-Fiddlesticks.ogg" />
+  <source src="https://jumbo.tootsville.adventuring.click/Assets/Voices/Bella-Fiddlesticks.wav" />
+</audio>
 
 <!--#include file="error-footer.htmlf"-->
