@@ -52,11 +52,11 @@
   (callback* (#j:FB:login (make-object "scope" "public_profile,email"))
              facebook-sign-in-changed))
 
-(setf #j:window:fbAsyncInit
+(setf (oget* "window" "fbAsyncInit")
       (lambda ()
         (#j:FB:init
          (make-object
-          "appId" "1265378050154137",
+          "appId" "1265378050154137"
           "cookie" t ; enable cookies to  allow the server to access the
                                         ; session
           "xfbml" true    ; parse social plugins on this page
@@ -77,7 +77,7 @@
   (let ((js (#j:document:createElement "script")))
     (setf (oget js "id") "facebook-jssdk")
     (setf (oget js "src") "//connect.facebook.net/en_US/sdk.js")
-    ((oget* fjs "parentNode" "insertBefore") js fjs)))
+    ((oget (oget fjs "parentNode") "insertBefore") js fjs)))
 (load-facebook-async)
 
 (defun set-html (id html)
@@ -212,7 +212,7 @@
 (defun signInToMesh (response)
   (log "Sign in to game mesh now; received directory")
   (when (response) (log response))
-  (ga "send","event","Game Sign-In" "Join Mesh" "Join Mesh")
+  (ga "send" "event" "Game Sign-In" "Join Mesh" "Join Mesh")
   ;; TODO: use returned figures from join-gossip call
   (let ((rando (floor (random 10000))))
     (set (getf *game-state* :player-info)
@@ -254,8 +254,8 @@
   (#j:FB:logout))
 
 (defun quit ()
-  (when (not (or ((getf *game-state* :player-info)
-                  (logged-in-p))))
+  (when (not (or (getf *game-state* :player-info)
+                 (logged-in-p)))
     (game-status-update))
   (when (getf *game-state* :player-info) (quit-from-game))
   (when (getf *game-state* :google-user) (quit-from-google))

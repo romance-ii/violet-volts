@@ -1,3 +1,14 @@
+# Redirect for things that are on other servers.
+#
+# This   allows  arbitrary   servers  to   bounce  404's   off  to   one
+# another, basically.
+RedirectMatch ^/wikiwiki/(.*)$ https://wikiwiki.tootsville.adventuring.click/wikiwiki/$1
+RedirectMatch ^/tootsbook/(.*)$ https://www.tootsbook.com/tootsbook/$1
+RedirectMatch ^/Assets/(.*)$ //jumbo.tootsville.adventuring.click/Assets/$1
+RedirectMatch ^/directory/(.*)$ https://whitney.tootsville.adventuring.click/directory/$1
+RedirectMatch ^/members/(.*)$ https://members.tootsbook.com/members/$1
+RedirectMatch ^/([Pp][Ll][Aa][Yy].*) tootstest.cgi/login?to=$1
+
 RedirectMatch ^/$ https://www.tootsville.org/
 
 Options ExecCGI SymLinksIfOwnerMatch Includes
@@ -5,16 +16,14 @@ AddHandler fastcgi-script .cgi
 
 AcceptPathInfo On
 RewriteEngine On
+Header always set X-Frame-Options SAMEORIGIN
 
+# Ensure HTTPS only!
 RewriteCond %{HTTPS} !=on
 RewriteRule (.*) https://tootsville.adventuring.click%{REQUEST_URI} [R=301,L]
 
 RewriteRule ^tootstest/(.*)$ tootstest.cgi/%1 [QSA,L]
-RewriteRule ^[Pp][Ll][Aa][Yy].* tootstest.cgi/login [QSA,L]
 
-RewriteRule ^wikiwiki/(.*)$ https://wikiwiki.tootsville.adventuring.click/wikiwiki/%1 [QSA,L]
-
-Header always set X-Frame-Options SAMEORIGIN
 
 # Error Documents for all defined error codes.
 ErrorDocument 400 /error/400.shtml

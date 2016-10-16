@@ -1,6 +1,7 @@
 # Backup, temp files
 tmp.*
 *.tmp
+tmp?
 temp-*
 *~
 *.bak
@@ -9,7 +10,6 @@ temp-*
 dumper*.lisp
 DEADJOE
 *.fasl
-
 
 # Deployment packages
 *.apk
@@ -21,7 +21,21 @@ setup-*.exe
 *.deb
 *.war
 dist/*
+
+# Editor working files
 .emacs.desktop
 .emacs.desktop.lock
+.settings
+.workspace
+
+# Build temp files
 build/
+
+# Compilation target
 tootstest.cgi
+
+# Compiled CSS files from LESS sources
+static/css/*.css
+
+
+js/*.js
