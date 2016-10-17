@@ -23,8 +23,8 @@
                ;; for DB
                :datafly
                :sxql
-               
-               :inotify
+
+	       :bordeaux-threads               
                :cl-uglify-js
                )
   :components ((:module "src"
