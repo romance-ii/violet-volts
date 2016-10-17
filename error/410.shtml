@@ -5,4 +5,7 @@
 <p> The  resource you have requested  has been removed, and  will not be
   coming back. </p>
 
-<a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_410">(Learn More…)</a> <!--#include file="error-footer.htmlf"-->
+<a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_410">(Learn
+  More…)</a>
+
+<!--#include file="error-footer.htmlf"-->

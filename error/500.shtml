@@ -3,6 +3,8 @@
      id="featured">
 <style>
   #builder-toot { display: none; }
+  #play-now { display: none; }
+  #tootsvilleorg { display: none; }
 </style>
 <h1> 500: Internal Error </h1>
 
@@ -10,8 +12,8 @@
 
 <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Error_500">(Learn More…)</a> 
 
-<p> This is a serious problem with our program. Our volunteers will have
-  to fix it. </p>
+<ul><p> This is a serious problem with our program. Our volunteers will have
+  to fix it. </p></ul>
 
 
   <!--#include file="error-footer.htmlf"-->
