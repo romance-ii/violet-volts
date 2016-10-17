@@ -1,8 +1,10 @@
-all:	bin doc test
+all:	bin
 
-bin:	tootstest.cgi static/js/mesh.js static/css/main.css static/css/doc.css
+bin:	tootstest.cgi \
+	static/js/mesh.js \
+	static/css/main.css static/css/doc.css
 
-tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\*)
+tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\* -and -not -path src/mesh/\**)
 	buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
@@ -15,14 +17,42 @@ tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*)
 	cd src/lib/jscl; ./make.sh
 
-static/js/mesh.js:	js/mesh.js
-	closure-compiler --compilation_level SIMPLE \
-		--create_source_map $<.map \
-		--formatting PRETTY_PRINT \
+# required to make Closure happy	
+js/undef-require.js:	
+	echo 'var require=undefined;' >> $@
+
+js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
+	closure-compiler --compilation_level ADVANCED \
+		--create_source_map static/js/mesh.cc.js.map \
 		--third_party true \
-		--warning_level VERBOSE \
-		--js_output_file $< \
-		--js $@
+		--js_output_file $@ \
+		--js js/undef-require.js \
+		--js src/lib/jscl/jscl.js \
+		--js js/mesh.js
+
+js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
+	uglifyjs src/lib/jscl/jscl.js js/mesh.js \
+		--source-map static/js/mesh.yug.js.map \
+		--screw-ie8 \
+		-o js/mesh.yug.js \
+		-m -c		
+
+static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
+	if [ \
+	    $$(stat js/mesh.cc.js | grep Size: | \
+		cut -d: -f2 | cut -d B -f 1) \
+	    -lt \
+	    $$(stat js/mesh.yug.js | grep Size: | \
+		cut -d: -f2 | cut -d B -f 1) \
+	    ]; then \
+	  echo "Closure produced tighter code than Uglify"; \
+	  cp js/mesh.cc.js static/js/mesh.js; \
+	else \
+	  echo "Uglify produced tighter code than Closure"; \
+	  cp js/mesh.yug.js static/js/mesh.js; \
+	fi
+	echo "Ignoring both and using raw";
+	cat src/lib/jscl/jscl.js js/mesh.js > static/js/mesh.js
 
 static/css/%.css:	src/css/%.less
 	lessc $< | cleancss -o $@
