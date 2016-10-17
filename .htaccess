@@ -8,6 +8,8 @@ RedirectMatch ^/Assets/(.*)$ //jumbo.tootsville.adventuring.click/Assets/$1
 RedirectMatch ^/directory/(.*)$ https://whitney.tootsville.adventuring.click/directory/$1
 RedirectMatch ^/members/(.*)$ https://members.tootsbook.com/members/$1
 RedirectMatch ^/([Pp][Ll][Aa][Yy].*) tootstest.cgi/login?to=$1
+RedirectMatch ^/css/(.*)$ /static/css/$1
+RedirectMatch ^/js/(.*)$ /static/js/$1
 
 RedirectMatch ^/$ https://www.tootsville.org/
 
