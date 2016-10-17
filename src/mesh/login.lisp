@@ -209,7 +209,7 @@
     (setf (getf *game-state* :player-info) (make-new-player))
     (game-status-update)))
 
-(defun signInToMesh (response)
+(defun sign-in-to-mesh (response)
   (log "Sign in to game mesh now; received directory")
   (when (response) (log response))
   (ga "send" "event" "Game Sign-In" "Join Mesh" "Join Mesh")
