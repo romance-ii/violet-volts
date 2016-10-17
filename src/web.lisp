@@ -68,13 +68,11 @@
   (cond
     ((wants-json-p)
      (render-json '((:error . 404))))
-    (t (merge-pathnames #P"error/404.html"
-                        *template-directory*))))
+    (t (redirect "/error/404.shtml"))))
 
 (defmethod on-exception ((app <web>) code)
   (declare (ignore app))
   (cond
     ((wants-json-p)
      (render-json `((:error . ,code))))
-    (t (merge-pathnames #P"error/500.html"
-                        *template-directory*))))
+    (t (redirect "/error/500.shtml"))))
