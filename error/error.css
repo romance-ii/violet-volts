@@ -31,6 +31,12 @@ h1 {
     max-height: 50%;
     float: right;
 }
+#featured {
+    max-width: 33%;
+    max-height: 50%;
+    float: right;
+}
+
 ul { 
     display: block;
     align-content: center;
