@@ -2,7 +2,7 @@
   (unless (find-package :jscl)
     (load (asdf:system-relative-pathname :tootstest
                                          "src/lib/jscl/jscl" :type "lisp"))
-    (funcall (intern "BOOTSTRAP" (find-package "JSCL")))))
+    (funcall (intern "BOOTSTRAP-CORE" (find-package "JSCL")))))
 (defpackage :tootstest.js (:use :jscl :cl))
 (in-package :tootstest.web)
 (syntax:use-syntax :annot)
