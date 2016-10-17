@@ -3,54 +3,107 @@
 {% block game %}
 {% endblock %}
 {% block overlay %}
+
+<!-- Log in (Sign in) Overlay -->
 <div id="login-overlay">
-  <h1> Play Now: tootstest </h1>
+  <h1><img src="https://jumbo.tootsville.adventuring.click/Assets/Icons/tootsville-logo.svg"
+           style="height:   6rem;    top:   0;    position:   absolute;"
+           alt="Tootsville"></h1>
 
-  <p>  Sign  in  here  to   begin,  whether  or  not  you've  played
-    before. </p>
+  <div class="twocol1">
 
-  <section id="google-sign-in-box" class="sign-in-box">
-    <h4> Sign in with your Google account </h4>
-    <center  style="min-height: 2em">
-      &nbsp;
-      <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
-    </center>
-  </section>
+    <h2> Play Now: <tt>tootstest</tt> </h2>
 
-  <section id="facebook-sign-in-box" class="sign-in-box">
-    <h4> Sign in using Facebook (broken?) </h4>
-    <center style="min-height: 2em">
-      &nbsp;
-      <div class="fb-login-button" data-max-rows="1"
-           data-size="large" data-show-faces="true"></div>
-    </center>
-  </section>
+    <ul><li><tt>tootstest</tt> is  a work in progress.  Many things do
+        not work.</li></ul>
 
-  <p> Remember, your use is subject to our
-    <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
-       target="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
-       >Terms    of   Service</a>.    We   protect
-    your
-    <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy"
-       target="privacy">privacy</a> in
-    meaningful ways. </p>
-  
-  <h4> Under 13? </h4>
-  <p> If you aren't  yet 13 years old, you'll need  a parent or guardian
-    to        sign       in        for        you.       Ask        them
-    to <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Parents"
-    >look at these instructions for parents</a> before signing in. </p>
+    <p> <strong>Sign  in here  to play.</strong> You  must be  13 years
+      old. </p>
 
-  <h4> Sign-in account questions? </h4>
+    <section id="google-sign-in-box" class="sign-in-box">
+      <center  style="min-height: 2em">
+        &nbsp;
+        <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
+      </center>
+    </section>
 
-  <p> Manage your
-    <a  href="https://myaccount.google.com/"
-        target="googleAccount">Google
-      Account at MyAccount.Google.com</a>, or your
-    <a
-      target="facebookAccount"
-      href="http://facebook.com/">Facebook Account at Facebook.com</a></p>
+    <section id="facebook-sign-in-box" class="sign-in-box">
+      <i> Facebook sign-in is probably still broken. </i>
+      <center style="min-height: 2em">
+        &nbsp;
+        <div class="fb-login-button" data-max-rows="1"
+             data-size="large" data-show-faces="true"
+             data-onlogin="gotFacebookSignin"></div>
+      </center>
+    </section>
+
+    <p> Every player must follow the
+      <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
+         target="tos">Terms of Service</a>. </p>
+
+    <p> We protect your
+      <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy"
+         target="privacy">privacy</a> in
+      meaningful ways. </p>
+
+  </div>
+
+  <!-- ******************** -->
+
+  <div class="twocol2">
+
+    <section id="under-13">
+      <h4> Under 13? </h4>
+      <p>  If you  aren't yet  13  years old,  you'll need  a parent  or
+        guardian     to     sign     in    for     you.     Ask     them
+        to <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Parents"
+              >look  at  these  instructions for  parents</a>  before  signing
+        in. </p>
+      <h5> This feature is coming soon. </h5>
+    </section>
+
+    <section id="account-management">
+      <h4> Sign-in account questions? </h4>
+
+      <p> Manage your
+        <a  href="https://myaccount.google.com/"
+            target="googleAccount">Google
+          Account at MyAccount.Google.com</a>, or your
+        <a
+          target="facebookAccount"
+          href="http://facebook.com/">Facebook           Account          at
+          Facebook.com</a></p>
+
+      <p> Use these  sites to sign up, change passwords,  and check your
+        privacy settings. </p>
+
+    </section>
+  </div>
+
+  <br clear="both">
+
+  <h3> Want to know more? </h3>
+
+  <p> Visit <a target="tootsvilleorg"
+               href="https://www.tootsville.org/">Tootsville.org</a>  to
+    discover  the  world of  Tootsville.  Read  all about  it
+    in <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/"
+          target="wiki-wiki">the Wiki-Wiki</a>. </p>
+
+  <p> <a href="https://www.tootsbook.com/tootsbook/"
+         target="tootsbook">Tootsbook</a> has  news and blog  posts that
+         you might find interesting. Check out the
+    <a href="https://www.tootsbook.com/tootsbook/category/herd/"
+       target="tootsbook">Herd  Events</a> for  social events  happening
+    inside the game world, or
+    <a href="https://www.tootsbook.com/tootsbook/category/tootanga/"
+       target="tootsbook">Tootangan Gazette</a>  articles to learn
+    more about the game world. </p>
+
 </div>
+
+<!-- End of log in (sign in) overlay -->
+
 <div id="game-welcome">
   <h1> Welcome </h1>
   <section id="welcome-signin">
@@ -64,14 +117,13 @@
 
       <div id="google-signed-in">
         <h3> Signed in with Google </h3>
-        <p>Manage your account <a target="oauthAccountManager"
-                                  href="https://myaccount.google.com/">at Google.com</a> </p>
+        <p> Manage your account <a target="oauthAccountManager"
+                                   href="https://myaccount.google.com/">at Google.com</a> </p>
 
         <img id="welcome-photo" align="middle"> <span id="welcome-name">???</span>
         <button onclick="quitFromGoogle();">Sign out</button>
       </div>
       <div id="google-not-signed-in">
-        <h3> Sign in with Google </h3>
         <center  style="min-height: 2em">
           &nbsp; <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
         </center>
@@ -89,8 +141,7 @@
         <button onclick="quitFromFacebook();">Sign Out</button>
       </div>
       <div id="facebook-not-signed-in">
-        <h3> Sign in with Facebook </h3>
-        <i> Probably still broken </i>
+        <i> Facebook probably still broken </i>
         <center style="min-height: 2em">
           <button onclick="signInToFacebook();">Sign In</button>
         </center>
