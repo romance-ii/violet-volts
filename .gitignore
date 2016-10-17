@@ -37,5 +37,8 @@ tootstest.cgi
 # Compiled CSS files from LESS sources
 static/css/*.css
 
-
+# Compiled Javascript and source-map files
 js/*.js
+js/*.map
+static/js/*.js
+static/js/*.map
