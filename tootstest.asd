@@ -24,7 +24,7 @@
                :datafly
                :sxql
 
-               :bordeaux-threads               
+               :bordeaux-threads
                :cl-uglify-js
                :cl-rdfxml
                :drakma
