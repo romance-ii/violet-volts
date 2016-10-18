@@ -7,18 +7,18 @@
 (defun server-full-p ()
   (>= (approximate-player-count) (server-full-player-count)))
 
-(defroute "/game-server/" () 
+(defroute "/game-server/" ()
   (render #p"game-server.html"
           `(:server-status
             ((:players-online .,(approximate-player-count))
              (:players-full-limit .,(server-full-player-count))
-             (:online-status .,(if (server-online-p) 
+             (:online-status .,(if (server-online-p)
                                    (if (server-full-p)
                                        "OnlineFull"
                                        "Online")
                                    "OfflineTemporarily"))
              (:online-status-en .,(if (server-online-p)
-                                      (if (server-full-p) 
+                                      (if (server-full-p)
                                           "online, but full"
                                           "online and ready")
                                       "temporarily offline"))

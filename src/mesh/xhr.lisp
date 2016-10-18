@@ -21,7 +21,7 @@
 (defun get (uri callback &optional headers)
   (error "No get"))
 
-(defmacro with-get ((uri response &optional headers) 
+(defmacro with-get ((uri response &optional headers)
                     &body body)
   `(get ,uri (lambda (,response) ,@body nil) ,headers))
 

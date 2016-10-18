@@ -99,7 +99,7 @@ console.log(\"Compile-time error: ~a in …>jscl>~a\");
       (write-string (with-jscl-padding (source-path)
                       (with-output-to-string (s)
                         (jscl::with-compilation-environment
-                            (jscl::!compile-file source-path s))))
+                          (jscl::!compile-file source-path s))))
                     out))))
 
 (defun jscl-compile-file (source-path)

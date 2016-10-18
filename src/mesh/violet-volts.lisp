@@ -18,7 +18,7 @@
                   :overlay-active "game-welcome"
                   :server-info ( :url ,(concatenate 'string
                                                     #j:document:location:protocol
-                                                    "//" 
+                                                    "//"
                                                     #j:document:location:host
                                                     "/tootstest/action"))))
 
@@ -27,4 +27,3 @@
 
 (defun keywordify (word)
   (make-keyword (string-upcase word)))
-

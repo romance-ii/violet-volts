@@ -5,7 +5,7 @@
   (bootstrap-core)
   (let ((*features* (list* :jscl :jscl-xc *features*))
         (*package* (find-package "JSCL"))
-        (*default-pathname-defaults* *base-directory*)) 
+        (*default-pathname-defaults* *base-directory*))
     (compile-application
      (cons
       (source-pathname "package" :directory '(:relative :up :up :up "src" "mesh")
@@ -17,4 +17,3 @@
                                    :type "lisp"))))
      (source-pathname "mesh" :directory '(:relative :up :up :up "js")
                       :type "js"))))
-

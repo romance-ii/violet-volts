@@ -63,7 +63,7 @@
           "version" "v2.5"   ; use Graph API version 2.5
           ))
 
-        (callback* (#j:FB:getLoginStatus) 
+        (callback* (#j:FB:getLoginStatus)
                    facebook-sign-in-changed)))
 
 (defun id-element (id)

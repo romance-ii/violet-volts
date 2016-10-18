@@ -10,7 +10,7 @@
   (#j:window:addEventListener "resize" (lambda () ((oget *engine* "resize")))))
 
 (defun color (red green blue)
-  (cond 
+  (cond
     ((and (integerp red) (integerp green) (intergerp )
           (<= 0 red #xff) (<= 0 green #xff) (<= 0 blue #xff))
      (make-new #j:BABYLON:Color3 (/ red #xff) (/ green #xff) (/ blue #xff)))
@@ -65,6 +65,3 @@
 (defun make-render-process ()
   (check-scene)
   ((oget *engine* "runRenderLoop") (lambda () ((oget *scene* "render")))))
-
-
-

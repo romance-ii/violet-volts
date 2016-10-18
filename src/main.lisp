@@ -51,8 +51,8 @@ version — print compilation date-stamp
   (ql:quickload :swank)
   (funcall (intern "START-SERVER" (find-package :swank))))
 
-(defun write-docs () 
-  (ql:quickload :net.didierverna.declt) 
+(defun write-docs ()
+  (ql:quickload :net.didierverna.declt)
   (ensure-directories-exist #p"doc/")
   (funcall (intern "DECLT" (find-package :net.didierverna.declt))
            :tootstest
@@ -62,27 +62,26 @@ version — print compilation date-stamp
            :hyperlinks nil
            :introduction (alexandria:read-file-into-string #p"src/static/introduction")))
 
-(defun entry (argv) 
-  (case (intern (string-upcase (typecase argv 
+(defun entry (argv)
+  (case (intern (string-upcase (typecase argv
                                  (cons (if (< 1 (length argv))
                                            (second argv)
                                            "FAST-CGI"))
                                  (null "HELP")
                                  (t argv))) :keyword)
-    (:fast-cgi (fastcgi-entry)) 
+    (:fast-cgi (fastcgi-entry))
     (:server (start))
     (:repl (start-repl))
     (:version (print *compiled*))
     (:swank (start-swank))
-    (:write-docs (write-docs)) 
+    (:write-docs (write-docs))
     (otherwise (print-help))))
 
 (defun fastcgi-entry ()
   (format t "Content-Type: text/plain~c~c~c~c
-  
+
   Starting FastCGI is half-working if you see this. But, only half.~%"
           #\Return #\Linefeed #\Return #\Linefeed)
   (format *error-output* "~%FastCGI started~%")
   (let ((ql:*quickload-explain* nil) (ql:*quickload-verbose* nil))
     (clackup *appfile-path* :server :fcgi :port nil :use-thread nil :fd 0)))
-
