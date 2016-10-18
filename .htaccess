@@ -13,6 +13,9 @@ RedirectMatch ^/js/(.*)$ /static/js/$1
 
 RedirectMatch ^/$ https://www.tootsville.org/
 
+Redirect /form/reserve-legacy-toot-name https://goo.gl/forms/TSF6zTktKAsty7OR2
+
+
 Options ExecCGI SymLinksIfOwnerMatch Includes
 AddHandler fastcgi-script .cgi
 
