@@ -1,2 +1,2 @@
-rsync -essh -r static tootstest.cgi .htaccess robots.txt tootsville.adventuring.click:tootsville.adventuring.click/
-rsync -essh -r tootsville.org tootsvilleorg@tootsville.org:
+rsync -essh -rv static tootstest.cgi .htaccess robots.txt tootsville.adventuring.click:tootsville.adventuring.click/
+rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
