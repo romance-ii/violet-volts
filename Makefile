@@ -1,5 +1,8 @@
 all:	bin
 
+deploy:	bin
+	./server-push
+
 bin:	tootstest.cgi \
 	static/js/mesh.js \
 	static/css/main.css static/css/doc.css
