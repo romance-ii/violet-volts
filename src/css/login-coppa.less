@@ -1,0 +1,52 @@
+#coppa-sign-in-label {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+#coppa-sign-in {
+    display: none;
+}
+
+@keyframes coppa-glow {
+    0% { box-shadow: 0 0 6pt clear; }
+    100% { .gold-glow; }
+}
+
+#overlay button#coppa-sign-in-button {
+    font-family: Acme, sans-serif;
+    font-size: 2.5rem;
+    margin: 1rem;
+    padding: 1rem;
+    min-height: 1in;
+    min-width: 1in;
+    border: 2pt solid black;
+    background-color: @burgundy;
+    .outline;
+    align: center;
+    text-align: center;
+    vertical-align: middle;
+    animation: coppa-glow 2s infinite;
+    transition: 3s ease-in-out;
+}
+
+.gold-glow {
+    box-shadow:
+    -.2rem -.2rem .2rem @gold,
+    .2rem -.2rem .2rem @gold,
+    -.2rem .2rem .2rem @gold,
+    .2rem .2rem .2rem @gold;
+    color: @yellow;
+
+}
+
+#coppa-sign-in-button:hover {
+    background-color: (@burgundy + @charcoal);
+}
+
+#coppa-sign-in:checked + #login-overlay {
+    position: fixed;
+    top: 100vh;
+}
+
+

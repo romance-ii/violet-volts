@@ -4,6 +4,7 @@
 @import "palette.less";
 @import "common.less";
 @import "main-nav.less";
+@import "login-coppa.less";
 @charset "UTF-8";
 
 html {
@@ -11,10 +12,10 @@ html {
     padding: 0;
     background-color: #ccf;
     font-family: Acme, sans-serif;
-    background: -webkit-repeating-linear-gradient(45deg, @indigo, @indigo 1rem,
-                                                  @dark-indigo 1rem, @dark-indigo 2rem);
-    background: repeating-linear-gradient(45deg, @indigo, @indigo 1rem,
-                                          @dark-indigo 1rem, @dark-indigo 2rem);
+    background-color: @periwinkle;
+    background: repeating-linear-gradient(45deg, @periwinkle, @periwinkle 1rem,
+                                          (@periwinkle - @charcoal) 1rem,
+                                          (@periwinkle - @charcoal) 2rem);
 }
 
 body { 
@@ -231,10 +232,10 @@ section>iframe:first-child {
 }
 
 button, input[type=button], input[type=submit], input[type=clear] {
-    border: 2pt solid #ddd;
+    border: 2pt solid @silver;
     background-color: rgba(128,128,192,0);
-    color: #ddd;
-    font: Roboto, Cantarell, Charcoal, Chicago, sans-serif;
+    color: @silver;
+    font-family: Cantarell, serif;
     transition: .5s;
     margin: .25rem;
     min-width: 1cm;
