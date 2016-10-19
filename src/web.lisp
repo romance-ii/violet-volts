@@ -33,7 +33,7 @@
   (read-file-into-string pathname ))
 
 (defroute "/tootstest/" ()
-  (redirect "/tootstest/login"))
+  (hunchentoot:redirect "/tootstest/login"))
 
 (defroute "/tootstest/css/:name.css" (&key name)
   (send-static "text/css;charset=utf-8"
@@ -106,16 +106,9 @@
 (defun wants-json-p ()
   (search "application/json" (gethash "Accept" (request-headers *request*))))
 
-(defmethod on-exception ((app <web>) (code (eql 404)))
-  (declare (ignore app))
-  (cond
-    ((wants-json-p)
-     (render-json '((:error . 404))))
-    (t (redirect "/error/404.shtml"))))
-
 (defmethod on-exception ((app <web>) code)
   (declare (ignore app))
   (cond
     ((wants-json-p)
      (render-json `((:error . ,code))))
-    (t (redirect "/error/500.shtml"))))
+    (t (hunchentoot:redirect (format nil "https://www.tootsville.org/error/~d.shtml" code)))))
