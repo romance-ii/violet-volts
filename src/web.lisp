@@ -33,7 +33,7 @@
   (read-file-into-string pathname ))
 
 (defroute "/tootstest/" ()
-  (hunchentoot:redirect "/tootstest/login"))
+  (redirect-to "/tootstest/login"))
 
 (defroute "/tootstest/css/:name.css" (&key name)
   (send-static "text/css;charset=utf-8"
@@ -111,4 +111,4 @@
   (cond
     ((wants-json-p)
      (render-json `((:error . ,code))))
-    (t (hunchentoot:redirect (format nil "https://www.tootsville.org/error/~d.shtml" code)))))
+    (t (redirect-to (format nil "https://www.tootsville.org/error/~d.shtml" code)))))
