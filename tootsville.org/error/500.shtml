@@ -1,8 +1,9 @@
 <!--#include file="error-header.htmlf"-->
-<img src="https://jumbo.tootsville.adventuring.click/Assets/Avatars/Quicksilver/Assets/toot-tester-need-help.jpg"
+<img src="https://jumbo.tootsville.adventuring.click/Assets/Avatars/Quicksilver/Assets/shade.jpeg"
      id="featured">
 <style>
   #builder-toot { display: none; }
+  #featured { top: -3rem; right: calc(100vw + 1rem); min-height: 100vh; }
   #play-now { display: none; }
   #tootsvilleorg { display: none; }
 </style>
@@ -15,5 +16,9 @@
 <ul><p> This is a serious problem with our program. Our volunteers will have
   to fix it. </p></ul>
 
+<audio autoplay="t">
+  <source src="https://jumbo.tootsville.adventuring.click/Assets/Voices/evil-laugh.mp3" />
+  <source src="https://jumbo.tootsville.adventuring.click/Assets/Voices/evil-laugh.wav" />
+</audio>
 
   <!--#include file="error-footer.htmlf"-->
