@@ -38,15 +38,15 @@ body {
     max-height: 50%;
     float: left;
 }
-ul { display: block;
+body>ul { display: block;
      align-content: center;
      width: 33%;
      margin-left: 27.5%;
 }
-ul>li { display: block;
+body>ul>li { display: block;
         align-content: center;
 }
-ul>li>a {
+body>ul>li>a {
     display: block;
     text-decoration: none;
     text-align: center;
