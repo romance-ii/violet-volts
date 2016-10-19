@@ -5,29 +5,53 @@
 @import "common.less";
 @import "main-nav.less";
 @import "login-coppa.less";
+@import "login.less";
 @charset "UTF-8";
 
 html {
-    margin: 0; 
+    margin: 0;
     padding: 0;
     background-color: #ccf;
     font-family: Acme, sans-serif;
     background-color: @periwinkle;
-    background: repeating-linear-gradient(45deg, @periwinkle, @periwinkle 1rem,
+    background: repeating-linear-gradient(45deg, @periwinkle,
+                                          @periwinkle 1rem,
                                           (@periwinkle - @charcoal) 1rem,
                                           (@periwinkle - @charcoal) 2rem);
 }
 
-body { 
-    color: black; 
-    background-color: white; 
+html.mesh-joined {
+    background: repeating-linear-gradient(45deg, @spring-green,
+                                          @spring-green 1rem,
+                                          (@spring-green - @charcoal) 1rem,
+                                          (@spring-green - @charcoal) 2rem);    
+}
+
+html.mesh-lagging {
+    background: repeating-linear-gradient(45deg, @gold,
+                                          @gold 1rem,
+                                          (@gold - @charcoal) 1rem,
+                                          (@gold - @charcoal) 2rem);    
+}
+
+html.mesh-error {
+    background: repeating-linear-gradient(45deg, @burgundy,
+                                          @burgundy 1rem,
+                                          (@burgundy - @charcoal) 1rem,
+                                          (@burgundy - @charcoal) 2rem);    
+}
+
+body {
+    color: black;
+    background-color: white;
     padding: 1rem 2rem 1rem 2rem;
     border: 0 solid white;
     border-radius: 3rem;
     min-width: 75vw !important;
     width: 90%;
     max-width: calc(100vw - 2rem);
-    height: 36em;
+    min-height: min(calc(100vh - 8em), 36em);
+    height: auto;
     margin: 3rem auto 3rem auto;
 }
 
@@ -127,7 +151,15 @@ nav a:hover {
     left: 1rem;
     top: -1rem;
     font-size: 3rem;
-    margin-bottom: 0;
+    margin: 0 0 0 -1rem;
+}
+
+#overlay > h2 {
+    position: relative;
+    left: 1rem;
+    top: -1rem;
+    font-size: 1.5rem;
+    margin: 0 0 0 -1rem;
 }
 
 #overlay button {
@@ -139,35 +171,13 @@ nav a:hover {
     font-size: 2rem;
 }
 
-#login-overlay {
-    display: block;
-}
-
-.sign-in-box {
-    min-width: 12rem;
-    max-width: 35rem;
-    margin: 0 auto 0 auto;
-    padding: .5rem;
-    text-align: center;
-}
-
 .outline {
     color: white;
     text-shadow:
-    -1px -1px 0 #000,  
+    -1px -1px 0 #000,
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-}
-
-.sign-in-box:hover {
-    background-color: #e8e8e8;
-}
-
-.sign-in-box>h4 {
-    text-align: center;
-    margin: 0;
-    padding: 0;
 }
 
 #game-welcome {
@@ -250,11 +260,12 @@ button:active,
 input[type=button]:active,
 input[type=submit]:active,
 input[type=clear]:active
-                      {
-                          border: 2pt solid white;
-                          background-color: rgba(128,128,192,0.5);
-                          color: white;
-                      }
+{
+    border: 2pt solid white;
+    background-color: (@periwinkle - rgba(0,0,0,0.5));
+    color: white;
+    .outline;
+}
 
 #welcome-signin {
     display: inline-block;
@@ -297,27 +308,28 @@ h1+p, h2+p, h3+p, h4+p, h5+p, h6+p, div+p, section+p {
     .twocol1 {
         float: left;
         width: calc(50% - 3rem);
-        margin: 0 0 0 1rem;
+        margin: 0;
+        padding: 0 1rem 0 0;
     }
     .twocol2 {
         float: right;
         width: calc(50% - 3rem);
-        margin: 0 1rem 0 0;
+        margin: 0 0 0 1rem;
+        padding: 0 0 0 1rem;
+        border-left: .2rem solid @charcoal;
     }
 }
 
-.google-logo {
-    height:1em;  
-    padding: 3px 3px 1px 3px; 
-    position: relative;
-    top: .25em; 
+.nascar > img {
+    height: 4rem;
+    width: auto;
+    padding: 1rem;
 }
 
-tt, pre {
-    font-family: Inconsolata, fixed;
-}
-
-dl>dd {
-    font-family: Cantarell, serif;
+.nascar > img:after {
+    font-size: .8rem;
+    font-family: Cantarell, sans-serif;
+    content: attr("title");
+    display: inline-block;
 }
 

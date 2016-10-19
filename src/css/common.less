@@ -9,16 +9,23 @@ p {
     margin-right: 1rem;
     padding: 0;
     font-size: 1rem;
+    font-family: Cantarell, serif;
 }
 
 strong {
-    font-weight: bold; 
-    color: indigo; 
+    font-weight: bold;
+    color: @indigo;
+    font-family: Acme, sans-serif;
 }
 
-h1,h2,h3,h4 {
+em {
+    font-style: roman;
+    font-family: Acme, sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
     padding: 0;
-    color: indigo;
+    color: @indigo;
 }
 
 h1,h2,h3 {
@@ -26,13 +33,7 @@ h1,h2,h3 {
     margin-right: 1rem;
 }
 
-h4 {
-    margin-left: 3rem;
-    margin-right: 1rem;
-}
-
 h1 {
-    margin-top: 3rem;
     font-size: 3rem;
 }
 
@@ -46,7 +47,33 @@ h3, h4 {
     font-size: 1rem;
 }
 
+h4 {
+    margin-left: 3rem;
+    margin-right: 1rem;
+}
+
+h5 {
+    font-size: 1rem;
+    display: inline-block;
+    padding-right: 2rem;
+}
+
+h6 {
+    font-size: 1rem;
+    font-weight: normal;
+    display: inline-block;
+    padding-right: 2rem;
+}
+
 h1:first-child, h2:first-child, h3:first-child, h1 + h2, h2 + h3, h3 + h4 {
     margin-top: 0;
+}
+
+t, pre {
+    font-family: Inconsolata, fixed;
+}
+
+dl>dd {
+    font-family: Cantarell, serif;
 }
 
