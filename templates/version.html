@@ -1,0 +1,66 @@
+{% extends "layouts/blank.html" %}
+{% block title %}Version {{ product }} {{ build-date }}{% endblock %}
+{% block body %}
+
+<h1> Tootsville Login Server </h1>
+
+<p> The login server product is <tt>{{ product }}</tt>. </p>
+<p> The web server component was compiled {{ build-date }}. </p>
+<p> Copyright © 2004-2016, Bruce-Robert Fenn Pocock. </p>
+
+<h2> <img src="https://www.gnu.org/graphics/agplv3-155x51.png"
+          alt="AGPLv3">License </h2>
+
+<p> This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or (at
+  your option) any later version. </p>
+
+<p> This program is distributed in the  hope that it will be useful, but
+  WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
+  MERCHANTABILITY or FITNESS FOR A  PARTICULAR PURPOSE. See the GNU Affero
+  General Public License for more details. </p>
+
+<p> <a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html">Read
+    the license</a>. </p>
+
+<p>   You  can   review   or   download  the   source   code  for   this
+  software  <a  href="https://www.github.com/romance-ii/violet-volts">on
+    GitHub</a> at your convenience. </p>
+
+<h2> Power of Freedom </h2>
+
+<p> {{product}} is made with these free software components </p>
+
+<div class="nascar">
+
+  <img src="https://fedorahosted.org/design-team/raw-attachment/ticket/436/sticker%20%232.png"
+       title="Choose Freedom. Choose Fedora.">
+
+  <img src="http://www.lisperati.com/lisplogo_fancy_256.png"
+       title="Lisp. Caution: Made with Secret Alien Technology">
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Emacs-logo.svg"
+       title="GNU Emacs">
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg"
+       title="GNU Linux">
+
+  <img src="http://www.babylonjs.com/assets/Logo.svg"
+       title="Babylon.js">
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Logo_Blender.svg"
+       title="Blender">
+
+  <img src="https://www.gimp.org/images/frontpage/wilber-big.png"
+       title="The Gimp">
+
+  <img src="https://www.mozilla.org/media/img/home/voices/mozilla-wordmark-white.20d134cd8af7.png"
+       title="Mozilla Foundation">
+
+  <img src="https://www.gnu.org/graphics/bahlon/3d-gnu-head.jpg"
+       title="Gnu's Not Unix">
+
+</div>
+
+{% endblock %}

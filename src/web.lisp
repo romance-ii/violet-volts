@@ -101,6 +101,13 @@
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
 
+(defroute "/tootstest/version" ()
+  (render #p"version.html"
+          (list :product "tootstest"
+                :build-date #.(local-time:format-timestring
+                               nil (local-time:now)
+                               :format '(:year #\- :month #\- :day)))))
+
 ;; Error pages
 
 (defun wants-json-p ()
