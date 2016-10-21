@@ -1,0 +1,117 @@
+.speech-balloon
+{
+    font-family: Cantarell, sans-serif;
+    position: relative;
+    -x-width: 200px;
+    -x-height: 1.5em;;
+    text-align: center;
+    -rem-line-height: 1.5em;;
+    -rem-margin: 60px auto;
+    background-color: white;
+    border: .1rem solid @charcoal;
+    border-radius: 1rem;
+    box-shadow: 2pt 2pt 4pt @grey;
+    padding: .1rem .5rem .1rem .5rem;
+    margin: 1rem;
+}
+
+.though-balloon
+{
+    width: 130px;
+    line-height: 1.5em;;
+    -webkit-border-radius: 108px;
+    -moz-border-radius: 108px;
+    border-radius: 108px;
+}
+
+.speech-balloon:before, .speech-balloon:after
+{
+    content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.speech-balloon:before
+{
+    left: 30px;
+    top: 1.5em;
+    border: 10px solid;
+    border-color: @charcoal transparent transparent @charcoal;
+}
+
+.speech-balloon:after
+{
+    left: 32px;
+    top: 1.5em;
+    border: 8px solid;
+    border-color: white transparent transparent white;
+}
+
+.though-balloon:before, .though-balloon:after
+{
+    left: 10px;
+    top: 70px;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 8px solid @charcoal;
+    -webkit-border-radius: 28px;
+    -moz-border-radius: 28px;
+    border-radius: 28px;
+}
+
+.though-balloon:after
+{
+    width: 20px;
+    height: 20px;
+    left: 5px;
+    top: 1.5em;;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    border-radius: 18px;
+}
+
+ul.speech-balloons {
+    display: block;
+    > li {
+        display: inline-block;
+        a:link {
+            .speech-balloon;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            &:before, &:after {
+                content: ' ';
+                position: absolute;
+                width: 0;
+                height: 0;
+            }
+
+            &:before
+            {
+                left: 30px;
+                top: 1.5em;;
+                border: 10px solid;
+                border-color: @charcoal transparent transparent @charcoal;
+            }
+
+            &:after
+            {
+                left: 32px;
+                top: 1.5em;;
+                border: 8px solid;
+                border-color: white transparent transparent white;
+            }
+        }
+
+        a:visited {
+            color: black;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+}

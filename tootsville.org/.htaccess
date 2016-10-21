@@ -7,7 +7,9 @@ RedirectMatch ^/tootsbook/(.*)$ https://www.tootsbook.com/tootsbook/$1
 RedirectMatch ^/Assets/(.*)$ //jumbo.tootsville.adventuring.click/Assets/$1
 RedirectMatch ^/directory/(.*)$ https://whitney.tootsville.adventuring.click/directory/$1
 RedirectMatch ^/members/(.*)$ https://members.tootsbook.com/members/$1
-RedirectMatch ^/([Pp][Ll][Aa][Yy].*) tootstest.cgi/login?to=$1
+RedirectMatch ^/([Pp][Ll][Aa][Yy].*) https://tootsville.adventuring.click/$1
+RedirectMatch ^/(form.*)$ https://tootsville.adventuring.click/$1
+RedirectMatch ^/(quiz.*)$ https://tootsville.adventuring.click/$1
 
 RedirectMatch ^//(.*)$ https://www.tootsville.org/$1
 RedirectMatch ^/for/?$ https://www.tootsville.org/

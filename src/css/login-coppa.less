@@ -1,5 +1,4 @@
 #coppa-sign-in-label {
-    width: 100%;
     padding: 1rem;
     margin: 1rem;
 }
@@ -13,21 +12,25 @@
     100% { .gold-glow; }
 }
 
-#overlay button#coppa-sign-in-button {
+#coppa-sign-in-button {
     font-family: Acme, sans-serif;
     font-size: 2.5rem;
-    margin: 1rem;
+    margin: 2rem 1rem 1rem 5rem;
     padding: 1rem;
-    min-height: 1in;
-    min-width: 1in;
+    min-height: 1cm;
+    min-width: 1cm;
+    width: 8rem;
     border: 2pt solid black;
     background-color: @burgundy;
+    color: white;
     .outline;
     align: center;
     text-align: center;
     vertical-align: middle;
+    vertical-align-content: middle;
     animation: coppa-glow 2s infinite;
-    transition: 3s ease-in-out;
+    transition: 6s ease-in-out;
+    cursor: pointer;
 }
 
 .gold-glow {
@@ -37,7 +40,6 @@
     -.2rem .2rem .2rem @gold,
     .2rem .2rem .2rem @gold;
     color: @yellow;
-
 }
 
 #coppa-sign-in-button:hover {
@@ -45,6 +47,196 @@
 }
 
 #coppa-sign-in:checked + #login-overlay {
+    left: 110vw;
+    h1 {
+        top: -6.5rem;
+        .play-now {
+            top: -10rem;
+        }
+    }
+    > section {
+        &#under-13 {
+            left: 110vw;
+        }
+        &#over-13 {
+            left: 110vw;
+        }
+        &#login-info {
+            right: 200vw;
+        }        
+    }
+}
+
+#login-overlay-coppa {
+    display: block;
     position: fixed;
-    top: 100vh;
+    top: 110vh;
+    left: 0;
+    transition: 3s ease-in-out;
+    width: 100vw;
+    height: calc(100vh - 5rem);
+    margin: -2rem 0 3rem 0;
+    background-color: white;
+    padding: 6rem 1rem 0 1rem;
+
+    u {
+        cursor: pointer;
+    }
+    
+    h1 {
+        top: -6.5rem;
+        .login-h1;        
+    }
+
+    h2 {
+        color: @burgundy;
+        margin: 0;
+    }
+
+    form {
+        border: .2rem dashed black;
+        margin: 1rem;
+        padding: 1rem;
+        vertical-align: middle;
+        height: 16rem;
+        width: 32rem;
+        overflow: visible;
+
+        button {
+            margin: 1.5rem 3rem 0 0;
+            float: right;
+            .outline;
+            background-color: @burgundy;
+            font-size: 1.5rem;
+            height: 2rem;
+            padding: .3rem;
+            font-family: Acme;
+            border-color: black;
+
+            &:hover {
+                background-color: @pink;
+                border-color: @pink;
+            }
+        }
+
+        #coppa-toot-name {
+            border: .3rem solid @charcoal;
+            margin-left: 2em;
+            width: 13rem;
+            color: @charcoal;
+            font-family: Inconsolata;
+            &:active {
+                border-bottom: .3rem solid black;
+                color: black;
+            }
+        }
+
+        fieldset.five-across {
+            border: 1rem solid charcoal;
+            padding: 0 0 1rem 0;
+            height: 2.25rem;
+            input[type="radio"] {
+                display: none;
+            }
+            &:nth-child(2) {
+                input[type="radio"]:checked + label {
+                    background-color: @gold;
+                }
+                label {
+                    background-color: @green;
+                }
+            }
+            input[type="radio"]:checked + label {
+                background-color: @pink;
+                color: white;
+                border-color: @gold;
+                box-shadow: 0 0 5pt @yellow;
+            }
+            label {
+                background-color: @periwinkle;
+            }
+            &:last-child {
+                input[type="radio"]:checked + label {
+                    background-color: @violet;
+                }
+                label {
+                    background-color: @spring-green;
+                }
+            }
+            label {
+                display: inline-block;
+                height: 2rem;
+                width: 2.5rem;
+                margin: 0 1rem 0 1rem;
+                padding: .25rem;
+                border: .2rem solid @charcoal;
+                font-family: Cantarell;
+                font-size: 1.75rem;
+                color: black;
+                text-align: center;
+                transition: 1s ease-in-out;
+            }
+        }
+    }
+
+    .hint {
+        h5 { margin: 0 1rem 0 0; }
+        position: fixed;
+        top: 3rem;
+        transition: 5s ease-in-out;
+        right: -100rem;
+        width: 20rem;
+        height: calc(100vh - 8rem);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border-left: .3rem solid @burgundy;
+        margin: 0;
+        padding: 1rem;
+        background-color: white;
+    }
+}
+
+#coppa-sign-in:checked + #login-overlay + #login-overlay-coppa {
+    top: 2rem;
+    overflow: visible;
+    h1 {
+        top: -1.5rem;
+    }
+    #coppa-back-out {
+        left: 1rem;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    .hint {
+        right: 1rem;
+    }
+}
+
+#coppa-back-out {
+    position: fixed;
+    bottom: 1rem;
+    left: -100vw;
+    transition: 3s ease-in-out;
+}
+
+@media only screen and (max-width: 60rem) {
+    #login-overlay-coppa {
+        background-color: red;
+    }
+}
+
+@media only screen and (max-height: 500px) {
+    #login-overlay-coppa {
+        background-color: red;
+        h1 {
+            img { height: 1.5rem; }
+            .play-now { font-size: 1rem; }
+        }
+        h2 { display: none; }
+        form {
+            height: calc(100vh - 9rem);
+            overflow-y: scroll;
+        }
+    }
 }

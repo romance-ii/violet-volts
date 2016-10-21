@@ -1,7 +1,16 @@
 <!--#include file="error-header.htmlf"-->
 <img src="https://jumbo.tootsville.adventuring.click/Assets/Avatars/Quicksilver/Assets/shade.jpeg"
      id="featured">
+
 <style>
+@font-face {
+  font-family: 'Creepster';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Creepster'), local('Creepster-Regular'), url(https://fonts.gstatic.com/s/creepster/v5/un014as1qOcrVg1hrkn_UVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
   #builder-toot { display: none; }
   #featured { position: fixed;
               top: 0;
@@ -19,7 +28,7 @@
 #bwahaha {
   color: rgba(255,0,0,0.5);
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
-  font-family: Acme, sans-serif;
+  font-family: Creepster, Acme, sans-serif;
   font-variant: small-caps;
   letter-spacing: 2px;
   font-size: 2em;
@@ -30,40 +39,49 @@
   margin-left: -6rem;
   
   animation: horror-animation 5s infinite;
+
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
 
 @keyframes horror-animation {
-	0% {text-shadow: 0 0 10px rgba(1.0,0,0,0.1); left: 51%; top: 36%;}
-	5% {text-shadow: 0 0 10px rgba(1.0,0,0,0.2); left: 50%; top: 35%;}
-  10% {text-shadow: 0 0 10px rgba(1.0,0,0,0.3); left: 49%; top: 34%;}
-	15% {text-shadow: 0 0 10px rgba(1.0,0,0,0.4); left: 50%; top: 35%;}
-  16% {text-shadow: 0 0 5px @dark-gray; left: 50%}
-  17% {text-shadow: 0 0 10px rgba(1.0,0,0,0.4); left: 50%;}
-	20% {text-shadow: 0 0 10px rgba(1.0,0,0,0.5); left: 49%}
-  25% {text-shadow: 0 0 10px rgba(1.0,0,0,0.6); left: 49%}
- 	30% {text-shadow: 0 0 10px rgba(1.0,0,0,0.7); left: 50%}
-	35% {text-shadow: 0 0 5px rgba(1.0,0,0,0.8); left: 50%}
-  36% {text-shadow: 0 0 5px @dark-gray; left: 50%}
-  37% {text-shadow: 0 0 5px rgba(1.0,0,0,0.8); left: 50%}
-  40% {text-shadow: 0 0 5px rgba(1.0,0,0,0.9); left: 51%}
-	45% {text-shadow: 0 0 5px rgba(1.0,0,0,0.8); left: 51%}
-	50% {text-shadow: 0 0 5px rgba(1.0,0,0,0.7); left: 51%}
-	55% {text-shadow: 0 0 10px rgba(1.0,0,0,0.6); left: 50%}
-  56% {text-shadow: 0 0 5px @dark-gray; left: 50%}
-  57% {text-shadow: 0 0 10px rgba(1.0,0,0,0.6); left: 52%}
-  60% {text-shadow: 0 0 10px rgba(1.0,0,0,0.5); left: 50%}
-	65% {text-shadow: 0 0 10px rgba(1.0,0,0,0.4); left: 50%}
-	70% {text-shadow: 0 0 10px rgba(1.0,0,0,0.3); left: 49%}
-  75% {text-shadow: 0 0 10px rgba(1.0,0,0,0.2); left: 49%}
-  76% {text-shadow: 0 0 5px @dark-gray; left: 50%}
-  77% {text-shadow: 0 0 10px rgba(1.0,0,0,0.2); left: 49%}
- 	80% {text-shadow: 0 0 5px rgba(1.0,0,0,0.1); left: 49%}
-	85% {text-shadow: 0 0 5px rgba(1.0,0,0,0.2); left: 51%}
-  86% {text-shadow: 0 0 5px @dark-gray; left: 50%}
-  87% {text-shadow: 0 0 5px rgba(1.0,0,0,0.2); left: 51%}
-  90% {text-shadow: 0 0 5px rgba(1.0,0,0,0.3); left: 51%}
-	95% {text-shadow: 0 0 10px rgba(1.0,0,0,0.4); left: 51%} 
- 	100% {text-shadow: 0 0 10px rgba(1.0,0,0,0.5); left: 50%} 
+0% {text-shadow: 0 0 10pt rgba(0,0,0,0.1); left: 51%; top: 36%;}
+5% {text-shadow: 0 0 10pt rgba(0,0,0,0.2); left: 50%; top: 35%;}
+10% {text-shadow: 0 0 10pt rgba(0,0,0,0.3); left: 49%; top: 34%;}
+15% {text-shadow: 0 0 10pt rgba(0,0,0,0.4); left: 50%; top: 35%;}
+16% {text-shadow: 0 0 5pt @dark-gray; left: 50%}
+17% {text-shadow: 0 0 10pt rgba(0,0,0,0.4); left: 50%;}
+20% {text-shadow: 0 0 10pt rgba(0,0,0,0.5); left: 49%}
+25% {text-shadow: 0 0 10pt rgba(0,0,0,0.6); left: 49%}
+30% {text-shadow: 0 0 10pt rgba(0,0,0,0.7); left: 50%}
+35% {text-shadow: 0 0 5pt rgba(0,0,0,0.8); left: 50%}
+36% {text-shadow: 0 0 5pt @dark-gray; left: 50%}
+37% {text-shadow: 0 0 5pt rgba(0,0,0,0.8); left: 50%}
+40% {text-shadow: 0 0 5pt rgba(0,0,0,0.9); left: 51%}
+45% {text-shadow: 0 0 5pt rgba(0,0,0,0.8); left: 51%}
+50% {text-shadow: 0 0 5pt rgba(0,0,0,0.7); left: 51%}
+55% {text-shadow: 0 0 10pt rgba(0,0,0,0.6); left: 50%}
+56% {text-shadow: 0 0 5pt @dark-gray; left: 50%}
+57% {text-shadow: 0 0 10pt rgba(0,0,0,0.6); left: 52%}
+60% {text-shadow: 0 0 10pt rgba(0,0,0,0.5); left: 50%}
+65% {text-shadow: 0 0 10pt rgba(0,0,0,0.4); left: 50%}
+70% {text-shadow: 0 0 10pt rgba(0,0,0,0.3); left: 49%}
+75% {text-shadow: 0 0 10pt rgba(0,0,0,0.2); left: 49%}
+76% {text-shadow: 0 0 5pt @dark-gray; left: 50%}
+77% {text-shadow: 0 0 10pt rgba(0,0,0,0.2); left: 49%}
+80% {text-shadow: 0 0 5pt rgba(0,0,0,0.1); left: 49%}
+85% {text-shadow: 0 0 5pt rgba(0,0,0,0.2); left: 51%}
+86% {text-shadow: 0 0 5pt @dark-gray; left: 50%}
+87% {text-shadow: 0 0 5pt rgba(0,0,0,0.2); left: 51%}
+90% {text-shadow: 0 0 5pt rgba(0,0,0,0.3); left: 51%}
+95% {text-shadow: 0 0 10pt rgba(0,0,0,0.4); left: 51%} 
+100% {text-shadow: 0 0 10pt rgba(0,0,0,0.5); left: 50%} 
 } 
 </style>
 <h1> 500: Internal Error </h1>

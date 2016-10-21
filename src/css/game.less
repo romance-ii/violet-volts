@@ -1,0 +1,47 @@
+#game {
+    width: 800px;
+    height: 450px;
+    position: fixed;
+    top: 100vh;
+    left: 1rem;
+    z-index: 1000;
+    border: .4rem solid black;
+    box-shadow:
+    -.2rem -.2rem .2rem @red,
+    .2rem -.2rem .2rem @red,
+    -.2rem .2rem .2rem @red,
+    .2rem .2rem .2rem @red;
+    background: repeating-linear-gradient(-45deg, @red,
+                                          @red 1rem,
+                                          (@red - @charcoal) 1rem,
+                                          (@red - @charcoal) 2rem);
+    transition: 1s ease-in-out;
+}
+
+html.mesh-joined #game {
+    background: black;
+    box-shadow: none;
+    top: 1rem;
+}
+
+@media only screen and (orientation: landscape) {
+    #game {
+        left: calc( ( 100vw - 0.5625vh ) - 2rem);
+        height: calc(100vh - 2rem);
+        width: calc(0.5625vh - 2rem);
+    }
+}
+
+@media only screen and (orientation: portrait) {
+    #game {
+        left: 1rem;
+        width: calc(100vw - 2rem);
+        height: calc(56.25vw - 2rem);
+    }
+}
+
+@media print {
+    #game {
+        display: none;
+    }
+}

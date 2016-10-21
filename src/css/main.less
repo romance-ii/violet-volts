@@ -1,108 +1,24 @@
 @import "https://fonts.googleapis.com/css?family=Acme&name=Acme.css";
 @import "https://fonts.googleapis.com/css?family=Cantarell&name=Cantarell.css";
 @import "https://fonts.googleapis.com/css?family=Inconsolata&name=Inconsolata.css";
+@charset "UTF-8";
 @import "palette.less";
 @import "common.less";
+@import "speech.less";
 @import "main-nav.less";
 @import "login-coppa.less";
 @import "login.less";
-@charset "UTF-8";
+@import "help.less";
+@import "html+body.less";
+@import "game.less";
 
-html {
-    margin: 0;
-    padding: 0;
-    background-color: #ccf;
-    font-family: Acme, sans-serif;
-    background-color: @periwinkle;
-    background: repeating-linear-gradient(45deg, @periwinkle,
-                                          @periwinkle 1rem,
-                                          (@periwinkle - @charcoal) 1rem,
-                                          (@periwinkle - @charcoal) 2rem);
-}
-
-html.mesh-joined {
-    background: repeating-linear-gradient(45deg, @spring-green,
-                                          @spring-green 1rem,
-                                          (@spring-green - @charcoal) 1rem,
-                                          (@spring-green - @charcoal) 2rem);    
-}
-
-html.mesh-lagging {
-    background: repeating-linear-gradient(45deg, @gold,
-                                          @gold 1rem,
-                                          (@gold - @charcoal) 1rem,
-                                          (@gold - @charcoal) 2rem);    
-}
-
-html.mesh-error {
-    background: repeating-linear-gradient(45deg, @burgundy,
-                                          @burgundy 1rem,
-                                          (@burgundy - @charcoal) 1rem,
-                                          (@burgundy - @charcoal) 2rem);    
-}
-
-body {
-    color: black;
-    background-color: white;
-    padding: 1rem 2rem 1rem 2rem;
-    border: 0 solid white;
-    border-radius: 3rem;
-    min-width: 75vw !important;
-    width: 90%;
-    max-width: calc(100vw - 2rem);
-    min-height: min(calc(100vh - 8em), 36em);
-    height: auto;
-    margin: 3rem auto 3rem auto;
-}
-
-a:link {
-    color: @indigo;
-}
-a:visited {
-    color: @violet;
-}
-a:hover {
-    color: @burgundy;
-    text-decoration: underline;
-}
-
-#main {
-    text-align: center;
-    color: @charcoal;
-    max-width: 100vw;
-    min-width: 3cm;
-    position: fixed;
-    top: -2.25rem;
-    height: 3rem;
-    transition: top 1s bottom 1s;
-    padding: 1rex 1rex 0 1rex;
-    margin: 0 auto 0 auto;
-    background-color: white;
-    border: 1pt solid @charcoal;
-}
-
-#main:hover {
-    top: 0;
-}
-
-#main > ul {
-    display: block;
-    height: 1rem;
-    margin: .25rem;
-    padding: 0;
-}
-
-#main > ul > li {
-    display: inline-block;
-    margin-left: .75rem;
-    margin-right: .75rem;
-}
 
 nav a:link, nav a:visited {
     border: 1pt solid black;
     background-color: white;
     font-weight: bold;
     text-decoration: none;
+    color: white;
     .outline;
 }
 
@@ -128,7 +44,7 @@ nav a:hover {
 }
 
 #watermark {
-    height: 3rem;
+    height: 2rem;
     width: auto;
     position: fixed;
     right: 0;
@@ -140,39 +56,42 @@ nav a:hover {
     border-radius: 2rem 0 0 0;
 }
 
-#overlay {
-    padding: 1.5rem;
-    margin: 1rex;
-    display: inline-block;
-}
 
-#overlay > h1 {
-    position: relative;
-    left: 1rem;
-    top: -1rem;
-    font-size: 3rem;
-    margin: 0 0 0 -1rem;
-}
+#IGNORED {
+    h1 {
+        position: relative;
+        left: 1rem;
+        top: -1rem;
+        font-size: 3rem;
+        margin: 0 0 0 -1rem;
+    }
 
-#overlay > h2 {
-    position: relative;
-    left: 1rem;
-    top: -1rem;
-    font-size: 1.5rem;
-    margin: 0 0 0 -1rem;
-}
+    h1 > img {
+        height:   6rem;
+        top:   0;
+        position:   fixed;
+    }
 
-#overlay button {
-    background-color: #336;
-}
+    #overlay > h2 {
+        position: relative;
+        left: 1rem;
+        top: -1rem;
+        font-size: 1.5rem;
+        margin: 0 0 0 -1rem;
+    }
 
-#overlay > h2 {
-    left: 2rem;
-    font-size: 2rem;
+    #overlay button {
+        background-color: #336;
+    }
+
+    #overlay > h2 {
+        left: 2rem;
+        font-size: 2rem;
+    }
+
 }
 
 .outline {
-    color: white;
     text-shadow:
     -1px -1px 0 #000,
     1px -1px 0 #000,
@@ -250,7 +169,19 @@ button, input[type=button], input[type=submit], input[type=clear] {
     margin: .25rem;
     min-width: 1cm;
     min-height: 1cm;
+    cursor: pointer;
+    .noselect;
 }
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 
 button:hover,
 input[type=button]:hover,
@@ -304,22 +235,6 @@ h1+p, h2+p, h3+p, h4+p, h5+p, h6+p, div+p, section+p {
     text-indent: 0;
 }
 
-@media screen and (min-width: 40rem) {
-    .twocol1 {
-        float: left;
-        width: calc(50% - 3rem);
-        margin: 0;
-        padding: 0 1rem 0 0;
-    }
-    .twocol2 {
-        float: right;
-        width: calc(50% - 3rem);
-        margin: 0 0 0 1rem;
-        padding: 0 0 0 1rem;
-        border-left: .2rem solid @charcoal;
-    }
-}
-
 .nascar > img {
     height: 4rem;
     width: auto;
@@ -333,3 +248,13 @@ h1+p, h2+p, h3+p, h4+p, h5+p, h6+p, div+p, section+p {
     display: inline-block;
 }
 
+@media only screen and (max-width: 1023px) {
+    #IGNORED-overlay {
+        margin: 0;
+        padding: 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+    }
+}

@@ -5,6 +5,7 @@ deploy:	bin
 
 bin:	tootstest.cgi \
 	static/js/mesh.js \
+	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
 tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\* -and -not -path src/mesh/\**)
@@ -40,6 +41,14 @@ js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 		-o js/mesh.yug.js \
 		-m -c		
 
+static/js/social.js: src/js/social.js
+	uglifyjs src/js/social.js \
+		--source-map static/js/social.js.map \
+		--screw-ie8 \
+		-o static/js/social.js \
+		-m -c		
+
+
 static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
 	if [ \
 	    $$(stat js/mesh.cc.js | grep Size: | \
@@ -57,7 +66,7 @@ static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
 	echo "Ignoring both and using raw";
 	cat src/lib/jscl/jscl.js js/mesh.js > static/js/mesh.js
 
-static/css/%.css:	src/css/%.less
+static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 	lessc $< | cleancss -o $@
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \

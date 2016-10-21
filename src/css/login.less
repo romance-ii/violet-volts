@@ -1,28 +1,121 @@
+.login-h1 {
+    position: fixed;
+    height: 3rem;
+    transition: 2s ease-in-out;
+    top: 1rem;
+
+    img {
+        height: 6rem;
+    }
+
+    .play-now {
+        position: fixed;
+        top: 1rem;
+        left: 25rem;
+        width: 15rem;
+        .outline;
+        color: @pink;
+        display: inline-block;
+        background-color: (@periwinkle - rgba(0,0,0,0.33333));
+        padding: 0.5rem;
+        border: 1px solid white;
+        border-radius: .5rem;
+        text-align: center;
+    }
+}
+
 #login-overlay {
     display: block;
-}
-
-.sign-in-box {
-    min-width: 12rem;
-    max-width: 35rem;
-    margin: 0 auto 0 auto;
-    padding: .5rem;
-    text-align: center;
-}
-
-.sign-in-box:hover {
-    background-color: #e8e8e8;
-}
-
-.sign-in-box>h4 {
-    text-align: center;
+    position: fixed;
+    top: 3rem;
+    left: 1rem;
+    border-radius: 2rem;
+    transition: 3s ease-in-out;
     margin: 0;
     padding: 0;
+    height: calc(100vh - 9rem);
+    width: calc(100vw - 2rem);
+    background-color: white;
+    overflow: visible;
+
+    > section {
+        transition: 3s ease-in-out;
+        width: 33vw - 2rem;
+        height: calc(100vh - 30rem);
+        position: fixed;
+        top: 7rem;
+
+        .bottom {
+            margin-top: 2rem;
+            color: @charcoal;
+        }
+    }
+
+    #under-13 {
+        left: 2rem;
+    }
+
+    #over-13 {
+        left: calc(33vw + 1rem);
+    }
+
+    #login-info {
+        right: 1rem;
+    }
+
+    h1 {
+        top: -1.5rem;
+        .login-h1;
+    }
+
+    h2 {
+        font-size: 2rem;
+        .outline;
+        color: white;
+        background-color: @violet;
+        border: .2rem solid black;
+        padding: .5rem;
+        width: auto;
+        align: center;
+        top: 12rem;
+    }
+
+    #over-13 h2 {
+        background-color: @gold;
+    }
+
+    #login-info h2 {
+        background-color: @green;
+    }
+
+    ul.rules {
+        border: .2rem dashed black;
+        margin: 2.5rem 1rem 0 1rem;
+    }
+
+    .sign-in-box {
+        min-width: 12rem;
+        max-width: 35rem;
+        margin: 0 auto 0 auto;
+        padding: .5rem;
+        text-align: center;
+        height: 6rem;
+
+        > h4 {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .google-logo {
+        height:1em;
+        padding: 3px 3px 1px 3px;
+        position: relative;
+        top: .25em;
+    }
 }
 
-.google-logo {
-    height:1em;
-    padding: 3px 3px 1px 3px;
-    position: relative;
-    top: .25em;
+#facebook-sign-in-box {
+    display: none;
 }
