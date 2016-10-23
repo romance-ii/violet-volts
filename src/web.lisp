@@ -86,9 +86,12 @@
    (dom:document-element
     (tootsbook-headlines)) "item"))
 
+(defun unescape-& (string)
+  (cl-ppcre:regex-replace-all "&amp;" string "&"))
+
 (defun get-text-of-element (node element)
   (apply #'concatenate 'string
-         (map 'list #'dom:node-value
+         (map 'list (compose #'unescape-& #'dom:node-value)
               (dom:child-nodes
                (first-elt
                 (dom:get-elements-by-tag-name node element))))))
