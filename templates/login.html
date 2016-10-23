@@ -76,7 +76,8 @@
     <section id="google-sign-in-box" class="sign-in-box">
       <center>
         <h4><i class="fa fa-google-plus"></i> &nbsp; Google Account Sign-in</h4>
-        <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
+        <div class="g-signin2"
+             data-onsuccess="curry_lisp('LOGIN::GOT-GOOGLE-SIGN-IN')"></div>
       </center>
     </section>
 
@@ -268,9 +269,12 @@
       </fieldset>
     </div>
 
-    <button
-      onclick="startCOPPALogin()"
-      > Let's Make Some Noise! </button>
+    <div>
+      Then click here:
+      <button
+        onclick="call_lisp('LOGIN:START-COPPA-LOGIN')"
+        > Let's Make Some Noise! </button>
+    </div>
 
   </form>
 
