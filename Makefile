@@ -18,7 +18,8 @@ tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\
 		--entry tootstest:entry
 	mv --backup=t tootstest.cgi.new tootstest.cgi
 
-src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*)
+src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*) \
+		src/lib/jscl/src/prelude.js
 	cd src/lib/jscl; ./make.sh
 
 # required to make Closure happy	
