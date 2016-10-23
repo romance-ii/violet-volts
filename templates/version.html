@@ -2,31 +2,53 @@
 {% block title %}Version {{ product }} {{ build-date }}{% endblock %}
 {% block body %}
 
-<h1> Tootsville Login Server </h1>
+<h1> Tootsville Gossipnet Server </h1>
 
-<p> The login server product is <tt>{{ product }}</tt>. </p>
-<p> The web server component was compiled {{ build-date }}. </p>
-<p> Copyright © 2004-2016, Bruce-Robert Fenn Pocock. </p>
+<h2> Server Process </h2>
+
+<p> The Gossipnet server product is <tt id="product">{{ product }}</tt>,
+  version        <tt       id="version">{{        version       }}</tt>,
+  compiled <span id="build-date">{{ build-date }}</span>. </p>
+<p> I am running on  a <span id="machine-type">{{ machine.type }}</span>
+  machine, version
+  <span      id="machine-version">{{     machine.version      }}</span>,
+  named   <span  id="machine-instance">{{   machine.instance  }}</span>.
+  Its system software is <span id="software-type">{{ software.type }}</span>, version
+  <span id="software-version">{{  software.version }}</span>.  My Common
+  Lisp implementation is <span id="lisp-type">{{ lisp.type }}</span>,
+  version <span id="lisp.version">{{ lisp.version }}</span>.</p>
+
+<p id="copyright-disclaimer">  Copyright © 2004-{{  copyright-latest }},
+  Bruce-Robert Fenn Pocock. All Rights  Reserved except as granted under
+  license. </p>
+
 
 <h2> <img src="https://www.gnu.org/graphics/agplv3-155x51.png"
           alt="AGPLv3">License </h2>
 
 <p> This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU Affero General Public License as published
-  by the Free Software Foundation, either version 3 of the License, or (at
-  your option) any later version. </p>
+  it             under              the             terms             of
+  the   <a  href="https://www.gnu.org/licenses/agpl-3.0-standalone.html"
+  id="license">GNU Affero General Public License</a> as published by the
+  Free Software Foundation, either version 3 of the License, or (at your
+  option) any later version. </p>
 
-<p> This program is distributed in the  hope that it will be useful, but
-  WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
-  MERCHANTABILITY or FITNESS FOR A  PARTICULAR PURPOSE. See the GNU Affero
-  General Public License for more details. </p>
-
-<p> <a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html">Read
-    the license</a>. </p>
+<p id="warranty"> This  program is distributed in the hope  that it will
+  be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+  of   MERCHANTABILITY   or   FITNESS    FOR   A   PARTICULAR   PURPOSE.
+  See <a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html">the
+  GNU Affero General Public License</a> for more details. </p>
 
 <p>   You  can   review   or   download  the   source   code  for   this
-  software  <a  href="https://www.github.com/romance-ii/violet-volts">on
+  software  <a  href="https://github.com/romance-ii/violet-volts">on
     GitHub</a> at your convenience. </p>
+
+<p> Continuous integration testing courtesy of
+  <a rel="continuous-integration"
+     href="https://travis-ci.org/romance-ii/violet-volts">Travis-CI</a>.
+  &nbsp; 
+  <img
+    src="https://api.travis-ci.org/romance-ii/violet-volts.svg?branch=tootstest"> </p>
 
 <h2> Power of Freedom </h2>
 

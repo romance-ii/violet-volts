@@ -107,6 +107,20 @@
 (defroute "/tootstest/version" ()
   (render #p"version.html"
           (list :product "tootstest"
+                :version (asdf:component-version (asdf:find-system :tootstest))
+                :machine (list :version (machine-version)
+                               :type (machine-type)
+                               :instance (machine-instance))
+                :lisp (list :type (lisp-implementation-type)
+                            :version (lisp-implementation-version))
+                :software (list :type (software-type)
+                                :version (software-version))
+                :acceptor (list :name (request-server-name *request*)
+                                :port (request-server-port *request*)
+                                :protocol (request-server-protocol *request*))
+                :copyright-latest #.(local-time:format-timestring
+                                     nil (local-time:now)
+                                     :format '(:year))
                 :build-date #.(local-time:format-timestring
                                nil (local-time:now)
                                :format '(:year #\- :month #\- :day)))))
