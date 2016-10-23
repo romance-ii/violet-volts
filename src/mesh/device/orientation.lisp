@@ -1,2 +1,1 @@
 (in-package :device.orientation)
-
