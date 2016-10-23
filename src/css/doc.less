@@ -34,3 +34,16 @@ body {
     margin-right: 3rem;
     text-align: center;
 }
+
+.nascar > img {
+    height: 4rem;
+    width: auto;
+    padding: 1rem;
+}
+
+.nascar > img::after {
+    font-size: .8rem;
+    font-family: Cantarell, sans-serif;
+    content: attr("title");
+    display: inline-block;
+}
