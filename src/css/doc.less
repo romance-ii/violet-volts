@@ -5,16 +5,12 @@
 @import "common.less";
 @charset "UTF-8";
 
-* {
-    box-model: border-box;
-}
-
 html {
-    background-color: black;
+    background-color: @periwinkle;
     background-attachment: fixed;
     background-width: 100vw;
     margin: 0;
-    padding: 0;
+    padding: 1rem;
 }
 
 body {
@@ -23,17 +19,12 @@ body {
     min-width: 25rem;
     height: auto;
     margin: auto auto auto auto;
-    background-color: @grey;
+    padding: 1rem;
+    background-color: white;
     color: @charcoal;
     border-radius: 0 0 2rem 2rem;
     border: 1pt solid @grey;
 }
-
-#doc {
-    padding: 1rem;
-    margin-top: 1.5rem;
-}
-
 
 #footer {
     margin-top: 3em;
