@@ -4,9 +4,14 @@
 (in-package :tootstest-asd)
 
 (defsystem tootstest
-  :version "0.1"
+  :version "0.2"
   :author "Bruce-Robert Fenn Pocock <BRFennPocock@star-hope.org>"
-  :license "Private test"
+  :license "AGPL v3+"
+  :bug-tracker "https://github.com/romance-ii/violet-volts/issues"
+  :description
+  "A test server to initiate the Tootsville mesh networking. Part of the Romance II project."
+  :long-description
+  "A test server to initiate the Tootsville mesh networking. Part of the Romance II project."
   :depends-on (:clack
                :lack
                :caveman2
