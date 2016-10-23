@@ -27,3 +27,10 @@
 
 (defun keywordify (word)
   (make-keyword (string-upcase word)))
+
+(defun init ()
+  (log "—~—
+Romance Ⅱ Game System
+Copyright © 2016 Bruce-Robert Fenn Pocock
+—~—"))
+
