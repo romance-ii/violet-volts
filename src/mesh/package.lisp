@@ -111,3 +111,39 @@
   (:export #:make-event #:dispatch-event))
 (defpackage :device.network
   (:use :cl :jscl/ffi))
+(defpackage :Aelius-Galenus
+  (:nicknames :galen)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Appius-Claudius-Caecus
+  (:nicknames :appius)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Clodia-Metelli-Pulcher
+  (:nicknames :clodia)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Gaius-Asinius-Pollio
+  (:nicknames :asinius)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Gaius-Julius-Caesar
+  (:nicknames :caesar)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Gaius-Lutatius-Catulus
+  (:nicknames :lutatius)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Lucius-Aemilius-Regillus
+  (:nicknames :regillus)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Marcus-Vitruvius-Pollio
+  (:nicknames :vitruvius)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Narcissus
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Publius-Cornelius-Tacitus
+  (:nicknames :tacitus)
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Rabirius
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Rahab
+  (:use :cl :jscl/ffi :romance))
+(defpackage :Sextus-Julius-Frontinus
+  (:nicknames :frontinus)
+  (:use :cl :jscl/ffi :romance))
