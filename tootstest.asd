@@ -33,6 +33,7 @@
                :cl-uglify-js
                :cl-rdfxml
                :drakma
+               :yason
                )
   :components ((:module "src"
                         :components
