@@ -9,7 +9,10 @@ bin:	tootstest.cgi \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
-tootstest.cgi:	tootstest.asd $(shell find . -name \*.lisp -and -not -path \**/.\* -and -not -path src/mesh/\**)
+tootstest.cgi:	tootstest.asd \
+		$(shell find . -name \*.lisp \
+			-and -not -path \**/.\* \
+			-and -not -path src/mesh/\**)
 	buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
