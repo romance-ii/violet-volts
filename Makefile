@@ -5,6 +5,7 @@ deploy:	bin
 
 bin:	tootstest.cgi \
 	static/js/mesh.js \
+	static/js/lisp.js \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
@@ -42,11 +43,11 @@ js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 		-o js/mesh.yug.js \
 		-m -c		
 
-static/js/social.js: src/js/social.js
-	uglifyjs src/js/social.js \
-		--source-map static/js/social.js.map \
+static/js/%.js: src/js/%.js
+	uglifyjs $< \
+		--source-map $@.map \
 		--screw-ie8 \
-		-o static/js/social.js \
+		-o $@ \
 		-m -c		
 
 
