@@ -42,35 +42,50 @@ js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
 
 js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 	uglifyjs src/lib/jscl/jscl.js js/mesh.js \
-		--source-map static/js/mesh.yug.js.map \
+		--source-map static/$@.map \
 		--screw-ie8 \
 		-o js/mesh.yug.js \
 		-m -c		
 
-static/js/%.js: src/js/%.js
+js/%.yug.js: src/js/%.js
 	uglifyjs $< \
-		--source-map $@.map \
+		--source-map static/$@.map \
 		--screw-ie8 \
 		-o $@ \
 		-m -c		
 
+js/%.cc.js: src/js/%.js
+	closure-compiler --compilation_level ADVANCED \
+		--create_source_map static/$@.map \
+		--third_party true \
+		--js_output_file $@ \
+		--js $<
+
+js/jscl.yug.js: src/lib/jscl/jscl.js
+	uglifyjs $< \
+		--source-map static/$@.map \
+		--screw-ie8 \
+		-o $@ \
+		-m -c		
+
+js/jscl.cc.js: src/lib/jscl/jscl.js
+	closure-compiler --compilation_level ADVANCED \
+		--create_source_map static/$@.map \
+		--third_party true \
+		--js_output_file $@ \
+		--js $<
+
+static/js/%.js: js/%.cc.js js/%.yug.js
+	echo "Comparing smaller JS isn't working, just using Closure version for now"
+	cp $< $@
+
+static/js/jscl.js:	js/jscl.cc.js js/jscl.yug.js
+	echo "Comparing smaller JS isn't working, just using Closure version for now"
+	cp $< $@
 
 static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
-	if [ \
-	    $$(stat js/mesh.cc.js | grep Size: | \
-		cut -d: -f2 | cut -d B -f 1) \
-	    -lt \
-	    $$(stat js/mesh.yug.js | grep Size: | \
-		cut -d: -f2 | cut -d B -f 1) \
-	    ]; then \
-	  echo "Closure produced tighter code than Uglify"; \
-	  cp js/mesh.cc.js static/js/mesh.js; \
-	else \
-	  echo "Uglify produced tighter code than Closure"; \
-	  cp js/mesh.yug.js static/js/mesh.js; \
-	fi
-	echo "Ignoring both and using raw";
-	cat src/lib/jscl/jscl.js js/mesh.js > static/js/mesh.js
+	echo "Comparing smaller JS isn't working, just using Closure version for now"
+	cp $< $@
 
 static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 	lessc $< | cleancss -o $@
