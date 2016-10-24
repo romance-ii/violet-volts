@@ -1,26 +1,26 @@
 (in-package :cl-user)
 (defpackage tootstest.config
-  (:use :cl)
-  (:import-from :envy
-                :config-env-var
-                :defconfig)
-  (:export :config
-           :*application-root*
-           :*static-directory*
-           :*template-directory*
-           :appenv
-           :developmentp
-           :productionp))
+ (:use :cl)
+ (:import-from :envy
+  :config-env-var
+  :defconfig)
+ (:export :config
+  :*application-root*
+  :*static-directory*
+  :*template-directory*
+  :appenv
+  :developmentp
+  :productionp))
 (in-package :tootstest.config)
 
-(setf (config-env-var) "APP_ENV")
+(setf (config-env-var) "VIOLETVOLTS")
 
-(defparameter *application-root*   (asdf:system-source-directory :tootstest))
-(defparameter *static-directory*   (merge-pathnames #P"static/" *application-root*))
+(defparameter *application-root* (asdf:system-source-directory :tootstest))
+(defparameter *static-directory* (merge-pathnames #P"static/" *application-root*))
 (defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
 
 (defconfig :common
-    `(:databases ((:maindb :sqlite3 :database-name ":memory:"))))
+    `(:databases ((:maindb :sqlite3 :database-name ":memory:")))) 
 
 (defconfig |development|
     '())
@@ -29,7 +29,10 @@
     `(:error))
 
 (defconfig |test|
-    '())
+    '(:on-error-mail (:from-name "Tootsville Support"
+                      :from-address "support@tootsville.adventuring.click"
+                      :smtp-server "localhost" 
+                      :subject-prefix "Error")))
 
 (defun config (&optional key)
   (envy:config #.(package-name *package*) key))
