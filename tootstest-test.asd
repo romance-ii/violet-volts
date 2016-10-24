@@ -1,14 +1,16 @@
 (in-package :cl-user)
-(defpackage tootstest-test-asd
-  (:use :cl :asdf))
-(in-package :tootstest-test-asd)
 
-(defsystem tootstest-test
+(asdf:defsystem :tootstest-test
   :author "Bruce-Robert Fenn Pocock <BRFennPocock@star-hope.org>"
-  :license ""
+  :license "AGPLv3"
+  :defsystem-depends-on (:prove-asdf)
   :depends-on (:tootstest
+               :selenium
                :prove)
   :components ((:module "t"
-                :components
-                ((:file "tootstest"))))
-  :perform (load-op :after (op c) (asdf:clear-system c)))
+                        :components
+                        ((:test-file "tootstest")
+                         (:test-file "selenium-test")))) 
+  :perform (asdf:test-op :after (op c)
+                         (funcall (intern #.(string :run) :prove) :tootstest-test))
+  :perform (asdf:load-op :after (op c) (asdf:clear-system c)))
