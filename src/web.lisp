@@ -24,16 +24,23 @@
 (defvar *web* (make-instance '<web>))
 (clear-routing-rules *web*)
 
-;;
-;; Routing rules
+
+;;; Default route
+
+(defroute "/" ()
+  "This is encountered only in local testing."
+  (redirect-to "/tootstest/"))
+
+(defroute "/tootstest/" ()
+  (redirect-to "/tootstest/login"))
+
+
+;;; Static assets
 
 (defun send-static (content-type pathname)
   (appendf (response-headers *response*)
            (list "Content-Type" content-type))
-  (read-file-into-string pathname ))
-
-(defroute "/tootstest/" ()
-  (redirect-to "/tootstest/login"))
+  (read-file-into-string pathname))
 
 (defroute "/tootstest/css/:name.css" (&key name)
   (send-static "text/css;charset=utf-8"
@@ -103,6 +110,9 @@
 (defroute "/tootstest/news" ()
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
+
+
+;;; ZOMG
 
 (define-constant +application/json+ "application/json"
   :test 'equal)
