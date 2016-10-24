@@ -1,0 +1,10 @@
+#!/bin/bash
+if ! [ -f "$(dirname "$0")"/selenium-latest.zip ]
+then
+    curl -L0 $( \
+                curl -L0 http://docs.seleniumhq.org/download/ | \
+                    perl -e  'while (<>) {  if (/<h[1-6]>.*WebDriver/)  {  last }  }
+while (<>) { if  (/<a href="(.*selenium-java.*\.zip?)">.?Download/) { print $1; exit } }' \
+         ) > "$(dirname "$0")"/selenium-latest.zip
+fi
+
