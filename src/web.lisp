@@ -104,6 +104,18 @@
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
 
+(define-constant +application/json+ "application/json"
+  :test 'equal)
+
+(defroute "/tootstest/zomg" ()
+  (assert (string-equal +application/json+ (request-content-type *request*)
+                        :end2 #.(length +application/json+))
+          () "Zombies should always use JSON, not ~a" (request-content-type *request*)) 
+  (let ((report (let ((yason:*parse-object-as* :plist)
+                      (yason:*PARSE-json-arrays-as-vectors* t))
+                  (yason:parse (request-raw-body *request*)))))
+    (format *error-output* "ZOMG! error report from client:~%~s" report)))
+
 (defroute "/tootstest/version" ()
   (render #p"version.html"
           (list :product "tootstest"
