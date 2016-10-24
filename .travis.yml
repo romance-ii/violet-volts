@@ -1,13 +1,38 @@
-language: lisp
-sudo: required
+language: common-lisp
+sudo: false
+
+os:
+  - linux
+
+addons:
+  apt:
+    packages:
+      - libfcgi-dev
+  sauce_connect:
+    username: "brfennpocock"
+    # Access key  encryption via (  gem install travis;  travis encrypt
+    #  my-secret-access-key )
+    access_key:
+      secure: "yVyqB+lbwT8wRSlpFkFUXD2+aiUquSncJfSfviI51Mvab669s3tx4796cMCLQ0Z2a/WijEh/G+NigMhXZMYCGPpVhZFl0VKX8wvta/wepzH3RWg2OYziiD8cEJwmXRezLrcxtymAOfwJEPSObPLFypevb2fVbFgqnLiJk0EAP6uCJYO6yx0n87eNgtkySdV7OHcMAUH0xqm9fE1XPwCuyFFPdgkHUFAourr6VBbpDmtFiYNvBKDs0ZUUw9gjTO3wZCta+uZ1hPnRqbG10QtqRn/qqcTl8yCg0HstZk0E6NEd1CCcJ3ZG4PeLviKRTSAVVhmBtVExZDygZugxnEhJxKedhyk19mKubx7moszRDrzfOC1UTv6rnaFSaWav9o8ZFMiHb3qxj7D9e4c9wa5Lju7b7lug6kG1EA++Qzw565fmUBx2J0hQF7cZFuIoz97Z867CjEYNMBRj6ZZQXWmnCMJTlxJxBJLipe+uBUu2oIf2rVAj/iqdBQuGJpedPqSVdPqVtdy4qUqJSgU3aW7SY7Tz2lfOhlUj+yxalK2ubBeoUkVN+2q83YLhKCZ3gUSKxM5e6MkO0KjLojYdqxLMhEfVk2eI3srEy3ahInovQFzkBamlE5SJkfVkFjQDBSwgtMtz5bm076Q6dH3MUAesp65rrh0xspwrMQsO886MTmg="
 
 env:
   matrix:
     - LISP=sbcl
+    - BROWSER=firefox
 
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
 
+cache:
+  directories:
+    - $HOME/.roswell
+    - $HOME/.config/common-lisp
+    - $HOME/.cache
+
+before_script:
+  - bash bin/download-latest-selenium
+  - java -jar bin/selenium-latest.jar 
+    
 script:
   - make
   - make test
