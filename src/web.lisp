@@ -117,6 +117,11 @@ http://ncona.com/2015/02/consuming-a-google-id-token-from-a-server/ "
                  "The Google sign-in permission has already expired.")
       (getf response :sub))))
 
+(defun render-player-details (registrar opaque-id)
+  (let ((player-entity (find-player-entity :registrar registrar opaque-id :self)))
+    (render-json `((:sign-in . ((:registrar . ,registrar)
+                                (:id ,opaque-id)))))))
+
 (defroute ("/tootstest/login/registrars/:registrar" :method :post)
     (&key registrar id-token)
   (handler-case
@@ -126,7 +131,7 @@ http://ncona.com/2015/02/consuming-a-google-id-token-from-a-server/ "
         (when user
           (render-player-details :google user))) 
     (error (c)
-      (render-json (:error (princ-to-string c))))))
+      (render-json `((:error . (princ-to-string c)))))))
 
 
 ;;; News
