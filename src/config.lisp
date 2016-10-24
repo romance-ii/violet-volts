@@ -20,19 +20,21 @@
 (defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
 
 (defconfig :common
-    `(:databases ((:maindb :sqlite3 :database-name ":memory:")))) 
+    `(:databases ((:maindb :sqlite3 :database-name ":memory:"))
+                 :on-error-mail (:from-name "Tootsville Support"
+                                            :from-address "support@tootsville.adventuring.click"
+                                            :to-address "support@tootsville.adventuring.click"
+                                            :smtp-server "localhost" 
+                                            :subject-prefix "Error")))
 
 (defconfig |development|
     '())
 
 (defconfig |production|
-    `(:error))
+    '(:error))
 
 (defconfig |test|
-    '(:on-error-mail (:from-name "Tootsville Support"
-                      :from-address "support@tootsville.adventuring.click"
-                      :smtp-server "localhost" 
-                      :subject-prefix "Error")))
+    '())
 
 (defun config (&optional key)
   (envy:config #.(package-name *package*) key))
