@@ -22,7 +22,8 @@ tootstest.cgi:	tootstest.asd \
 		--entry tootstest:entry
 	mv --backup=t tootstest.cgi.new tootstest.cgi
 
-src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp -and -not -name .\*) \
+src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
+			-and -not -name .\*) \
 		src/lib/jscl/src/prelude.js
 	cd src/lib/jscl; ./make.sh
 
