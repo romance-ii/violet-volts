@@ -48,32 +48,61 @@
     </p>
 
     <section id="repos">
+      <h3> Next Milestone Progress </h3>
+      <ul>
+        <li> Milestone <q><span id="milestone-name"><i class="fa fa-gear
+        fa-spin"></i> ?</span></q> — progress <span
+        id="milestone-progress"><i class="fa fa-gear
+        fa-spin"></i> ?</span>% (<span
+        id="milestone-open-issues"><i class="fa fa-gear
+        fa-spin"></i> ?</span> issues still open)</li>
+        <li id="milestone-fetch">(Loading from GitHub<noscript>, will not work without JavaScript</noscript>)</li>
+      </ul>
+      <h3> Trello Boards </h3>
+      <p> In addition to the GitHub Issues, other tasks end up here </p>
+      <ul>
+        <li> <a
+        href="https://trello.com/b/vuSj2fMK/software-development-tootsville"><i
+        class="fa fa-trello"></i> Software
+        Development</a> </li>
+        <li> <a href="https://trello.com/b/nHTGv3XC/operations-tootsville"><i
+        class="fa fa-trello"></i> Operations</a> </li>
+      </ul>
+      <h3> Wiki-Wiki </h3>
+      <ul>
+        <li> Maybe start at <a
+        href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Builder:Pages">Builder:Pages</a></li>
+      </ul>
       <h3> GitHub repos </h3>
       <ul>
 
         <li>
-          <a href="https://github.com/romance-ii/violet-volts">Violet Volts</a>
+          <a href="https://github.com/romance-ii/violet-volts"><i class="fa
+          fa-github"></i> Violet Volts</a>
           <a href="https://travis-ci.org/romance-ii/violet-volts/branches#">
             <img src="https://api.travis-ci.org/romance-ii/violet-volts.svg?branch=tootstest"
                  style="height:1.25rem; margin-left: 2rem" alt="(Travis CI)"></a>
         </li>
 
         <li>
-          <a href="https://github.com/romance-ii/jscl">JSCL</a>
+          <a href="https://github.com/romance-ii/jscl"><i class="fa
+          fa-github"></i> JSCL</a>
           <a href="https://travis-ci.org/romance-ii/jscl/branches#">
             <img src="https://api.travis-ci.org/romance-ii/jscl.svg?branch=toots"
                  style="height:1.25rem; margin-left: 2rem" alt="(Travis CI)"></a>
         </li>
 
         <li>
-          <a href="https://github.com/romance-ii/Babylon.js">Babylon.js</a>
+          <a href="https://github.com/romance-ii/Babylon.js"><i class="fa
+          fa-github"></i> Babylon.js</a>
           <a href="https://travis-ci.org/romance-ii/Babylon.js/branches#">
             <img src="https://api.travis-ci.org/romance-ii/Babylon.js.svg?branch=toots"
                  style="height:1.25rem; margin-left: 2rem" alt="(Travis CI)"></a>
         </li>
 
         <li>
-          <a href="https://github.com/romance-ii/webtorrent">WebTorrent</a>
+          <a href="https://github.com/romance-ii/webtorrent"><i class="fa
+          fa-github"></i> WebTorrent</a>
           <a href="https://travis-ci.org/romance-ii/webtorrent/branches#">
             <img src="https://api.travis-ci.org/romance-ii/webtorrent.svg?branch=toots"
                  style="height:1.25rem; margin-left: 2rem" alt="(Travis CI)"></a>
@@ -82,6 +111,20 @@
 
       </ul>
     </section>
+    
+    <script>
+      function milestone(read) {
+        if (! read.data) { return; }
+        var github = read.data;
+        document.getElementById("milestone-name").innerHTML = github.title;
+        document.getElementById("milestone-progress").innerHTML = Math.round((github.closed_issues / (github.open_issues + github.closed_issues)) * 100);
+        document.getElementById("milestone-open-issues").innerHTML = github.open_issues;
+        document.getElementById("milestone-fetch").style.display = "none";
+      }
+    </script>
+    <script
+    src="https://api.github.com/repos/romance-ii/violet-volts/milestones/1?callback=milestone">
+    </script>
 
   </body>
 </html>
