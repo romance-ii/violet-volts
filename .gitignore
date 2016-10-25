@@ -42,3 +42,9 @@ js/*.js
 js/*.map
 static/js/*.js
 static/js/*.map
+
+# Cordova build artefacts
+node_modules/
+cordova/plugins/
+cordova/platforms/
+dist/
