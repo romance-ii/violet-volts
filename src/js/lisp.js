@@ -61,7 +61,7 @@ window.curry_lisp = function (symbol) {
                               "productSub": navigator.productSub,
                               "vendor": navigator.vendor,
                               "vendorSub": navigator.vendorSub,
-                              "standalone", navigator.standalone },
+                              "standalone": navigator.standalone },
             "message": message,
             "source": source,
             "line": line,
