@@ -1,6 +1,3 @@
-[submodule "UnrealEngine"]
-	path = UnrealEngine
-	url = git@github.com:EpicGames/UnrealEngine
 [submodule "jscl"]
 	path = src/lib/jscl
 	url = git@github.com:romance-ii/jscl
