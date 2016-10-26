@@ -5,13 +5,13 @@
 <h1> Latest News from Tootsbook </h1>
 
 <dl class="headlines">
-{% for story in headlines %}
+  {% for story in headlines %}
 
-<dt><a href="{{ story.link }}">{{ story.title }}</a></dt>
-<dd>{{ story.description }}</dd>
+  <dt><a href="{{ story.link }}">{{ story.title }}</a></dt>
+  <dd>{{ story.description }}</dd>
 
 
-{% endfor %}
+  {% endfor %}
 </dl>
 
 <h2>
