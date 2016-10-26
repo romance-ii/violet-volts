@@ -88,7 +88,7 @@ static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
 	cp $< $@
 
 static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
-	lessc $< | cleancss -o $@
+	lessc $< | cleancss --skip-import -o $@
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
