@@ -24,6 +24,20 @@
 (defvar *web* (make-instance '<web>))
 (clear-routing-rules *web*)
 
+(defun redirect-to (uri &optional (status 307))
+  "Redirect to another URI. Status code 307 for temporary, 301 or 308 for permanent (typically)."
+  (list
+   status
+   `(:location ,uri
+               :x-redirected-by ,(asdf:component-version (asdf:find-system :tootstest))
+               :content-type "text/html")
+   (concatenate 'string
+                "<!DOCTYPE html><html><title>Redirect</title><a href=\""
+                uri
+                "\">Redirected to "
+                uri
+                "</a></html>")))
+
 
 ;;; Default route
 
@@ -206,7 +220,7 @@ http://ncona.com/2015/02/consuming-a-google-id-token-from-a-server/ "
                 :version (asdf:component-version (asdf:find-system :tootstest))
                 :machine (list :version (machine-version)
                                :type (machine-type)
-                               :instance (machine-instance))
+                               :instance (string-capitalize (machine-instance)))
                 :lisp (list :type (lisp-implementation-type)
                             :version (lisp-implementation-version))
                 :software (list :type (software-type)

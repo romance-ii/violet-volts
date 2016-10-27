@@ -5,6 +5,9 @@
     <title>{% block title %}{% endblock %} / tootstest — Tootsville </title>
     <link rel="stylesheet" type="text/css" media="screen" href="/css/doc.css">
 
+    <!-- Font Awesome CDN code is “registered” to support@tootsville.adventuring.click -->
+    <script src="https://use.fontawesome.com/2e97e3d2fa.js"></script>
+
     <!-- Icons, bookmark settings, web app binding like native, stuff -->
     <link rel="apple-touch-icon" sizes="180x180"
           href="https://jumbo.tootsville.adventuring.click/Assets/Icons/apple-touch-icon.png">
@@ -78,7 +81,7 @@
     <!-- Accounts Metadata -->
     <meta name="google-signin-client_id"
           content="1052481910502-sumg845at7g627qdvhhhambm7c7do8e4.apps.googleusercontent.com">
-    <meta property="og:url"                
+    <meta property="og:url"
           content="https://tootsville.adventuring.click/" />
     <meta property="og:title"
           content="Tootsville" />
@@ -99,18 +102,18 @@
     <base target="_blank">
   </head>
   <body>
-      <!-- Google Analytics -->
-      <script>
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', 'UA-80917352-1', 'auto');
-        ga('set', 'transport', 'beacon');	ga('set','appName','tootstest');
-        ga('set','appVersion','0.0.1');
-        ga('require', 'linkid');		ga('require', 'eventTracker');
-        ga('require', 'outboundLinkTracker');	ga('require', 'urlChangeTracker');
-        ga('send', 'pageview');
-      </script>
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-80917352-1', 'auto');
+      ga('set', 'transport', 'beacon');	ga('set','appName','tootstest');
+      ga('set','appVersion','0.0.1');
+      ga('require', 'linkid');		ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');	ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
 
-      {% block body %}{% endblock %}
- 
+    {% block body %}{% endblock %}
+
   </body>
 </html>

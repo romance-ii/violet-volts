@@ -16,7 +16,9 @@
 
 (defun connection-settings (&optional (db :maindb))
   (unless *db-secrets*
-    (let ((secret-file))
+    (let ((secret-file (merge-pathnames (make-pathname :directory '(:relative ".config" "tootstest")
+                                                       :name "db-secrets" :type "lisp")
+                                        (user-homedir-pathname))))
       (if (probe-file secret-file)
           (load secret-file)
           (warn "db-secrets not set; database access will probably fail; tried ~s" secret-file))))
