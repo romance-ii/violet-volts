@@ -12,7 +12,7 @@ bin:	tootstest.cgi \
 bin/buildapp:
 	if which buildapp; \
 	then \
-		ln -s $(which buildapp) bin/buildapp; \
+		ln -s $$(which buildapp) bin/buildapp; \
 	else \
 		cl -e '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
 	fi
