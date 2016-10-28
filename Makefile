@@ -14,7 +14,7 @@ bin/buildapp:
 	then \
 		ln -s $(which buildapp) bin/buildapp; \
 	else \
-		cl -e '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"'; \
+		cl -e '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
