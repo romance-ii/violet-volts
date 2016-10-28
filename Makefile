@@ -1,6 +1,6 @@
-all:	bin
+all:	bin doc test
 
-deploy:	bin
+deploy:	bin doc test
 	./server-push
 
 bin:	tootstest.cgi \
@@ -128,7 +128,7 @@ doc/violet-volts.html.zip:	doc/violet-volts.html.d/violet-volts.html\
 doc/violet-volts.html.d/violet-volts.html:	doc/violet-volts.texi
 	cd doc; makeinfo -o violet-volts.html.d/ \
 		--html --css-include=src/static/css/doc.css \
-		--split=node ../violet-volts.texi
+		--split=node violet-volts.texi
 
 doc/violet-volts.ps:	doc/violet-volts.texi
 	cd doc; makeinfo --ps -o violet-volts.ps violet-volts.texi
