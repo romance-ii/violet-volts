@@ -31,12 +31,13 @@
    `(:location ,uri
                :x-redirected-by ,(asdf:component-version (asdf:find-system :tootstest))
                :content-type "text/html")
-   (concatenate 'string
-                "<!DOCTYPE html><html><title>Redirect</title><a href=\""
-                uri
-                "\">Redirected to "
-                uri
-                "</a></html>")))
+   (flexi-streams:string-to-octets
+     (concatenate 'string
+                  "<!DOCTYPE html><html><title>Redirect</title><a href=\""
+                  uri
+                  "\">Redirected to "
+                  uri
+                  "</a></html>"))))
 
 
 ;;; Default route
