@@ -75,6 +75,20 @@ version — print compilation date-stamp
   (print "Hunchentoot server running. Evaluate (TOOTSTEST:STOP) to stop, or exit the REPL.")
   (start-repl))
 
+(defun post-read-version-page ()
+  (let ((retries 3))
+    (tagbody retry-post
+       (handler-case 
+           (return-from post-read-version-page (drakma:http-request "http://localhost:27701/tootstest/version"))
+         (usocket:connection-refused-error (c)
+           (cond ((minusp (decf retries))
+                  (error "Failed POST: Can't connect to local server (after retries)~%~a" c))
+                 (t (format *error-output*
+                            "~&~a~%Hmm, maybe we need to wait a moment and try that again." c)
+                    (force-output *error-output*)
+                    (sleep 1)
+                    (go retry-post))))))))
+
 (defun power-on-self-test ()
   (fresh-line) 
   (princ "Power-on self-test:") 
@@ -84,7 +98,7 @@ version — print compilation date-stamp
                           (signal c))))
   ;;; something that appears on the version page, but no error pages.
   (unless (search "Bruce-Robert Fenn Pocock"
-                  (drakma:http-request "http://localhost:27701/tootstest/version"))
+                  (post-read-version-page))
     (warn "Failed POST")
     (stop)
     (cl-user::exit :code 27 :abort t :timeout 5) 
