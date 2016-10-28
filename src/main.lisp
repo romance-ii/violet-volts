@@ -67,6 +67,25 @@ version — print compilation date-stamp
   (print "Hunchentoot server running. Evaluate (TOOTSTEST:STOP) to stop, or exit the REPL.")
   (start-repl))
 
+(defun power-on-self-test ()
+  (fresh-line) 
+  (princ "Power-on self-test:") 
+  (handler-case (start :port 27701)
+    (simple-error (c) (if (find-restart :restart-server)
+                          (invoke-restart :restart-server)
+                          (signal c))))
+  ;;; something that appears on the version page, but no error pages.
+  (unless (search "Bruce-Robert Fenn Pocock"
+                  (drakma:http-request "http://localhost:27701/tootstest/version"))
+    (warn "Failed POST")
+    (stop)
+    (cl-user::exit :code 27 :abort t :timeout 5) 
+    nil)
+  (princ "Passed POST")
+  (fresh-line)
+  (stop)
+  t)
+
 (defun entry (argv)
   (case (intern (string-upcase (typecase argv
                                  (cons (if (< 1 (length argv))
@@ -76,6 +95,7 @@ version — print compilation date-stamp
                                  (t argv))) :keyword)
     (:fast-cgi (fastcgi-entry))
     (:server (start-hunchentoot))
+    (:check (power-on-self-test))
     (:repl (start-repl))
     (:version (print *compiled*))
     (:swank (start-swank))
