@@ -1,4 +1,4 @@
-all:	bin doc test
+all:	bin doc
 
 deploy:	bin doc test
 	./server-push
