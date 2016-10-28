@@ -62,6 +62,11 @@ version — print compilation date-stamp
            :hyperlinks nil
            :introduction (alexandria:read-file-into-string #p"src/static/introduction")))
 
+(defun start-hunchentoot ()
+  (start)
+  (print "Hunchentoot server running. Evaluate (TOOTSTEST:STOP) to stop, or exit the REPL.")
+  (start-repl))
+
 (defun entry (argv)
   (case (intern (string-upcase (typecase argv
                                  (cons (if (< 1 (length argv))
@@ -70,7 +75,7 @@ version — print compilation date-stamp
                                  (null "HELP")
                                  (t argv))) :keyword)
     (:fast-cgi (fastcgi-entry))
-    (:server (start))
+    (:server (start-hunchentoot))
     (:repl (start-repl))
     (:version (print *compiled*))
     (:swank (start-swank))
