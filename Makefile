@@ -9,6 +9,14 @@ bin:	tootstest.cgi \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
+bin/buildapp:
+	if which buildapp; \
+	then \
+		ln -s $(which buildapp) bin/buildapp; \
+	else \
+		cl -e '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"'; \
+	fi
+
 tootstest.cgi:	tootstest.cgi.new
 	./tootstest.cgi.new check
 	mv --backup=t tootstest.cgi.new tootstest.cgi
@@ -17,7 +25,7 @@ tootstest.cgi.new:	tootstest.asd \
 		$(shell find . -name \*.lisp \
 			-and -not -path \**/.\* \
 			-and -not -path src/mesh/\**)
-	buildapp --output tootstest.cgi.new \
+	bin/buildapp --output tootstest.cgi.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
 		--load "src/setup.lisp" \
