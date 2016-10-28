@@ -9,7 +9,11 @@ bin:	tootstest.cgi \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
-tootstest.cgi:	tootstest.asd \
+tootstest.cgi:	tootstest.cgi.new
+	./tootstest.cgi.new check
+	mv --backup=t tootstest.cgi.new tootstest.cgi
+
+tootstest.cgi.new:	tootstest.asd \
 		$(shell find . -name \*.lisp \
 			-and -not -path \**/.\* \
 			-and -not -path src/mesh/\**)
@@ -20,14 +24,13 @@ tootstest.cgi:	tootstest.asd \
 		--eval '(ql:quickload :tootstest)' \
 		--load-system tootstest \
 		--entry tootstest:entry
-	mv --backup=t tootstest.cgi.new tootstest.cgi
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 			-and -not -name .\*) \
 		src/lib/jscl/src/prelude.js
 	cd src/lib/jscl; ./make.sh
 
-# required to make Closure happy	
+# required to make Closure happy
 js/undef-require.js:	
 	echo 'var require=undefined;' >> $@
 

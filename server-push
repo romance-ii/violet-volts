@@ -1,5 +1,7 @@
+#!/bin/bash
+rsync -essh -rv src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
+ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi \
+	|| exit
 rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
 	tootsville.adventuring.click:tootsville.adventuring.click/
-rsync -essh -rv src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
-ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi
 rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
