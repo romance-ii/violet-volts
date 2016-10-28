@@ -103,9 +103,13 @@ static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
-	cd src/lib/jscl; sbcl --load jscl.lisp \
+	mkdir -p js
+	( cd src/lib/jscl; sbcl --load jscl.lisp \
+		--disable-debugger \
 		--load ../../../src/bootstrap-tootstest.lisp \
-		--eval '(jscl::bootstrap-mesh)' --eval '(quit)'
+		--eval '(jscl::bootstrap-mesh)' --eval '(quit)' ) || \
+	   ( echo " MESH not building (no surprises there) FIXME " ; \
+		> js/mesh.js )
 
 test:	bin
 	cd src/lib/jscl; ./run-tests.sh
