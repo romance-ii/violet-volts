@@ -53,14 +53,22 @@ version — print compilation date-stamp
 
 (defun write-docs ()
   (ql:quickload :net.didierverna.declt)
-  (ensure-directories-exist #p"doc/")
-  (funcall (intern "DECLT" (find-package :net.didierverna.declt))
-           :tootstest
-           :library-name "Violet Volts"
-           :texi-file #p"doc/violet-volts.texi"
-           :tagline "tootstest build"
-           :hyperlinks nil
-           :introduction (alexandria:read-file-into-string #p"src/static/introduction")))
+  (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
+ ;;; Patch this file. TODO: File a bug or submit upstream or something.
+    (load (merge-pathnames 
+           (make-pathname :directory '(:relative "src" "lib")
+                          :name "net.didierverna.declt.item.symbol"
+                          :type "lisp")
+           source-dir))
+    (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
+    (funcall (intern "DECLT" (find-package :net.didierverna.declt))
+             :tootstest
+             :library-name "Violet Volts"
+             :texi-file (merge-pathnames #p"doc/violet-volts.texi"
+                                         source-dir)
+             :tagline "tootstest build"
+             :hyperlinks nil
+             :introduction (alexandria:read-file-into-string #p"src/static/introduction"))))
 
 (defun start-hunchentoot ()
   (start)
