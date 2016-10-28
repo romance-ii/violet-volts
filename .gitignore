@@ -64,3 +64,6 @@ cordova/platforms/
 
 # Set up as a symlink or compiled locally
 bin/buildapp
+
+# Ignore generated documentation
+doc/**
