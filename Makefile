@@ -21,7 +21,7 @@ tootstest.cgi:	tootstest.cgi.new
 	./tootstest.cgi.new check
 	mv --backup=t tootstest.cgi.new tootstest.cgi
 
-tootstest.cgi.new:	tootstest.asd \
+tootstest.cgi.new:	tootstest.asd bin/buildapp \
 		$(shell find . -name \*.lisp \
 			-and -not -path \**/.\* \
 			-and -not -path src/mesh/\**)
