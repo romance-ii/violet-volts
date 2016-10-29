@@ -1,4 +1,30 @@
+# Makefile for tootstest
+#
+# Targets:
+#
+# deps — install prerequisites needed from the build-deps file
+#
+# bin — compile the deployment files (CGI script, compiled JS/CSS, &c)
+#
+# doc — extract and build documentation in various formats
+#
+# test — run automated unit tests
+#
+# ui-test — run Selenium-based unit tests
+#
+# deploy — send code to production server, compile and test
+#
+
 all:	bin doc
+
+deps:
+	if which pkcon; then \
+		pkcon -y install $$(< build-deps ); \
+	elif which dnf; then \
+		sudo dnf -y install $$(< build-deps ); \
+	elif which yum; then \
+		sudo dnf -y install $$(< build-deps ); \
+	fi	
 
 deploy:	bin doc test
 	./server-push
