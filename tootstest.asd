@@ -9,9 +9,11 @@
   :license "AGPL v3+"
   :bug-tracker "https://github.com/romance-ii/violet-volts/issues"
   :description
-  "A test server to initiate the Tootsville mesh networking. Part of the Romance II project."
+  "A test server to initiate the Tootsville mesh networking. Part of the Romance Ⅱ project."
   :long-description
-  "A test server to initiate the Tootsville mesh networking. Part of the Romance II project."
+  " The  tootstest server is  integrating the mesh networking  code with
+the components from  the Romance Ⅱ development, using  Tootsville as the
+testbed case for the development."
   :depends-on (:clack
                :lack
                :caveman2
@@ -34,6 +36,8 @@
                :cl-rdfxml
                :drakma
                :yason
+               
+               :uuid
                )
   :components ((:module "src"
                         :components
