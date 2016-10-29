@@ -26,7 +26,7 @@ deps:
 		sudo dnf -y install $$(< build-deps ); \
 	fi	
 
-deploy:	bin doc test
+deploy:	bin test
 	./server-push
 
 bin:	tootstest.cgi \
