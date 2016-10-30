@@ -3,7 +3,16 @@
   (:use :cl)
   (:import-from :tootstest.config :config)
   (:import-from :clack :clackup)
-  (:export :start :stop :fastcgi-entry))
+  (:export #:start #:stop #:fastcgi-entry
+           #:entry
+           #:fastcgi-entry
+           #:start-hunchentoot
+           #:power-on-self-test
+           #:start-repl
+           #:*compiled*
+           #:start-swank
+           #:write-docs
+           #:print-help))
 (in-package :tootstest)
 
 (defvar *appfile-path*
@@ -52,6 +61,7 @@ version — print compilation date-stamp
   (funcall (intern "START-SERVER" (find-package :swank))))
 
 (defun write-docs ()
+  (format *trace-output* "~& Writing documentation…")
   (ql:quickload :net.didierverna.declt)
   (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
  ;;; Patch this file. TODO: File a bug or submit upstream or something.
@@ -61,14 +71,36 @@ version — print compilation date-stamp
                           :type "lisp")
            source-dir))
     (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
+    (let ((licenses (intern "*LICENSES*" (find-package :net.didierverna.declt))))
+      (set licenses
+           (cons (eval licenses)
+                 '((:agplv3
+                    "The GNU Affero General Public License"
+                    "This  program is  free  software; you  can redistribute  it
+and/or  modify it  under  the terms  of the  GNU  Affero General  Public
+License as  published by  the Free  Software Foundation;  either version
+3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program; if not,  write to the Free Software Foundation,
+Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")))))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
              :tootstest
              :library-name "Violet Volts"
              :texi-file (merge-pathnames #p"doc/violet-volts.texi"
                                          source-dir)
-             :tagline "tootstest build"
+             :info-file (merge-pathnames #p "doc/violet-volts" 
+                                         source-dir) 
+             :license :agplv3
+             :declt-notice :short
              :hyperlinks nil
-             :introduction (alexandria:read-file-into-string #p"src/static/introduction"))))
+             :introduction (alexandria:read-file-into-string #p"src/static/introduction")
+             :conclusion (alexandria:read-file-into-string #p"src/static/conclusion"))))
 
 (defun start-hunchentoot ()
   (start)
