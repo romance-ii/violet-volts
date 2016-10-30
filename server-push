@@ -1,5 +1,6 @@
 #!/bin/bash
-rsync -essh -rv src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
+scp tootstest.asd Makefile app.lisp tootsville.adventuring.click:tootsville.adventuring.click/
+rsync -essh -v src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
 ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi \
 	|| exit
 rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \

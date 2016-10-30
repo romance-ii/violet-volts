@@ -36,11 +36,12 @@ bin:	tootstest.cgi \
 	static/css/main.css static/css/doc.css
 
 bin/buildapp:
+	mkdir -p bin
 	if which buildapp; \
 	then \
 		ln -s $$(which buildapp) bin/buildapp; \
 	else \
-		cl -e '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
+		sbcl --eval '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
