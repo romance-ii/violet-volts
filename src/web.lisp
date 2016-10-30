@@ -28,6 +28,12 @@
   "This is the singleton instance of the web application object.")
 (clear-routing-rules *web*)
 
+(defun wants-json-p ()
+  "Does the client request Accept JSON format?"
+  (or (search "application/json" (gethash "Accept" (request-headers *request*)))
+      (search "text/json" (gethash "Accept" (request-headers *request*)))
+      (search "application/x-json" (gethash "Accept" (request-headers *request*)))))
+
 (defun redirect-to (uri &optional (status 307))
   "Redirect to another URI. Status code 307 for temporary, 301 or 308 for permanent (typically).
 
@@ -575,10 +581,6 @@ host-side, here. The crash report should arrive in JSON format."
       (t (render #p"version.html" version-info-list)))))
 
 ;; Error pages
-
-(defun wants-json-p ()
-  "Does the client request JSON format?"
-  (search "application/json" (gethash "Accept" (request-headers *request*))))
 
 (defmethod on-exception ((app <web>) code)
   "Return error with code CODE"
