@@ -1256,3 +1256,16 @@ Currently, this means resolving:
 
 
 ;;; symbol.lisp ends here
+
+
+
+;;; — — this patch actually goes in asdf.lisp but 
+
+(defun sub-component-p (component relative-to)
+  "Return T if COMPONENT can be found under RELATIVE-TO."
+  (and (component-pathname component)
+       (pathname-match-p (component-pathname component)
+                         (make-pathname :name :wild
+                                        :directory
+                                        (append (pathname-directory relative-to)
+                                                '(:wild-inferiors))))))
