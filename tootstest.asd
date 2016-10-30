@@ -42,11 +42,20 @@ testbed case for the development."
   :components ((:module "src"
                         :components
                         ((:file "main" :depends-on ("config" "view" "db"))
-                         (:file "web" :depends-on ("view"))
+                         (:file "db-player" :depends-on ("db"))
+                         (:file "web" :depends-on ("view" "db-player"))
+                         
+                         (:file "login" :depends-on ("web"))
+                         (:file "static" :depends-on ("web"))
+                         (:file "register" :depends-on ("web"))
+                         (:file "version" :depends-on ("web"))
+                         (:file "zomg" :depends-on ("web"))
                          (:file "gossip" :depends-on ("web"))
                          (:file "script" :depends-on ("web"))
+                         (:file "news" :depends-on ("web"))
                          (:file "meta-game" :depends-on ("web"))
                          (:file "characters" :depends-on ("web"))
+                         
                          (:file "view" :depends-on ("config"))
                          (:file "db" :depends-on ("config"))
                          (:file "config"))))
