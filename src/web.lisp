@@ -179,23 +179,57 @@ http://ncona.com/2015/02/consuming-a-google-id-token-from-a-server/ "
 
 (defclass player (creature-controller)
   ((player-id :type (unsigned-byte 128) :accessor player-id
-              :initform (binary<-uuid (uuid:make-v4-uuid)))
+              :initform (binary<-uuid (uuid:make-v4-uuid))
+              :documentation  "A  128-bit  unique  identifier  for  this
+player, used  internally. We  are generating  these using  v4-UUID's, at
+least for now, although other than being a positive integer, I would not
+recommend making any assumptions about their internal format.")
    (player-email :type (or string null) :accessor player-email
-                 :initform :email)
+                 :initform :email
+                 :documentation "The  primary e-mail  address associated
+with this player.  The player's contact methods list  may have alternate
+addresses, and there  is no guarantee that this “primary”  address is as
+good as, much less better than, any  of them. This value may be used for
+display  only,  but before  actually  sending  mail, visit  the  contact
+methods list and find the actual best address.
+
+This may also be NIL.")
    (player-given-name :type (or string null) :accessor player-given-name
-                      :initform :given-name)
+                      :initform :given-name
+                      :documentation "The player's  given name (usually,
+first name) if one is known. This may be NIL.")
    (player-surname :type (or string null) :accessor player-surname
-                   :initform :surname)
+                   :initform :surname
+                   :documentation "The player's surname (family name, or
+last name) if one is known. This may be NIL.")
    (player-full-name :type (or string null) :accessor player-full-name
-                     :initform :full-name)
+                     :initform :full-name
+                     :documentation "The  player's full  name, formatted
+as they  like it. This might  include honorifics or titles;  there is no
+safe way to convery between this and the given name and surname.")
    (player-date-of-birth :type (or local-time:date null) :accessor player-date-of-birth
-                         :initform :date-of-birth)
+                         :initform :date-of-birth
+                         :documentation "The player's date of birth, if it is known.")
    (player-age :type (or (real 0 *) null) :accessor player-age
-               :initform :age))
+               :initform :age
+               :documentation  "The  player's  age,   if  it  is  known.
+Note that the reader method will  compute the age from the date-of-birth
+when one is present."))
   (:documentation "A class representing a player who is a human being in
  the real world."))
 
 (defun legal-age (date-of-birth)
+  "The age of  a person born on DATE-OF-BIRTH, right  now. This uses the
+legal definition  that the  person's age increments  at the  midnight of
+their date  of birth  each year,  with the date  29 February  treated as
+1 March on non-leap-years.
+
+The time  zone used for  this computation  is the not  defined, however,
+yielding  rather  irregular  behaviour   depending  on  time  zones  and
+the like.
+
+TODO: Determine  in what  time zone  we should  computer this  for legal
+reasons, eg, COPPA."
   (multiple-value-bind (msec sec min hour day month year)
       (local-time:decode-timestamp (local-time:now))
     (declare (ignore msec sec min hour))
@@ -210,16 +244,34 @@ http://ncona.com/2015/02/consuming-a-google-id-token-from-a-server/ "
            (if had-birthday-p 1 0))))))
 
 (defmethod player-age :around (player)
+  "This  AROUND method  will define  the PLAYER's  age based  upon their
+date-of-birth   (`PLAYER-DATE-OF-BIRTH')   rather    than   the   stored
+`PLAYER-AGE' slot-value, when the date of birth is known."
   (let ((dob (player-date-of-birth player)))
-    (if dob (legal-age dob) (call-next-method))))
+    (if dob
+        (let ((legal-age (legal-age dob))
+              (recorded-age (call-next-method)))
+          (unless (= legal-age recorded-age)
+            (setf (player-age player) legal-age))
+          legal-age)
+        (call-next-method))))
 
 (defun player-adult-p (player)
+  "Reurns a generalized true value if PLAYER is 18 or older.
+
+Should return true beginning on the day of their 18th birthday."
   (>= (player-age player) 18))
 
 (defun player-under-13-p (player)
+  "Returns a generalized true value if PLAYER is under 13.
+
+Should return NIL beginning on the day of their 13th birthday."
   (< (player-age player) 13))
 
 (defun player-over-13-p (player)
+  "Returns a generalized true value if PLAYER is over 13.
+
+Should return true beginning on the day of their 13th birthday."
   (>= (player-age player) 13))
 
 (defclass item ()
@@ -255,6 +307,13 @@ each cdr, a new value."
      collect (cons writer new-value)))
 
 (defun update-player-info (player-id info)
+  "GIven  property  list  INFO,  find  the record  for  player  with  ID
+PLAYER-ID and update  each slot-value whose :initarg values  are keys in
+INFO, with the value following it in the list.
+
+In other  words, update fields in  the player record by  overwriting the
+fields mentioned in INFO in much hte same way as they woudl be passed to
+MAKE-INSTANCE 'PLAYER."
   (let ((Δ (collect-setters-for-class 'player info)))
     (when Δ
       (let ((player (find-player-by-id player-id)))
@@ -262,7 +321,8 @@ each cdr, a new value."
            do (funcall writer player new-value))))))
 
 (defun link-player-to-registration (player registrar id-string)
-  "Link a PLAYER object to a login REGISTRAR and their ID-STRING representng that player."
+  "Link  a  PLAYER object  to  a  login  REGISTRAR and  their  ID-STRING
+representng that player."
   (check-type player player)
   (check-type registrar (or string symbol) "string-designator for a registrar")
   (check-type id-string string
@@ -293,7 +353,7 @@ update or intantiate the local records.
 
 Methods on this  generic function specialize upon the  REGISTRAR and may
 return   NIL;   in   which   case,  the   :AROUND   method   will   call
-MAKE-USER-REGISTRATION  to instantiate  a  record. Otherwise,  methods
+MAKE-USER-REGISTRATION  to  instantiate  a  record.  Otherwise,  methods
 should return a unique user ID previously assigned by that function.
 
 The default method should suffice for many types of registrars."))
@@ -340,11 +400,14 @@ is good, and return the local user object reference associated with it."
                      response-uri)
     (let* ((response (yason:parse (map 'string #'code-char response-binary)
                                   :object-as :plist
-                                  :object-key-fn (compose #'make-keyword #'string-upcase)
+                                  :object-key-fn (compose #'make-keyword
+                                                          #'string-upcase)
                                   :json-arrays-as-vectors t)))
-      (assert (find (getf response :iss) '("accounts.google.com" "https://accounts.google.com")
+      (assert (find (getf response :iss) '("accounts.google.com"
+                                           "https://accounts.google.com")
                     :test #'string-equal) ()
-                    "While validating Google sign-in token, ISS field returned was ~A, whose authority I do not recognize"
+                    "While  validating Google  sign-in token,  ISS field
+returned was ~A, whose authority I do not recognize"
                     (getf response :iss))
       (assert (< (parse-integer (getf response :exp))
                  (local-time:timestamp-to-unix (local-time:now))) ()
@@ -399,26 +462,40 @@ by a specific method to obtain a reference to a local user.
 
 ;;; News
 
-(defvar *tootsbook-cache* nil)
-(defvar *tootsbook-fetched* 0)
+(defvar *tootsbook-cache* nil
+  "This is used as a cache for the current headlines from Tootsbook for a short time. See *TOOTSBOOK-REFRESH-SECONDS* for a definition of ``a short time.''")
+(defvar *tootsbook-fetched* 0
+  "At what  universal-time was  *TOOTSBOOK-CACHE* last fetched  from the
+  Tootsbook RDF feed?")
 
-(defvar *tootsbook-refresh-seconds* (* 60 5))
+(defvar *tootsbook-refresh-seconds* (* 60 5)
+  "How many seconds must pass between checking Tootsbook for new headlines?")
 
 (defun fetch-tootsbook/http ()
-  (setf *tootsbook-cache*
-        (cxml:parse-octets
-         (drakma:http-request
-          (puri:uri "http://www.tootsbook.com/tootsbook/feed/")
-          :content-type "application/rdfxml")
-         (cxml-dom:make-dom-builder))))
+  "Fetch new  headlines from  Tootsbook, and store  the RDF-XML  data in
+*TOOTSBOOK-CACHE*"
+  (let ((rdf (cxml:parse-octets
+              (drakma:http-request
+               (puri:uri "http://www.tootsbook.com/tootsbook/feed/")
+               :content-type "application/rdfxml")
+              (cxml-dom:make-dom-builder))))
+    (when rdf
+      (setf *tootsbook-fetched* (get-universal-time)
+            *tootsbook-cache* rdf))))
 
 (defun tootsbook-headlines ()
+  "Return  the current  (or,  at least,  fairly  recent) headlines  from
+Tootsbook's RDF feed. Uses a local cache, when available.
+
+Returns the RDF as a raw string"
   (when (> (get-universal-time)
            (+ *tootsbook-refresh-seconds* *tootsbook-fetched*))
     (fetch-tootsbook/http))
   *tootsbook-cache*)
 
 (defun rdf-story-to-plist (story)
+  "Convert and  RDF story  (DOM object)  into a  property list  with the
+title, link, content, and description."
   (loop for (tag label)
      in '(("title" :title) ("link" :link)
           ("content:encoded" :content) ("description" :description))
@@ -426,14 +503,19 @@ by a specific method to obtain a reference to a local user.
      collect (get-text-of-element story tag)))
 
 (defun tootsbook-headline-stories ()
+  "Returns  the  headline  elements   (DOM  objects)  from  the  current
+headlines on Tootsbook."
   (dom:get-elements-by-tag-name
    (dom:document-element
     (tootsbook-headlines)) "item"))
 
 (defun unescape-& (string)
+  "Replaces SGML-style &amp; with #\&"
   (cl-ppcre:regex-replace-all "&amp;" string "&"))
 
 (defun get-text-of-element (node element)
+  "Extracts  the  text  under  the  given ELEMENT  type  under  NODE  as
+a singular string."
   (apply #'concatenate 'string
          (map 'list (compose #'unescape-& #'dom:node-value)
               (dom:child-nodes
@@ -441,10 +523,12 @@ by a specific method to obtain a reference to a local user.
                 (dom:get-elements-by-tag-name node element))))))
 
 (defun tootsbook-news-plists ()
+  "Returns all headlines in Tootsbook currently as a list of property lists, each made by `RDF-STORY-TO-PLIST'."
   (map 'list #'rdf-story-to-plist
        (tootsbook-headline-stories)))
 
 (defroute "/tootstest/news" ()
+  "Render the latest news from Tootsbook into the “news” template."
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
 
@@ -455,6 +539,8 @@ by a specific method to obtain a reference to a local user.
   :test 'equal)
 
 (defroute "/tootstest/zomg" ()
+  "Zombies! Oh, my God! — The  client-side can report its crashes to the
+host-side, here. The crash report should arrive in JSON format."
   (assert (string-equal +application/json+ (request-content-type *request*)
                         :end2 #.(length +application/json+))
           () "Zombies should always use JSON, not ~a" (request-content-type *request*))
@@ -464,32 +550,38 @@ by a specific method to obtain a reference to a local user.
     (format *error-output* "ZOMG! error report from client:~%~s" report)))
 
 (defroute "/tootstest/version" ()
-  (render #p"version.html"
-          (list :product "tootstest"
-                :version (asdf:component-version (asdf:find-system :tootstest))
-                :machine (list :version (machine-version)
-                               :type (machine-type)
-                               :instance (string-capitalize (machine-instance)))
-                :lisp (list :type (lisp-implementation-type)
-                            :version (lisp-implementation-version))
-                :software (list :type (software-type)
-                                :version (software-version))
-                :acceptor (list :name (request-server-name *request*)
-                                :port (request-server-port *request*)
-                                :protocol (request-server-protocol *request*))
-                :copyright-latest #.(local-time:format-timestring
-                                     nil (local-time:now)
-                                     :format '(:year))
-                :build-date #.(local-time:format-timestring
-                               nil (local-time:now)
-                               :format '(:year #\- :month #\- :day)))))
+  "Render the version and license information nicely for the player."
+  (let ((version-info-list 
+         (list :product "tootstest"
+               :version (asdf:component-version (asdf:find-system :tootstest))
+               :machine (list :version (machine-version)
+                              :type (machine-type)
+                              :instance (string-capitalize (machine-instance)))
+               :lisp (list :type (lisp-implementation-type)
+                           :version (lisp-implementation-version))
+               :software (list :type (software-type)
+                               :version (software-version))
+               :acceptor (list :name (request-server-name *request*)
+                               :port (request-server-port *request*)
+                               :protocol (request-server-protocol *request*))
+               :copyright-latest #.(local-time:format-timestring
+                                    nil (local-time:now)
+                                    :format '(:year))
+               :build-date #.(local-time:format-timestring
+                              nil (local-time:now)
+                              :format '(:year #\- :month #\- :day)))))
+    (cond 
+      ((wants-json-p) (render-json (plist-alist version-info-list)))
+      (t (render #p"version.html" version-info-list)))))
 
 ;; Error pages
 
 (defun wants-json-p ()
+  "Does the client request JSON format?"
   (search "application/json" (gethash "Accept" (request-headers *request*))))
 
 (defmethod on-exception ((app <web>) code)
+  "Return error with code CODE"
   (declare (ignore app))
   (cond
     ((wants-json-p)
