@@ -1,5 +1,7 @@
 (in-package :cl-user)
 (defpackage tootstest
+  (:documentation "This is the main (entry-point/top-level) package used
+  to launch the program in various modes of operation.")
   (:use :cl)
   (:import-from :tootstest.config :config)
   (:import-from :clack :clackup)
@@ -16,11 +18,21 @@
 (in-package :tootstest)
 
 (defvar *appfile-path*
-  (asdf:system-relative-pathname :tootstest #P"app.lisp"))
+  (asdf:system-relative-pathname :tootstest #P"app.lisp")
+  "This is the location of app.lisp, which is the anchor-point for the static asset files relative to it.")
 
-(defvar *handler* nil)
+(defvar *handler* nil
+  "If  a local  (testing?) Hunchentoot  server is  running, its  Clackup
+  value will be stored here…")
 
 (defun start (&rest args &key server port debug &allow-other-keys)
+  "Start a local Hunchentoot server. 
+
+Presently, all arguments are ignored.
+
+The server will  be started running on port  5000 on local-loopback-only
+addresses  (127.0.0.1  and  ::1).  If an  existing  server  is  running,
+a restart will be presented to allow you to kill it (RESTART-SERVER)."
   (declare (ignore server port debug))
   (when *handler*
     (restart-case (error "Server is already running.")
@@ -31,11 +43,15 @@
         (apply #'clackup *appfile-path* args)))
 
 (defun stop ()
+  "Stop any locally-running Hunchentoot server process, eg, one started by `START'"
   (prog1
       (clack:stop *handler*)
     (setf *handler* nil)))
 
 (defun print-help ()
+  "Prints a short usage summary  to *STANDARD-OUTPUT*. Note that this is
+invoked  by calling  the  program  with “help”  as  its first  argument,
+explicitly — the default behaviour is to run as a FastCGI server."
   (format t "~|
 Usage: Run this program with one of these verbs. No verb at all defaults to “fast-cgi”
 
@@ -48,35 +64,29 @@ help — print this
 version — print compilation date-stamp
 "))
 
-(defvar *compiled* #.(with-output-to-string (s) (print-object (local-time:now) s)))
+(defvar *compiled* #.(with-output-to-string (s) (print-object (local-time:now) s))
+        "A string representing the (fairly precise) time at which the program was compiled.")
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (setf *compiled* (with-output-to-string (s) (print-object (local-time:now) s))))
 
 (defun start-repl ()
+  "Starts a PREPL REPL."
   (ql:quickload :prepl)
   (funcall (intern "REPL" (find-package :prepl))))
 
 (defun start-swank ()
+  "Starts a SWANK server."
   (ql:quickload :swank)
   (funcall (intern "START-SERVER" (find-package :swank))))
 
-(defun write-docs ()
-  (format *trace-output* "~& Writing documentation…")
-  (ql:quickload :net.didierverna.declt)
-  (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
- ;;; Patch this file. TODO: File a bug or submit upstream or something.
-    (load (merge-pathnames
-           (make-pathname :directory '(:relative "src" "lib")
-                          :name "net.didierverna.declt.item.symbol"
-                          :type "lisp")
-           source-dir))
-    (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
-    (let ((licenses (intern "*LICENSES*" (find-package :net.didierverna.declt))))
-      (set licenses
-           (cons (eval licenses)
-                 '((:agplv3
-                    "The GNU Affero General Public License"
-                    "This  program is  free  software; you  can redistribute  it
+(defun inform-declt-of-agplv3 ()
+  "Adds the AGPLv3 to the list of licenses for DECLT."
+  (let ((licenses (intern "*LICENSES*" (find-package :net.didierverna.declt))))
+    (set licenses
+         (cons (eval licenses)
+               '((:agplv3
+                  "The GNU Affero General Public License"
+                  "This  program is  free  software; you  can redistribute  it
 and/or  modify it  under  the terms  of the  GNU  Affero General  Public
 License as  published by  the Free  Software Foundation;  either version
 3 of the License, or (at your option) any later version.
@@ -88,13 +98,34 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with this program; if not,  write to the Free Software Foundation,
-Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")))))
+Inc., 675 Mass Ave, Cambridge, MA 02139, USA."))))))
+
+(defun patch-declt-item/symbol.lisp ()
+  "Patch this file. TODO: File a bug or submit upstream or something."
+  (load (merge-pathnames
+         (make-pathname :directory '(:relative "src" "lib")
+                        :name "net.didierverna.declt.item.symbol"
+                        :type "lisp")
+         source-dir)))
+
+(defun write-docs ()
+  "Write out the documentation in TeΧinfo format using DECLT.
+
+Note that DECLT  is not usually compiled into the  binary by default, so
+this  may  have  to  download  DECLT  and/or  its  dependencies  through
+Quicklisp when called."
+  (format *trace-output* "~& Writing documentation…")
+  (ql:quickload :net.didierverna.declt)
+  (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
+    (patch-declt-item/symbol.lisp)  
+    (inform-declt-of-agplv3)
+    (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
              :tootstest
-             :library-name "Violet Volts"
-             :texi-file (merge-pathnames #p"doc/violet-volts.texi"
+             :library-name "Violet Volts: tootstest"
+             :texi-file (merge-pathnames #p"doc/tootstest.texi"
                                          source-dir)
-             :info-file (merge-pathnames #p "doc/violet-volts"
+             :info-file (merge-pathnames #p "doc/tootstest"
                                          source-dir)
              :license :agplv3
              :declt-notice :short
