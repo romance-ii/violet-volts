@@ -28,7 +28,7 @@
 (defun start (&rest args &key server port debug &allow-other-keys)
   "Start a local Hunchentoot server. 
 
-Presently, all arguments are ignored.
+PORT may be a port number .
 
 The server will  be started running on port  5000 on local-loopback-only
 addresses  (127.0.0.1  and  ::1).  If an  existing  server  is  running,
@@ -134,11 +134,14 @@ Quicklisp when called."
              :conclusion (alexandria:read-file-into-string #p"src/static/conclusion"))))
 
 (defun start-hunchentoot ()
+  "Start a Hunchentoot  server via `START' and fall through  into a REPL
+to keep the process running."
   (start)
   (print "Hunchentoot server running. Evaluate (TOOTSTEST:STOP) to stop, or exit the REPL.")
   (start-repl))
 
 (defun post-read-version-page ()
+  "Power-On-Self-Test: Checks that the server can respond to the version-page query locally."
   (let ((retries 3))
     (tagbody retry-post
        (handler-case
@@ -153,6 +156,10 @@ Quicklisp when called."
                     (go retry-post))))))))
 
 (defun power-on-self-test ()
+  "Perform some sanity checking as a part of testing.
+
+This testing should  be much more complete  than it really is  — it will
+need to be expanded a great deal to increase confidence in these tests."
   (fresh-line)
   (princ "Power-on self-test:")
   (handler-case (start :port 27701)
@@ -172,6 +179,9 @@ Quicklisp when called."
   t)
 
 (defun entry (argv)
+  "Top-level  entry-point  for  the  compiled  executable  binary  form.
+Dispatches   based   upon   the   single  argument,   expected   to   be
+a verb (case-insensitive) from the card-coded table in this function."
   (case (intern (string-upcase (typecase argv
                                  (cons (if (< 1 (length argv))
                                            (second argv)
@@ -188,6 +198,11 @@ Quicklisp when called."
     (otherwise (print-help))))
 
 (defun fastcgi-entry ()
+  "This is the entry point for running as a FastCGI program.
+
+Note that it will print out  some HTTP-like garbage when it starts about
+“half-working,  if you  see  this.”  If that  actually  appears in  your
+browser, it was started as a “not-Fast” CGI program, in error."
   (format t "Content-Type: text/plain~c~c~c~c
 
   Starting FastCGI is half-working if you see this. But, only half.~%"
