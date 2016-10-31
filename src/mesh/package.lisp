@@ -1,6 +1,3 @@
-(defpackage :Sextus-Julius-Frontinus
-  (:nicknames :frontinus)
-  (:use :cl :jscl/ffi :romance))
 (defpackage :aelius-galenus
   (:nicknames :galen)
   (:use :cl :jscl/ffi :romance))
@@ -149,6 +146,9 @@
 (defpackage :rabirius
   (:use :cl :jscl/ffi :romance))
 (defpackage :rahab
+  (:use :cl :jscl/ffi :romance))
+(defpackage :sextus-julius-frontinus
+  (:nicknames :frontinus)
   (:use :cl :jscl/ffi :romance))
 (defpackage :ux.events
   (:use :cl :jscl/ffi))
