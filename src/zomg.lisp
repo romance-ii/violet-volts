@@ -1,7 +1,7 @@
 ;;;;; zomg.lisp —- Client exceptions reporter
 (in-package :tootstest.web)
 
-(defroute "/tootstest/zomg" ()
+(defroute route-/zomg "/tootstest/zomg" ()
   "Zombies! Oh, my God! — The  client-side can report its crashes to the
 host-side, here. The crash report should arrive in JSON format."
   (assert (string-equal +application/json+ (request-content-type *request*)

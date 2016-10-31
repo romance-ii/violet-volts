@@ -7,7 +7,7 @@
 (defun server-full-p ()
   (>= (approximate-player-count) (server-full-player-count)))
 
-(defroute "/game-server/" ()
+(defroute route-/game-server/ "/tootstest/game-server/" ()
   (render #p"game-server.html"
           `(:server-status
             ((:players-online .,(approximate-player-count))
