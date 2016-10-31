@@ -8,6 +8,8 @@
 #
 # doc — extract and build documentation in various formats
 #
+# doc-publish — push docs to Goethe
+#
 # test — run automated unit tests
 #
 # ui-test — run Selenium-based unit tests
@@ -28,6 +30,10 @@ deps:
 
 deploy:	bin test
 	./server-push
+
+# TODO: fix version labels, filenames magically
+doc-publish:	doc
+	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.2/
 
 bin:	tootstest.cgi \
 	static/js/mesh.js \
