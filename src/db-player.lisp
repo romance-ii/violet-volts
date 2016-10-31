@@ -43,17 +43,6 @@
 
 ;;; Creatures, Players.
 
-;; (defmodel      creature-controller       (:inflate      registered-at
-;; #'datetime-to-timestamp) id registered-at)
-
-;; (defclass  creature-controller  ()   ((creature  :type  (or  creature
-;;   (unsigned-byte            128)           null)            :accessor
-;;   creature-controller-creature :initarg  :creature :documentation "If
-;;   this  controller  is  currently  controlling a  creature,  this  is
-;;   a  reference  to that  creature;  either  an  ID, or  the  creature
-;;   object.")) (:documentation "A  base class used for  any entity (eg,
-;;   player) who can control a character in the game in some way."))
-
 (datafly:defmodel player
   "A  structure representing  a  player  who is  a  human  being in  the
  real world.
@@ -98,15 +87,19 @@ the given name and surname.
 
 The player's date of birth, if it is known.
 
-@item AGE
+@item AGE%
 
-The  player's age,  if it  is known.  Note that  the reader  method will
-compute the age from the date-of-birth when one is present.
+The  player's age,  if  it  is known.  Note  that  the related  function
+`PLAYER-AGE'  will  compute the  age  from  the date-of-birth  when  one
+is present.
 
 For sanity-checking purposes only, the age  is clamped to 0…130. This is
 mostly to detect the not-uncommon  data-entry error of someone supplying
 a  two-digit year-of-birth  that  is later  interpreted  as their  being
 1,900+ years old.
+
+Do  not call  `PLAYER-AGE%'  directly, please.  Use `PLAYER-AGE',  which
+falls back upon computing from the player's date-of-birth.
 
 @end itemize"
   (id (binary<-uuid (uuid:make-v4-uuid))
@@ -116,7 +109,7 @@ a  two-digit year-of-birth  that  is later  interpreted  as their  being
   (surname nil :type (or null string))
   (full-name nil :type (or null string))
   (date-of-birth nil :type (or null local-time:date))
-  (age nil :type (or null (real 0 (130)))))
+  (age% nil :type (or null (real 0 (130)))))
 
 (defun legal-age (date-of-birth &optional (reference-date (local-time:now)))
   "The age of  a person born on DATE-OF-BIRTH, as  of REFERENCE-DATE (or
@@ -138,7 +131,7 @@ reasons, eg, COPPA."
       (local-time:decode-timestamp reference-date)
     (declare (ignore msec sec min hour))
     (multiple-value-bind (msec sec min hour
-                               day-of-birth month-of-birth year-of-birth)
+                          day-of-birth month-of-birth year-of-birth)
         (local-time:decode-timestamp date-of-birth)
       (declare (ignore msec sec min hour))
       (let ((had-birthday-p (or (< month-of-birth month)
@@ -149,32 +142,16 @@ reasons, eg, COPPA."
               1)
            (if had-birthday-p 1 0))))))
 
-(eval-when (:compile-toplevel :execute :load-toplevel)
-  ;; Promote the  DEFSTRUCT function to  a generic function that  we can
-  ;; define a method AROUND.
-  (warn "Redefining PLAYER-AGE around ~a"
-        (symbol-function 'player-age))
-  (let ((player-age-fn (symbol-function 'player-age)))
-    (unless (typep player-age-fn 'generic-function)
-      (fmakunbound 'player-age))
-    (defgeneric player-age (player)
-      (:documentation "Get the AGE of the PLAYER"))
-    (when player-age-fn
-      (defmethod player-age ((player player))
-        (funcall player-age-fn player)))))
-
-(defmethod player-age :around (player)
-  "This  AROUND method  will define  the PLAYER's  age based  upon their
-date-of-birth   (`PLAYER-DATE-OF-BIRTH')   rather    than   the   stored
-`PLAYER-AGE' slot-value, when the date of birth is known."
+(defun player-age (player) 
+  (check-type player player)
   (let ((dob (player-date-of-birth player)))
     (if dob
         (let ((legal-age (legal-age dob))
-              (recorded-age (call-next-method)))
+              (recorded-age (player-age% player)))
           (unless (= legal-age recorded-age)
-            (setf (player-age player) legal-age))
+            (setf (player-age% player) legal-age))
           legal-age)
-        (call-next-method))))
+        (player-age% player))))
 
 (defun player-adult-p (player)
   "Reurns a generalized true value if PLAYER is 18 or older.
