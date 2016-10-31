@@ -100,7 +100,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program; if not,  write to the Free Software Foundation,
 Inc., 675 Mass Ave, Cambridge, MA 02139, USA."))))))
 
-(defun patch-declt-item/symbol.lisp ()
+(defun patch-declt-item/symbol.lisp (source-dir)
   "Patch this file. TODO: File a bug or submit upstream or something."
   (load (merge-pathnames
          (make-pathname :directory '(:relative "src" "lib")
@@ -117,7 +117,7 @@ Quicklisp when called."
   (format *trace-output* "~& Writing documentation…")
   (ql:quickload :net.didierverna.declt)
   (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
-    (patch-declt-item/symbol.lisp)  
+    (patch-declt-item/symbol.lisp source-dir)  
     (inform-declt-of-agplv3)
     (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
