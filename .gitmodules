@@ -6,3 +6,6 @@
 	path = src/lib/babylon.js
 	url = git@github.com:romance-ii/Babylon.js
 	branch = toots
+[submodule "alexandria"]
+	path = src/lib/alexandria
+	url = git@github.com:romance-ii/alexandria.git
