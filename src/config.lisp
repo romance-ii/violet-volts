@@ -1,16 +1,16 @@
 (in-package :cl-user)
 (defpackage tootstest.config
- (:use :cl)
- (:import-from :envy
-  :config-env-var
-  :defconfig)
- (:export :config
-  :*application-root*
-  :*static-directory*
-  :*template-directory*
-  :appenv
-  :developmentp
-  :productionp))
+  (:use :cl)
+  (:import-from :envy
+                :config-env-var
+                :defconfig)
+  (:export :config
+           :*application-root*
+           :*static-directory*
+           :*template-directory*
+           :appenv
+           :developmentp
+           :productionp))
 (in-package :tootstest.config)
 
 (setf (config-env-var) "VIOLETVOLTS")
@@ -24,7 +24,7 @@
                  :on-error-mail (:from-name "Tootsville Support"
                                             :from-address "support@tootsville.adventuring.click"
                                             :to-address "support@tootsville.adventuring.click"
-                                            :smtp-server "localhost" 
+                                            :smtp-server "localhost"
                                             :subject-prefix "Error")))
 
 (defconfig |development|

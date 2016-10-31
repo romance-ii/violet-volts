@@ -11,4 +11,3 @@ host-side, here. The crash report should arrive in JSON format."
                       (yason:*PARSE-json-arrays-as-vectors* t))
                   (yason:parse (request-raw-body *request*)))))
     (format *error-output* "ZOMG! error report from client:~%~s" report)))
-

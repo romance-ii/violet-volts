@@ -43,20 +43,16 @@
 
 ;;; Creatures, Players.
 
-;; (defmodel creature-controller
-;;   (:inflate registered-at #'datetime-to-timestamp) 
-;;   id 
-;;   registered-at)
+;; (defmodel      creature-controller       (:inflate      registered-at
+;;   #'datetime-to-timestamp) id registered-at)
 
-;; (defclass creature-controller ()
-;;   ((creature :type (or creature (unsigned-byte 128) null)
-;;              :accessor creature-controller-creature 
-;;              :initarg :creature
-;;              :documentation "If this controller is currently controlling
-;;              a creature, this is a reference to that creature; either an
-;;              ID, or the creature object."))
-;;   (:documentation "A base class used for any entity (eg, player) who can
-;;  control a character in the game in some way."))
+;; (defclass  creature-controller  ()   ((creature  :type  (or  creature
+;;   (unsigned-byte            128)           null)            :accessor
+;;   creature-controller-creature :initarg  :creature :documentation "If
+;;   this  controller  is  currently  controlling a  creature,  this  is
+;;   a  reference  to that  creature;  either  an  ID, or  the  creature
+;;   object.")) (:documentation "A  base class used for  any entity (eg,
+;;   player) who can control a character in the game in some way."))
 
 (datafly:defmodel player
   "A  structure representing  a  player  who is  a  human  being in  the
@@ -64,7 +60,7 @@
 
 Structure slots:
 
-@itemize  @item ID  
+@itemize  @item ID
 
 A 128-bit  unique identifier  for this player,  used internally.  We are
 generating these using v4-UUID's, at  least for now, although other than
@@ -120,7 +116,7 @@ a  two-digit year-of-birth  that  is later  interpreted  as their  being
   (surname nil :type (or string null))
   (full-name nil :type (or string null))
   (date-of-birth nil :type (or local-time:date null))
-  (age nil :type (or (real 0 (130)) null))) 
+  (age nil :type (or (real 0 (130)) null)))
 
 (defun legal-age (date-of-birth &optional (reference-date (local-time:now)))
   "The age of  a person born on DATE-OF-BIRTH, as  of REFERENCE-DATE (or
@@ -194,21 +190,15 @@ Should return NIL beginning on the day of their 13th birthday."
 Should return true beginning on the day of their 13th birthday."
   (>= (player-age player) 13))
 
-;; (defun class-slot-writers (class)
-;;   "Enumerate the first writer (if any) for any slot on CLASS that has one."
-;;   (loop with not-found = 'not-found
-;;      for slot in (closer-mop:class-slots (find-class class))
-;;      for writers = (closer-mop:slot-definition-writers slot) 
-;;      when writers
-;;      collect (cons slot (first writers))))
+;; (defun  class-slot-writers (class)  "Enumerate the  first writer  (if
+;;   any) for  any slot on CLASS  that has one." (loop  with not-found =
+;;   'not-found for slot  in (closer-mop:class-slots (find-class class))
+;;   for  writers   =  (closer-mop:slot-definition-writers   slot)  when
+;;   writers collect (cons slot (first writers))))
 
-;; (eval-when (:compile-toplevel :execute)
-;;   (dolist (class '(player))
-;;     (dolist (writer (class-slot-writers class))
-;;       (add-method 
-;;        (closer-mop:method-generic-function writer)
-;;        (make-method 
-;;         )))))
+;; (eval-when  (:compile-toplevel  :execute) (dolist  (class  '(player))
+;;   (dolist    (writer    (class-slot-writers    class))    (add-method
+;;   (closer-mop:method-generic-function writer) (make-method )))))
 
 
 (defun update-player-info (player-id info)
@@ -304,4 +294,3 @@ base-36-coded integer strings."
     (player player)
     ((integer 1 *) (find-player-by-id player))
     (string (find-player-by-id (parse-integer player :radix 36)))))
-

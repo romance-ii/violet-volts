@@ -36,7 +36,7 @@ testbed case for the development."
                :cl-rdfxml
                :drakma
                :yason
-               
+
                :uuid
                )
   :components ((:module "src"
@@ -44,7 +44,7 @@ testbed case for the development."
                         ((:file "main" :depends-on ("config" "view" "db"))
                          (:file "db-player" :depends-on ("db"))
                          (:file "web" :depends-on ("view" "db-player"))
-                         
+
                          (:file "login" :depends-on ("web"))
                          (:file "static" :depends-on ("web"))
                          (:file "register" :depends-on ("web"))
@@ -55,7 +55,7 @@ testbed case for the development."
                          (:file "news" :depends-on ("web"))
                          (:file "meta-game" :depends-on ("web"))
                          (:file "characters" :depends-on ("web"))
-                         
+
                          (:file "view" :depends-on ("config"))
                          (:file "db" :depends-on ("config"))
                          (:file "config"))))

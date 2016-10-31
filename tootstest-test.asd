@@ -9,6 +9,6 @@
   :depends-on (:tootstest
                :prove)
   :components ((:module "t"
-                :components
-                ((:file "tootstest"))))
+                        :components
+                        ((:file "tootstest"))))
   :perform (load-op :after (op c) (asdf:clear-system c)))

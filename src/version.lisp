@@ -19,7 +19,7 @@ in HTTP headers and such."
 
 (defroute "/tootstest/version" ()
   "Render the version and license information nicely for the player."
-  (let ((version-info-list 
+  (let ((version-info-list
          (list :product (romance-ii-program-name)
                :version (romance-ii-program-version)
                :machine (list :version (machine-version)
@@ -38,6 +38,6 @@ in HTTP headers and such."
                :build-date #.(local-time:format-timestring
                               nil (local-time:now)
                               :format '(:year #\- :month #\- :day)))))
-    (cond 
+    (cond
       ((wants-json-p) (render-json (plist-alist version-info-list)))
       (t (render #p"version.html" version-info-list)))))

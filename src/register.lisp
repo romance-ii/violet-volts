@@ -107,4 +107,3 @@ by a specific method to obtain a reference to a local user.
           (render-player-details user)))
     (error (c)
       (render-json `((:error . (princ-to-string ,c)))))))
-

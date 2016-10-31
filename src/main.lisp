@@ -65,7 +65,7 @@ version — print compilation date-stamp
   (ql:quickload :net.didierverna.declt)
   (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
  ;;; Patch this file. TODO: File a bug or submit upstream or something.
-    (load (merge-pathnames 
+    (load (merge-pathnames
            (make-pathname :directory '(:relative "src" "lib")
                           :name "net.didierverna.declt.item.symbol"
                           :type "lisp")
@@ -94,8 +94,8 @@ Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")))))
              :library-name "Violet Volts"
              :texi-file (merge-pathnames #p"doc/violet-volts.texi"
                                          source-dir)
-             :info-file (merge-pathnames #p "doc/violet-volts" 
-                                         source-dir) 
+             :info-file (merge-pathnames #p "doc/violet-volts"
+                                         source-dir)
              :license :agplv3
              :declt-notice :short
              :hyperlinks nil
@@ -110,7 +110,7 @@ Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")))))
 (defun post-read-version-page ()
   (let ((retries 3))
     (tagbody retry-post
-       (handler-case 
+       (handler-case
            (return-from post-read-version-page (drakma:http-request "http://localhost:27701/tootstest/version"))
          (usocket:connection-refused-error (c)
            (cond ((minusp (decf retries))
@@ -122,18 +122,18 @@ Inc., 675 Mass Ave, Cambridge, MA 02139, USA.")))))
                     (go retry-post))))))))
 
 (defun power-on-self-test ()
-  (fresh-line) 
-  (princ "Power-on self-test:") 
+  (fresh-line)
+  (princ "Power-on self-test:")
   (handler-case (start :port 27701)
     (simple-error (c) (if (find-restart :restart-server)
                           (invoke-restart :restart-server)
                           (signal c))))
-  ;;; something that appears on the version page, but no error pages.
+ ;;; something that appears on the version page, but no error pages.
   (unless (search "Bruce-Robert Fenn Pocock"
                   (post-read-version-page))
     (warn "Failed POST")
     (stop)
-    (cl-user::exit :code 27 :abort t :timeout 5) 
+    (cl-user::exit :code 27 :abort t :timeout 5)
     nil)
   (princ "Passed POST")
   (fresh-line)

@@ -2,7 +2,7 @@
 
 (defpackage tootstest.app
   (:documentation "The  tootstest application package for  the login/API
-  server process. This is a Caveman2 application.")
+ server process. This is a Caveman2 application.")
   (:use :cl)
   (:import-from :lack.builder
                 :builder)

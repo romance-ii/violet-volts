@@ -5,4 +5,3 @@
 (ignore-errors (require 'sb-rotate-byte))
 (unless (find-package :sb-rotate-byte)
   (load #p"SYS:CONTRIB;**;sb-rotate-byte.fasl.NEWEST"))
-

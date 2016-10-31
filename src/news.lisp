@@ -5,7 +5,7 @@
   "This is used as a cache for the current headlines from Tootsbook for a short time. See *TOOTSBOOK-REFRESH-SECONDS* for a definition of ``a short time.''")
 (defvar *tootsbook-fetched* 0
   "At what  universal-time was  *TOOTSBOOK-CACHE* last fetched  from the
-  Tootsbook RDF feed?")
+ Tootsbook RDF feed?")
 
 (defvar *tootsbook-refresh-seconds* (* 60 5)
   "How many seconds must pass between checking Tootsbook for new headlines?")
