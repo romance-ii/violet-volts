@@ -44,7 +44,7 @@
 ;;; Creatures, Players.
 
 ;; (defmodel      creature-controller       (:inflate      registered-at
-;;   #'datetime-to-timestamp) id registered-at)
+;; #'datetime-to-timestamp) id registered-at)
 
 ;; (defclass  creature-controller  ()   ((creature  :type  (or  creature
 ;;   (unsigned-byte            128)           null)            :accessor
@@ -111,12 +111,12 @@ a  two-digit year-of-birth  that  is later  interpreted  as their  being
 @end itemize"
   (id (binary<-uuid (uuid:make-v4-uuid))
       :type (unsigned-byte 128))
-  (email nil :type (or string null))
-  (given-name nil :type (or string null))
-  (surname nil :type (or string null))
-  (full-name nil :type (or string null))
-  (date-of-birth nil :type (or local-time:date null))
-  (age nil :type (or (real 0 (130)) null)))
+  (email nil :type (or null string))
+  (given-name nil :type (or null string))
+  (surname nil :type (or null string))
+  (full-name nil :type (or null string))
+  (date-of-birth nil :type (or null local-time:date))
+  (age nil :type (or null (real 0 (130)))))
 
 (defun legal-age (date-of-birth &optional (reference-date (local-time:now)))
   "The age of  a person born on DATE-OF-BIRTH, as  of REFERENCE-DATE (or
@@ -152,12 +152,16 @@ reasons, eg, COPPA."
 (eval-when (:compile-toplevel :execute :load-toplevel)
   ;; Promote the  DEFSTRUCT function to  a generic function that  we can
   ;; define a method AROUND.
+  (warn "Redefining PLAYER-AGE around ~a"
+        (symbol-function 'player-age))
   (let ((player-age-fn (symbol-function 'player-age)))
     (unless (typep player-age-fn 'generic-function)
-      (fmakunbound 'player-age)
-      (defgeneric player-age (player)
-        (:documentation "Get the AGE of the PLAYER")
-        (:method ((player player)) (funcall player-age-fn player))))))
+      (fmakunbound 'player-age))
+    (defgeneric player-age (player)
+      (:documentation "Get the AGE of the PLAYER"))
+    (when player-age-fn
+      (defmethod player-age ((player player))
+        (funcall player-age-fn player)))))
 
 (defmethod player-age :around (player)
   "This  AROUND method  will define  the PLAYER's  age based  upon their
@@ -222,7 +226,7 @@ representing that player."
   (check-type registrar (or string symbol) "string-designator for a registrar")
   (check-type id-string string
               "string that uniquely identifies a user across time, distinctive to REGISTRAR")
-  (with-connection (:members)
+  (with-connection :members
     (datafly:execute
      (sxql:insert-into :player-registrations
        (sxql:set= :player-id (player-id player)
@@ -264,7 +268,7 @@ calling MAKE-USER-REGISTRATION for them."
       (make-user-registration registrar id info)))
 
 (defun user-id<-registration (registrar id-string)
-  (with-connection (:members)
+  (with-connection :members
     (datafly:retrieve-one-value
      (sxql:select (:id)
        (sxql:from :player-registrations)
@@ -280,7 +284,7 @@ calling MAKE-USER-REGISTRATION for them."
 (defun find-player-by-id (id)
   "Retrieve the player object represented by ID."
   (check-type id (unsigned-byte 128))
-  (with-connection (:members)
+  (with-connection :members
     (datafly:retrieve-one
      (sxql:select (:*)
        (sxql:from :players)

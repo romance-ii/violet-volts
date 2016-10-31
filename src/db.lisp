@@ -1,15 +1,15 @@
 (in-package :cl-user)
 (defpackage tootstest.db
-  (:use :cl)
+  (:use :cl :alexandria)
   (:import-from :tootstest.config
                 :config)
   (:import-from :datafly
                 :*connection*
                 :connect-cached)
-  (:export :connection-settings
-           :db
-           :with-connection
-           :journal))
+  (:export #:connection-settings
+           #:db
+           #:with-connection
+           #:journal))
 (in-package :tootstest.db)
 
 (defvar *db-secrets*)
@@ -38,6 +38,9 @@
 
 
 
+(defvar *now* nil
+  "The time of the current transaction set; consistent through recursive updates")
+
 (defun journal-node (node &optional prior)
   (etypecase node
     (list (datafly:execute (sxql:insert-into :journal-nodes
@@ -47,10 +50,10 @@
                              :value nil
                              :prior prior))
           (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
-            loop for child in node
-            with prior-child
-            do (journal-node child prior-child)
-            do (setq prior-child child)))
+            (loop for child in node
+               with prior-child
+               do (journal-node child prior-child)
+               do (setq prior-child child))))
     (hash-table (datafly:execute (sxql:insert-into :journal-nodes
                                    :event-time *now*
                                    :node-type "list"
@@ -58,10 +61,10 @@
                                    :value nil
                                    :prior prior))
                 (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
-                  loop for child in node
-                  with prior-child
-                  do (journal-node child prior-child)
-                  do (setq prior-child child)))
+                  (loop for child in node
+                     with prior-child
+                     do (journal-node child prior-child)
+                     do (setq prior-child child))))
     (atom (datafly:execute (sxql:insert-into :journal-nodes
                              :event-time *now*
                              :node-type (simple-type-of node)
