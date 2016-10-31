@@ -43,64 +43,90 @@
 
 ;;; Creatures, Players.
 
-(defclass creature-controller ()
-  ((creature :type (or creature (unsigned-byte 128) null)
-             :accessor creature-controller-creature 
-             :initarg :creature
-             :documentation "If this controller is currently controlling
-             a creature, this is a reference to that creature; either an
-             ID, or the creature object."))
-  (:documentation "A base class used for any entity (eg, player) who can
- control a character in the game in some way."))
+;; (defmodel creature-controller
+;;   (:inflate registered-at #'datetime-to-timestamp) 
+;;   id 
+;;   registered-at)
 
-(defclass player (creature-controller)
-  ((player-id :type (unsigned-byte 128) :accessor player-id
-              :initform (binary<-uuid (uuid:make-v4-uuid))
-              :documentation  "A  128-bit  unique  identifier  for  this
-player, used  internally. We  are generating  these using  v4-UUID's, at
-least for now, although other than being a positive integer, I would not
-recommend making any assumptions about their internal format.")
-   (player-email :type (or string null) :accessor player-email
-                 :initform :email
-                 :documentation "The  primary e-mail  address associated
-with this player.  The player's contact methods list  may have alternate
-addresses, and there  is no guarantee that this “primary”  address is as
-good as, much less better than, any  of them. This value may be used for
-display  only,  but before  actually  sending  mail, visit  the  contact
-methods list and find the actual best address.
+;; (defclass creature-controller ()
+;;   ((creature :type (or creature (unsigned-byte 128) null)
+;;              :accessor creature-controller-creature 
+;;              :initarg :creature
+;;              :documentation "If this controller is currently controlling
+;;              a creature, this is a reference to that creature; either an
+;;              ID, or the creature object."))
+;;   (:documentation "A base class used for any entity (eg, player) who can
+;;  control a character in the game in some way."))
 
-This may also be NIL.")
-   (player-given-name :type (or string null) :accessor player-given-name
-                      :initform :given-name
-                      :documentation "The player's  given name (usually,
-first name) if one is known. This may be NIL.")
-   (player-surname :type (or string null) :accessor player-surname
-                   :initform :surname
-                   :documentation "The player's surname (family name, or
-last name) if one is known. This may be NIL.")
-   (player-full-name :type (or string null) :accessor player-full-name
-                     :initform :full-name
-                     :documentation "The  player's full  name, formatted
-as they  like it. This might  include honorifics or titles;  there is no
-safe way to convery between this and the given name and surname.")
-   (player-date-of-birth :type (or local-time:date null) :accessor player-date-of-birth
-                         :initform :date-of-birth
-                         :documentation "The player's date of birth, if it is known.")
-   (player-age :type (or (real 0 *) null) :accessor player-age
-               :initform :age
-               :documentation  "The  player's  age,   if  it  is  known.
-Note that the reader method will  compute the age from the date-of-birth
-when one is present."))
-  (:documentation "A class representing a player who is a human being in
- the real world."))
+(datafly:defmodel player
+  "A  structure representing  a  player  who is  a  human  being in  the
+ real world.
 
+Structure slots:
 
+@itemize  @item ID  
 
-(defun legal-age (date-of-birth)
-  "The age of  a person born on DATE-OF-BIRTH, right  now. This uses the
-legal definition  that the  person's age increments  at the  midnight of
-their date  of birth  each year,  with the date  29 February  treated as
-1 March on non-leap-years.
+A 128-bit  unique identifier  for this player,  used internally.  We are
+generating these using v4-UUID's, at  least for now, although other than
+being a positive  integer, I would not recommend  making any assumptions
+about their internal format.
+
+@item EMAIL
+
+The primary  e-mail address  associated with  this player.  The player's
+contact  methods list  may have  alternate  addresses, and  there is  no
+guarantee that  this “primary” address is  as good as, much  less better
+than, any of them.  This value may be used for  display only, but before
+actually  sending mail,  visit the  contact  methods list  and find  the
+actual best address.
+
+This may also be NIL.
+
+@item GIVEN-NAME
+
+The player's given name (usually, first  name) if one is known. This may
+be NIL.
+
+@item SURNAME
+
+The  player's surname  (family  name, or  last name)  if  one is  known.
+This may be NIL.
+
+@item FULL-NAME
+
+The player's  full name, formatted as  they like it. This  might include
+honorifics or titles;  there is no safe way to  convery between this and
+the given name and surname.
+
+@item DATE-OF-BIRTH
+
+The player's date of birth, if it is known.
+
+@item AGE
+
+The  player's age,  if it  is known.  Note that  the reader  method will
+compute the age from the date-of-birth when one is present.
+
+For sanity-checking purposes only, the age  is clamped to 0…130. This is
+mostly to detect the not-uncommon  data-entry error of someone supplying
+a  two-digit year-of-birth  that  is later  interpreted  as their  being
+1,900+ years old.
+
+@end itemize"
+  (id (binary<-uuid (uuid:make-v4-uuid))
+      :type (unsigned-byte 128))
+  (email nil :type (or string null))
+  (given-name nil :type (or string null))
+  (surname nil :type (or string null))
+  (full-name nil :type (or string null))
+  (date-of-birth nil :type (or local-time:date null))
+  (age nil :type (or (real 0 (130)) null))) 
+
+(defun legal-age (date-of-birth &optional (reference-date (local-time:now)))
+  "The age of  a person born on DATE-OF-BIRTH, as  of REFERENCE-DATE (or
+right  now).  This uses  the  legal  definition  that the  person's  age
+increments at  the midnight of their  date of birth each  year, with the
+date 29 February treated as 1 March on non-leap-years.
 
 The time  zone used for  this computation  is the not  defined, however,
 yielding  rather  irregular  behaviour   depending  on  time  zones  and
@@ -108,18 +134,34 @@ the like.
 
 TODO: Determine  in what  time zone  we should  computer this  for legal
 reasons, eg, COPPA."
+  (check-type date-of-birth local-time:timestamp)
+  (check-type reference-date local-time:timestamp)
+  (unless (local-time:timestamp< date-of-birth reference-date)
+    (return-from legal-age 0))
   (multiple-value-bind (msec sec min hour day month year)
-      (local-time:decode-timestamp (local-time:now))
+      (local-time:decode-timestamp reference-date)
     (declare (ignore msec sec min hour))
-    (multiple-value-bind (_1 _2 _3 _4
-                             day-of-birth month-of-birth year-of-birth)
+    (multiple-value-bind (msec sec min hour
+                               day-of-birth month-of-birth year-of-birth)
         (local-time:decode-timestamp date-of-birth)
-      (declare (ignore _1 _2 _3 _4))
+      (declare (ignore msec sec min hour))
       (let ((had-birthday-p (or (< month-of-birth month)
                                 (and (= month-of-birth month)
                                      (<= day-of-birth day)))))
-        (+ (- year year-of-birth 1)
+        (+ (- year
+              year-of-birth
+              1)
            (if had-birthday-p 1 0))))))
+
+(eval-when (:compile-toplevel :execute :load-toplevel)
+  ;; Promote the  DEFSTRUCT function to  a generic function that  we can
+  ;; define a method AROUND.
+  (let ((player-age-fn (symbol-function 'player-age)))
+    (unless (typep player-age-fn 'generic-function)
+      (fmakunbound 'player-age)
+      (defgeneric player-age (player)
+        (:documentation "Get the AGE of the PLAYER")
+        (:method ((player player)) (funcall player-age-fn player))))))
 
 (defmethod player-age :around (player)
   "This  AROUND method  will define  the PLAYER's  age based  upon their
@@ -151,27 +193,23 @@ Should return NIL beginning on the day of their 13th birthday."
 
 Should return true beginning on the day of their 13th birthday."
   (>= (player-age player) 13))
-(defun collect-setters-for-class (class info)
-  "GIven a  CLASS name symbol, where  INFO is a property  list suitable for
-MAKE-INSTANCE CLASS, collect the values  from the list where the keyword
-matches  the first  initarg name  for a  slot, and  the value  following
-matches the type specification for it, as well.
 
-Returns an alist where  each car is a writer function  for the slot, and
-each cdr, a new value."
-  (loop with not-found = 'not-found
-     for slot in (closer-mop:class-slots (find-class class))
-     for initarg = (first (closer-mop:slot-definition-initargs slot))
-     for writer = (or (first (closer-mop:slot-definition-writers slot))
-                      (first (closer-mop:slot-definition-writers slot)))
-     for type = (or (closer-mop:slot-definition-type slot) t)
-     for new-value = (getf info initarg not-found)
-     when (not (eql new-value not-found))
-     do (assert (typep new-value type) (new-value)
-                "Cannot store ~s in slot ~s (type ~s) of class ~s"
-                new-value type (closer-mop:slot-definition-name slot)
-                type class)
-     collect (cons writer new-value)))
+;; (defun class-slot-writers (class)
+;;   "Enumerate the first writer (if any) for any slot on CLASS that has one."
+;;   (loop with not-found = 'not-found
+;;      for slot in (closer-mop:class-slots (find-class class))
+;;      for writers = (closer-mop:slot-definition-writers slot) 
+;;      when writers
+;;      collect (cons slot (first writers))))
+
+;; (eval-when (:compile-toplevel :execute)
+;;   (dolist (class '(player))
+;;     (dolist (writer (class-slot-writers class))
+;;       (add-method 
+;;        (closer-mop:method-generic-function writer)
+;;        (make-method 
+;;         )))))
+
 
 (defun update-player-info (player-id info)
   "GIven  property  list  INFO,  find  the record  for  player  with  ID
@@ -181,26 +219,25 @@ INFO, with the value following it in the list.
 In other  words, update fields in  the player record by  overwriting the
 fields mentioned in INFO in much hte same way as they woudl be passed to
 MAKE-INSTANCE 'PLAYER."
-  (let ((Δ (collect-setters-for-class 'player info)))
+  (let ((Δ (plist-alist info)))
     (when Δ
       (let ((player (find-player-by-id player-id)))
-        (loop for (writer . new-value) in Δ
-           do (funcall writer player new-value))))))
-
-
+        (loop for (key . new-value) in Δ
+           do (setf (slot-value (intern (symbol-name key)) player) new-value))))))
 
 (defun link-player-to-registration (player registrar id-string)
   "Link  a  PLAYER object  to  a  login  REGISTRAR and  their  ID-STRING
-representng that player."
+representing that player."
   (check-type player player)
   (check-type registrar (or string symbol) "string-designator for a registrar")
   (check-type id-string string
               "string that uniquely identifies a user across time, distinctive to REGISTRAR")
-  (datafly:execute
-   (sxql:insert-into :player-registrations
-     (sxql:set= :player-id (player-id player)
-                :registrar (string registrar)
-                :id-string id-string))))
+  (with-connection (:members)
+    (datafly:execute
+     (sxql:insert-into :player-registrations
+       (sxql:set= :player-id (player-id player)
+                  :registrar (string registrar)
+                  :id-string id-string)))))
 
 (defun make-user-registration (registrar id-string info)
   "Create  a new  player object  based  upon INFO,  and link  it to  the
@@ -236,13 +273,13 @@ calling MAKE-USER-REGISTRATION for them."
         player)
       (make-user-registration registrar id info)))
 
-
 (defun user-id<-registration (registrar id-string)
-  (datafly:retrieve-one-value
-   (sxql:select (:id)
-     (sxql:from :player-registrations)
-     (sxql:where (:and (:equal :registrar (string registrar))
-                       (:equal :id-string id-string))))))
+  (with-connection (:members)
+    (datafly:retrieve-one-value
+     (sxql:select (:id)
+       (sxql:from :player-registrations)
+       (sxql:where (:and (:equal :registrar (string registrar))
+                         (:equal :id-string id-string)))))))
 
 (defmethod user-id<-registrar-id ((registrar symbol) (id string) &optional info)
   "The default handler  accepts any persistently unique  ID string and
@@ -250,11 +287,15 @@ calling MAKE-USER-REGISTRATION for them."
   (declare (ignore info))
   (user-id<-registration registrar id))
 
-
 (defun find-player-by-id (id)
   "Retrieve the player object represented by ID."
   (check-type id (unsigned-byte 128))
-  (error 'unimplemented))
+  (with-connection (:members)
+    (datafly:retrieve-one
+     (sxql:select (:*)
+       (sxql:from :players)
+       (sxql:where (:= :id id)))
+     :as :plist)))
 
 (defun ensure-player (player)
   "Ensure  that  PLAYER   is  a  PLAYER  object.   Coërces  integers  or
@@ -263,3 +304,4 @@ base-36-coded integer strings."
     (player player)
     ((integer 1 *) (find-player-by-id player))
     (string (find-player-by-id (parse-integer player :radix 36)))))
+
