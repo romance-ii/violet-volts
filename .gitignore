@@ -9,7 +9,7 @@ temp-*
 
 # Unix/Emacs style backups and temp files
 *~
-*#
+.#*
 
 # Generic backup files
 *.bak
