@@ -19,6 +19,13 @@
 
 all:	bin doc
 
+clean:
+	$(MAKE) -C src/lib/jscl clean
+	-rm -f tootstest.cgi tootstest.cgi.new \
+		js/*.js css/*.css \
+		static/js/*.js static/js/*.map static/css/*.css \
+		doc/* bin/buildapp
+
 deps:
 	if which pkcon; then \
 		pkcon -y install $$(< build-deps ); \
@@ -69,7 +76,7 @@ tootstest.cgi.new:	tootstest.asd bin/buildapp \
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 			-and -not -name .\*) \
 		src/lib/jscl/src/prelude.js
-	cd src/lib/jscl; ./make.sh
+	$(MAKE) -C src/lib/jscl
 
 # required to make Closure happy
 js/undef-require.js:	
@@ -145,8 +152,8 @@ js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		> js/mesh.js )
 
 test:	bin
-	cd src/lib/jscl; ./run-tests.sh
 	./tootstest.cgi test
+	$(MAKE) -C src/lib/jscl test
 
 doc/violet-volts.pdf:	doc/violet-volts.texi
 
