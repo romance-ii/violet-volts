@@ -15,17 +15,17 @@ the OS may do some disc caching."
   (read-file-into-string pathname))
 
 (defroute route-/css/*.css "/tootstest/css/:name.css" (&key name)
-  "CSS files are served statically."
-  (send-static "text/css;charset=utf-8"
-               (merge-pathnames (make-pathname
-                                 :directory '(:relative "css")
-                                 :name name :type "css")
-                                *static-directory*)))
+          "CSS files are served statically."
+          (send-static "text/css;charset=utf-8"
+                       (merge-pathnames (make-pathname
+                                         :directory '(:relative "css")
+                                         :name name :type "css")
+                                        *static-directory*)))
 
 (defroute route-/js/*.js "/tootstest/js/:name.js" (&key name)
-  "JavaScript files are served statically."
-  (send-static "application/javascript;charset=utf-8"
-               (merge-pathnames (make-pathname
-                                 :directory '(:relative "js")
-                                 :name name :type "js")
-                                *static-directory*)))
+          "JavaScript files are served statically."
+          (send-static "application/javascript;charset=utf-8"
+                       (merge-pathnames (make-pathname
+                                         :directory '(:relative "js")
+                                         :name name :type "js")
+                                        *static-directory*)))

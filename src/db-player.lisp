@@ -131,7 +131,7 @@ reasons, eg, COPPA."
       (local-time:decode-timestamp reference-date)
     (declare (ignore msec sec min hour))
     (multiple-value-bind (msec sec min hour
-                          day-of-birth month-of-birth year-of-birth)
+                               day-of-birth month-of-birth year-of-birth)
         (local-time:decode-timestamp date-of-birth)
       (declare (ignore msec sec min hour))
       (let ((had-birthday-p (or (< month-of-birth month)
@@ -142,7 +142,7 @@ reasons, eg, COPPA."
               1)
            (if had-birthday-p 1 0))))))
 
-(defun player-age (player) 
+(defun player-age (player)
   (check-type player player)
   (let ((dob (player-date-of-birth player)))
     (if dob

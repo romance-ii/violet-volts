@@ -9,16 +9,18 @@
 ;; This file is part of Declt.
 
 ;; Permission to use, copy, modify, and distribute this software for any
-;; purpose with or without fee is hereby granted, provided that the above
-;; copyright notice and this permission notice appear in all copies.
+;; purpose  with or  without fee  is hereby  granted, provided  that the
+;; above  copyright   notice  and  this  permission   notice  appear  in
+;; all copies.
 
-;; THIS SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-;; WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-;; MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-;; ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-;; WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-;; ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-;; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+;; THIS  SOFTWARE IS  PROVIDED  "AS  IS" AND  THE  AUTHOR DISCLAIMS  ALL
+;; WARRANTIES  WITH  REGARD  TO  THIS  SOFTWARE  INCLUDING  ALL  IMPLIED
+;; WARRANTIES  OF MERCHANTABILITY  AND FITNESS.  IN NO  EVENT SHALL  THE
+;; AUTHOR BE LIABLE FOR ANY  SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+;; DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+;; PROFITS,  WHETHER  IN AN  ACTION  OF  CONTRACT, NEGLIGENCE  OR  OTHER
+;; TORTIOUS ACTION,  ARISING OUT  OF OR  IN CONNECTION  WITH THE  USE OR
+;; PERFORMANCE OF THIS SOFTWARE.
 
 
 ;;; Commentary:
@@ -34,15 +36,14 @@
 ;; Definitions
 ;; ==========================================================================
 
-;; ----------
-;; Categories
-;; ----------
+;; ---------- Categories ----------
 
-;; #### NOTE: when constructing the context lists of external and internal
-;; definitions, only the definitions listed in *CATEGORIES* appear. This is
-;; because these lists follow the structure of the Definitions chapter in the
-;; generated manual. For instance, methods are listed under the corresponding
-;; generic function, so they don't represent a category of its own.
+;; ####  NOTE:  when constructing  the  context  lists of  external  and
+;; internal  definitions, only  the definitions  listed in  *CATEGORIES*
+;; appear.  This is  because these  lists  follow the  structure of  the
+;; Definitions chapter  in the  generated manual. For  instance, methods
+;; are listed  under the corresponding  generic function, so  they don't
+;; represent a category of its own.
 
 ;; #### NOTE: the order in *CATEGORIES* is important (see
 ;; ADD-CATEGORIES-NODE). It conditions the order of appearance of the
@@ -257,10 +258,10 @@ definitions.")
     (sb-introspect:function-lambda-list
      (etypecase (setf-expander-definition-update expander)
        (function
-	(setf-expander-definition-update expander))
+        (setf-expander-definition-update expander))
        (funcoid-definition
-	(funcoid-definition-function
-	 (setf-expander-definition-update expander))))))
+        (funcoid-definition-function
+         (setf-expander-definition-update expander))))))
   (:method ((method method-definition))
     "Return METHOD's lambda-list."
     (sb-mop:method-lambda-list (method-definition-method method)))
@@ -287,8 +288,8 @@ definitions.")
   "Create and return a new definitions pool.
 A definitions pool is a hash table of categorized definitions.
 Keys must be of the form (NAME :CATEGORY).
-  - NAME is the symbol naming the definition,
-  - :CATEGORY is one listed in *CATEGORIES*."
+ - NAME is the symbol naming the definition,
+ - :CATEGORY is one listed in *CATEGORIES*."
   (make-hash-table :test 'equal))
 
 (defun definitions-pool-size (pool)
@@ -298,7 +299,7 @@ Keys must be of the form (NAME :CATEGORY).
 (defun mapcan-definitions-pool (function pool)
   "Like MAPCAN, but work on a definitions POOL."
   (loop :for definition :being :the :hash-values :in pool
-	:nconc (funcall function definition)))
+     :nconc (funcall function definition)))
 
 ;; #### FIXME: the finalize process needs to find standalone writers and uses
 ;; this function. However, this function returns all writers; not only
@@ -309,63 +310,63 @@ Keys must be of the form (NAME :CATEGORY).
   (:documentation "Find a CATEGORY definition for NAME in POOL.
 If ERRORP, throw an error if not found. Otherwise, just return NIL.")
   (:method (name category pool
-	    &optional errorp
-	    &aux (definition (gethash (list name category) pool)))
+            &optional errorp
+            &aux (definition (gethash (list name category) pool)))
     "Default method used for root CATEGORYs"
     (or definition
-	(when errorp
-	  (error "No ~A definition found for symbol ~A" category name))))
+        (when errorp
+          (error "No ~A definition found for symbol ~A" category name))))
   (:method (name (category (eql :accessor)) pool
-	    &optional errorp
-	    &aux (definition (find-definition name :function pool errorp)))
+            &optional errorp
+            &aux (definition (find-definition name :function pool errorp)))
     "Method used to find accessor definitions."
     (or (when (accessor-definition-p definition)
-	  definition)
-	(when errorp
-	  (error "No accessor definition found for symbol ~A." name))))
+          definition)
+        (when errorp
+          (error "No accessor definition found for symbol ~A." name))))
   (:method (name (category (eql :writer)) pool
-	    &optional errorp
-	    &aux (definition (find-definition name :function pool errorp)))
+            &optional errorp
+            &aux (definition (find-definition name :function pool errorp)))
     "Method used to find writer definitions.
 Name must be that of the reader (not the SETF form)."
     (or (typecase definition
-	  (writer-definition
-	   definition)
-	  (accessor-definition
-	   (accessor-definition-writer definition)))
-	(when errorp
-	  (error "No writer definition found for symbol ~A." name))))
+          (writer-definition
+           definition)
+          (accessor-definition
+           (accessor-definition-writer definition)))
+        (when errorp
+          (error "No writer definition found for symbol ~A." name))))
   (:method (name (category (eql :generic-accessor)) pool
-	    &optional errorp
-	    &aux (definition
-		  (find-definition name :generic pool errorp)))
+            &optional errorp
+            &aux (definition
+                     (find-definition name :generic pool errorp)))
     "Method used to find generic accessor definitions."
     (or (when (generic-accessor-definition-p definition)
-	  definition)
-	(when errorp
-	  (error "No generic accessor definition found for symbol ~A." name))))
+          definition)
+        (when errorp
+          (error "No generic accessor definition found for symbol ~A." name))))
   (:method (name (category (eql :generic-writer)) pool
-	    &optional errorp
-	    &aux (definition (find-definition name :generic pool errorp)))
+            &optional errorp
+            &aux (definition (find-definition name :generic pool errorp)))
     "Method used to find generic writer definitions.
 Name must be that of the reader (not the SETF form)."
     (or (typecase definition
-	  (generic-writer-definition
-	   definition)
-	  (generic-accessor-definition
-	   (generic-accessor-definition-writer definition)))
-	(when errorp
-	  (error "No generic writer definition found for symbol ~A" name)))))
+          (generic-writer-definition
+           definition)
+          (generic-accessor-definition
+           (generic-accessor-definition-writer definition)))
+        (when errorp
+          (error "No generic writer definition found for symbol ~A" name)))))
 
 ;; #### PORTME.
 (defun method-name (method
-		    &aux (name (sb-mop:generic-function-name
-				(sb-mop:method-generic-function method))))
+                    &aux (name (sb-mop:generic-function-name
+                                (sb-mop:method-generic-function method))))
   "Return METHOD's name.
 Return a second value of T if METHOD is a writer method."
   (if (listp name)
       (values (second name) t)
-    name))
+      name))
 
 (defun find-method-definition (method pool)
   "Find a method definition for METHOD in POOL.
@@ -373,87 +374,87 @@ Return NIL if not found."
   (multiple-value-bind (name writerp) (method-name method)
     (when-let ((generic (find-definition name :generic pool)))
       (cond (writerp
-	     (etypecase generic
-	       (generic-writer-definition
-		(find method (generic-definition-methods generic)
-		      :key #'method-definition-method))
-	       (generic-accessor-definition
-		(find method (generic-definition-methods
-			      (generic-accessor-definition-writer generic))
-		      :key #'method-definition-method))))
-	    (t
-	     (find method (generic-definition-methods generic)
-		   :key #'method-definition-method))))))
+             (etypecase generic
+               (generic-writer-definition
+                (find method (generic-definition-methods generic)
+                      :key #'method-definition-method))
+               (generic-accessor-definition
+                (find method (generic-definition-methods
+                              (generic-accessor-definition-writer generic))
+                      :key #'method-definition-method))))
+            (t
+             (find method (generic-definition-methods generic)
+                   :key #'method-definition-method))))))
 
 (defgeneric category-definitions (category pool)
   (:documentation "Return all CATEGORY definitions from POOL.")
   (:method (category pool)
     "Default method used for root CATEGORYs."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (eq (second key) category)
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (eq (second key) category)
+       :collect value))
   (:method ((category (eql :accessor)) pool)
     "Method used for ordinary accessors."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :function)
-		     (accessor-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :function)
+                  (accessor-definition-p value))
+       :collect value))
   (:method ((category (eql :writer)) pool)
     "Method used for ordinary writers.
 Note that this only returns standalone (toplevel) writers."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :function)
-		     (writer-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :function)
+                  (writer-definition-p value))
+       :collect value))
   (:method ((category (eql :generic-accessor)) pool)
     "Method used for generic accessors."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :generic)
-		     (generic-accessor-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :generic)
+                  (generic-accessor-definition-p value))
+       :collect value))
   (:method ((category (eql :generic-writer)) pool)
     "Method used for generic writers.
 Note that this only returns standalone (toplevel) generic writers."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :generic)
-		     (generic-writer-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :generic)
+                  (generic-writer-definition-p value))
+       :collect value))
   (:method ((category (eql :short-combination)) pool)
     "Method used for short method combinations."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :combination)
-		     (short-combination-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :combination)
+                  (short-combination-definition-p value))
+       :collect value))
   (:method ((category (eql :long-combination)) pool)
     "Method used for long method combinations."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  :when (and (eq (second key) :combination)
-		     (long-combination-definition-p value))
-	    :collect value))
+       :for value :being :the :hash-values :in pool
+       :when (and (eq (second key) :combination)
+                  (long-combination-definition-p value))
+       :collect value))
   (:method ((category (eql :setf-expander)) pool)
     "Method used for setf expanders."
     (loop :for key   :being :the :hash-keys   :in pool
-	  :for value :being :the :hash-values :in pool
-	  ;; #### NOTE: do you see why dropping structures and using mixin
-	  ;; classes would help here ? ;-)
-	  :when (and (eq (second key) :macro)
-		     (macro-definition-access-expander value))
-	    :collect (macro-definition-access-expander value)
-	  :when (and (eq (second key) :function)
-		     (accessor-definition-p value)
-		     (accessor-definition-access-expander value))
-	    :collect (accessor-definition-access-expander value)
-	  :when (and (eq (second key) :generic)
-		     (generic-accessor-definition-p value)
-		     (generic-accessor-definition-access-expander value))
-	    :collect (generic-accessor-definition-access-expander value))))
+       :for value :being :the :hash-values :in pool
+       ;; #### NOTE: do you see why dropping structures and using mixin
+       ;; classes would help here ? ;-)
+       :when (and (eq (second key) :macro)
+                  (macro-definition-access-expander value))
+       :collect (macro-definition-access-expander value)
+       :when (and (eq (second key) :function)
+                  (accessor-definition-p value)
+                  (accessor-definition-access-expander value))
+       :collect (accessor-definition-access-expander value)
+       :when (and (eq (second key) :generic)
+                  (generic-accessor-definition-p value)
+                  (generic-accessor-definition-access-expander value))
+       :collect (generic-accessor-definition-access-expander value))))
 
 (defun add-definition (symbol category definition pool)
   "Add CATEGORY kind of DEFINITION for SYMBOL to POOL."
@@ -462,10 +463,10 @@ Note that this only returns standalone (toplevel) generic writers."
 (defun make-slot-definitions (class)
   "Return a list of direct slot definitions for CLASS."
   (mapcar (lambda (slot)
-	    (make-slot-definition
-	     :symbol (sb-mop:slot-definition-name slot)
-	     :slot slot))
-	  (sb-mop:class-direct-slots class)))
+            (make-slot-definition
+             :symbol (sb-mop:slot-definition-name slot)
+             :slot slot))
+          (sb-mop:class-direct-slots class)))
 
 ;; #### PORTME.
 (defun add-symbol-definition (symbol category pool)
@@ -771,7 +772,7 @@ Note that this only returns standalone (toplevel) generic writers."
   "Return SLOT definition's PROPERTY value."
   (funcall
    (intern (concatenate 'string "SLOT-DEFINITION-" (symbol-name property))
-	   :sb-mop)
+           :sb-mop)
    slot))
 
 (defgeneric reader-definitions (slot pool1 pool2)
@@ -781,18 +782,18 @@ Note that this only returns standalone (toplevel) generic writers."
     (mapcar
      (lambda (reader-name)
        (or (find-definition reader-name :generic pool1)
-	   (find-definition reader-name :generic pool2)
-	   (make-generic-definition :symbol reader-name :foreignp t)))
+           (find-definition reader-name :generic pool2)
+           (make-generic-definition :symbol reader-name :foreignp t)))
      (slot-property slot :readers)))
   ;; #### PORTME.
   (:method ((slot sb-pcl::structure-direct-slot-definition) pool1 pool2)
     "Method for structure slots."
     (list
      (let ((reader-name
-	     (sb-pcl::slot-definition-defstruct-accessor-symbol slot)))
+            (sb-pcl::slot-definition-defstruct-accessor-symbol slot)))
        (or (find-definition reader-name :function pool1)
-	   (find-definition reader-name :function pool2)
-	   (make-generic-definition :symbol reader-name :foreignp t))))))
+           (find-definition reader-name :function pool2)
+           (make-generic-definition :symbol reader-name :foreignp t))))))
 
 (defgeneric writer-definitions (slot pool1 pool2)
   (:documentation "Return a list of writer definitions for SLOT.")
@@ -801,18 +802,18 @@ Note that this only returns standalone (toplevel) generic writers."
     (mapcar
      (lambda (writer-name &aux (writer-name (second writer-name)))
        (or (find-definition writer-name :generic-writer pool1)
-	   (find-definition writer-name :generic-writer pool2)
-	   (make-generic-writer-definition :symbol writer-name :foreignp t)))
+           (find-definition writer-name :generic-writer pool2)
+           (make-generic-writer-definition :symbol writer-name :foreignp t)))
      (slot-property slot :writers)))
   ;; #### PORTME.
   (:method ((slot sb-pcl::structure-direct-slot-definition) pool1 pool2)
     "Method for structure slots."
     (list
      (let ((writer-name
-	     (sb-pcl::slot-definition-defstruct-accessor-symbol slot)))
+            (sb-pcl::slot-definition-defstruct-accessor-symbol slot)))
        (or (find-definition writer-name :writer pool1)
-	   (find-definition writer-name :writer pool2)
-	   (make-writer-definition :symbol writer-name :foreignp t))))))
+           (find-definition writer-name :writer pool2)
+           (make-writer-definition :symbol writer-name :foreignp t))))))
 
 ;; #### PORTME.
 (defgeneric definition-combination-users (definition combination)
@@ -826,15 +827,15 @@ Return nil."
   (:method ((definition generic-definition) combination)
     "Method for simple generic and writer definitions."
     (when (eq (sb-pcl::method-combination-type-name
-	       (sb-mop:generic-function-method-combination
-		(generic-definition-function definition)))
-	      combination)
+               (sb-mop:generic-function-method-combination
+                (generic-definition-function definition)))
+              combination)
       (list definition)))
   (:method ((definition generic-accessor-definition) combination)
     "Method for generic accessor definitions."
     (nconc (call-next-method)
-	   (definition-combination-users
-	    (generic-accessor-definition-writer definition) combination))))
+           (definition-combination-users
+               (generic-accessor-definition-writer definition) combination))))
 
 (defun pool-combination-users (pool combination)
   "Return a list of all generic definitions in POOL using method COMBINATION."
@@ -862,153 +863,153 @@ Currently, this means resolving:
 - heterogeneous accessors,
 - (generic) functions and macros (short form) setf expanders definitions."
   (labels ((classes-definitions (classes)
-	     (mapcar
-	      (lambda (name)
-		;; #### NOTE: documenting inheritance works here because SBCL
-		;; uses classes for reprensenting structures and conditions,
-		;; which is not required by the standard. It also means that
-		;; there may be intermixing of conditions, structures and
-		;; classes in inheritance graphs, so we need to handle that.
-		(or  (find-definition name :class pool1)
-		     (find-definition name :class pool2)
-		     (find-definition name :structure pool1)
-		     (find-definition name :structure pool2)
-		     (find-definition name :condition pool1)
-		     (find-definition name :condition pool2)
-		     (make-classoid-definition :symbol name :foreignp t)))
-	      (reverse (mapcar #'class-name classes))))
-	   (methods-definitions (methods)
-	     (mapcar
-	      (lambda (method)
-		(or  (find-method-definition method pool1)
-		     (find-method-definition method pool2)
-		     (make-method-definition :symbol (method-name method)
-					     :foreignp t)))
-	      methods))
-	   (compute-combination (generic)
-	     (let ((name (sb-pcl::method-combination-type-name
-			  (sb-mop:generic-function-method-combination
-			   (generic-definition-function generic)))))
-	       (setf (generic-definition-combination generic)
-		     (or (find-definition name :combination pool1)
-			 (find-definition name :combination pool2)
-			 (make-combination-definition :symbol name
-						      :foreignp t)))))
-	   (finalize (pool)
-	     (dolist (category '(:class :structure :condition))
-	       (dolist (definition (category-definitions category pool))
-		 (let ((class (find-class (definition-symbol definition))))
-		   (setf (classoid-definition-parents definition)
-			 (classes-definitions
-			  (sb-mop:class-direct-superclasses class)))
-		   (setf (classoid-definition-children definition)
-			 (classes-definitions
-			  (sb-mop:class-direct-subclasses class)))
-		   (setf (classoid-definition-methods definition)
-			 (methods-definitions
-			  (sb-mop:specializer-direct-methods class)))
-		   (dolist (slot (classoid-definition-slots definition))
-		     (setf (slot-definition-readers slot)
-			   (reader-definitions
-			    (slot-definition-slot slot) pool1 pool2))
-		     (setf (slot-definition-writers slot)
-			   (writer-definitions
-			    (slot-definition-slot slot) pool1 pool2))))))
-	     (dolist (generic (category-definitions :generic pool))
-	       (compute-combination generic)
-	       (when (generic-accessor-definition-p generic)
-		 (compute-combination
-		  (generic-accessor-definition-writer generic))))
-	     (dolist
-		 (combination (category-definitions :short-combination pool))
-	       (let ((operator (sb-pcl::short-combination-operator
-				(combination-definition-combination
-				 combination))))
-		 (setf (short-combination-definition-operator combination)
-		       (or (find-definition operator :function pool1)
-			   (find-definition operator :function pool2)
-			   (find-definition operator :macro pool1)
-			   (find-definition operator :macro pool2)
-			   ;; #### NOTE: a foreign operator is not necessarily
-			   ;; a regular function. However, since we don't
-			   ;; actually document those (only print their name),
-			   ;; we can just use a function definition here (it's
-			   ;; out of laziness).
-			   (make-function-definition :symbol operator
-						     :foreignp t))))
-	       (setf (combination-definition-users combination)
-		     (nconc (pool-combination-users
-			     pool1 (definition-symbol combination))
-			    (pool-combination-users
-			     pool2 (definition-symbol combination)))))
-	     (dolist
-		 (combination (category-definitions :long-combination pool))
-	       (setf (combination-definition-users combination)
-		     (nconc (pool-combination-users
-			     pool1 (definition-symbol combination))
-			    (pool-combination-users
-			     pool2 (definition-symbol combination)))))
-	     ;; #### NOTE: readers and writers belong to the same symbol so
-	     ;; they can't be in different pools (i.e. they are both internal
-	     ;; or external). Hence, we only need to look in the current pool.
-	     (dolist (accessor (category-definitions :accessor pool))
-	       (unless (accessor-definition-writer accessor)
-		 (setf (accessor-definition-writer accessor)
-		       (find-definition (definition-symbol accessor)
-					:generic-writer pool))))
-	     (dolist (writer (category-definitions :writer pool))
-	       (assert (null (writer-definition-reader writer)))
-	       (setf (writer-definition-reader writer)
-		     (find-definition (definition-symbol writer)
-				      :generic-accessor pool)))
-	     (dolist (accessor (category-definitions :generic-accessor pool))
-	       (unless (generic-accessor-definition-writer accessor)
-		 (setf (generic-accessor-definition-writer accessor)
-		       (find-definition (definition-symbol accessor)
-					:writer pool))))
-	     (dolist (writer (category-definitions :generic-writer pool))
-	       (assert (null (generic-writer-definition-reader writer)))
-	       (setf (generic-writer-definition-reader writer)
-		     (find-definition (definition-symbol writer)
-				      :accessor pool)))
-	     ;; At that point, a short form setf expander definition contains
-	     ;; a symbol naming the update object. We now need to transform
-	     ;; that into an actual (and possibly foreign) definition.
-	     (dolist (expander (category-definitions :setf-expander pool))
-	       (let ((name (setf-expander-definition-update expander)))
-		 (when (symbolp name)
-		   (let ((update-definition
-			   (or (find-definition name :function pool1)
-			       (find-definition name :function pool2)
-			       (find-definition name :generic pool1)
-			       (find-definition name :generic pool2)
-			       (find-definition name :macro pool1)
-			       (find-definition name :macro pool2)
-			       ;; #### NOTE: a foreign expander is not
-			       ;; necessarily a regular function. However,
-			       ;; since we don't actually document those (only
-			       ;; print their name), we can just use a
-			       ;; function definition here (it's out of
-			       ;; laziness).
-			       (make-function-definition :symbol name
-							 :foreignp t))))
-		     ;; #### NOTE: do you see why dropping structures and
-		     ;; using mixin classes would help here ? ;-)
-		     (etypecase update-definition
-		       (macro-definition
-			(setf (macro-definition-update-expander
-			       update-definition)
-			      expander))
-		       (function-definition
-			(setf (function-definition-update-expander
-			       update-definition)
-			      expander))
-		       (generic-definition
-			(setf (generic-definition-update-expander
-			       update-definition)
-			      expander)))
-		     (setf (setf-expander-definition-update expander)
-			   update-definition)))))))
+             (mapcar
+              (lambda (name)
+                ;; #### NOTE: documenting inheritance works here because SBCL
+                ;; uses classes for reprensenting structures and conditions,
+                ;; which is not required by the standard. It also means that
+                ;; there may be intermixing of conditions, structures and
+                ;; classes in inheritance graphs, so we need to handle that.
+                (or  (find-definition name :class pool1)
+                     (find-definition name :class pool2)
+                     (find-definition name :structure pool1)
+                     (find-definition name :structure pool2)
+                     (find-definition name :condition pool1)
+                     (find-definition name :condition pool2)
+                     (make-classoid-definition :symbol name :foreignp t)))
+              (reverse (mapcar #'class-name classes))))
+           (methods-definitions (methods)
+             (mapcar
+              (lambda (method)
+                (or  (find-method-definition method pool1)
+                     (find-method-definition method pool2)
+                     (make-method-definition :symbol (method-name method)
+                                             :foreignp t)))
+              methods))
+           (compute-combination (generic)
+             (let ((name (sb-pcl::method-combination-type-name
+                          (sb-mop:generic-function-method-combination
+                           (generic-definition-function generic)))))
+               (setf (generic-definition-combination generic)
+                     (or (find-definition name :combination pool1)
+                         (find-definition name :combination pool2)
+                         (make-combination-definition :symbol name
+                                                      :foreignp t)))))
+           (finalize (pool)
+             (dolist (category '(:class :structure :condition))
+               (dolist (definition (category-definitions category pool))
+                 (let ((class (find-class (definition-symbol definition))))
+                   (setf (classoid-definition-parents definition)
+                         (classes-definitions
+                          (sb-mop:class-direct-superclasses class)))
+                   (setf (classoid-definition-children definition)
+                         (classes-definitions
+                          (sb-mop:class-direct-subclasses class)))
+                   (setf (classoid-definition-methods definition)
+                         (methods-definitions
+                          (sb-mop:specializer-direct-methods class)))
+                   (dolist (slot (classoid-definition-slots definition))
+                     (setf (slot-definition-readers slot)
+                           (reader-definitions
+                            (slot-definition-slot slot) pool1 pool2))
+                     (setf (slot-definition-writers slot)
+                           (writer-definitions
+                            (slot-definition-slot slot) pool1 pool2))))))
+             (dolist (generic (category-definitions :generic pool))
+               (compute-combination generic)
+               (when (generic-accessor-definition-p generic)
+                 (compute-combination
+                  (generic-accessor-definition-writer generic))))
+             (dolist
+                 (combination (category-definitions :short-combination pool))
+               (let ((operator (sb-pcl::short-combination-operator
+                                (combination-definition-combination
+                                 combination))))
+                 (setf (short-combination-definition-operator combination)
+                       (or (find-definition operator :function pool1)
+                           (find-definition operator :function pool2)
+                           (find-definition operator :macro pool1)
+                           (find-definition operator :macro pool2)
+                           ;; #### NOTE: a foreign operator is not necessarily
+                           ;; a regular function. However, since we don't
+                           ;; actually document those (only print their name),
+                           ;; we can just use a function definition here (it's
+                           ;; out of laziness).
+                           (make-function-definition :symbol operator
+                                                     :foreignp t))))
+               (setf (combination-definition-users combination)
+                     (nconc (pool-combination-users
+                             pool1 (definition-symbol combination))
+                            (pool-combination-users
+                             pool2 (definition-symbol combination)))))
+             (dolist
+                 (combination (category-definitions :long-combination pool))
+               (setf (combination-definition-users combination)
+                     (nconc (pool-combination-users
+                             pool1 (definition-symbol combination))
+                            (pool-combination-users
+                             pool2 (definition-symbol combination)))))
+             ;; #### NOTE: readers and writers belong to the same symbol so
+             ;; they can't be in different pools (i.e. they are both internal
+             ;; or external). Hence, we only need to look in the current pool.
+             (dolist (accessor (category-definitions :accessor pool))
+               (unless (accessor-definition-writer accessor)
+                 (setf (accessor-definition-writer accessor)
+                       (find-definition (definition-symbol accessor)
+                                        :generic-writer pool))))
+             (dolist (writer (category-definitions :writer pool))
+               (assert (null (writer-definition-reader writer)))
+               (setf (writer-definition-reader writer)
+                     (find-definition (definition-symbol writer)
+                                      :generic-accessor pool)))
+             (dolist (accessor (category-definitions :generic-accessor pool))
+               (unless (generic-accessor-definition-writer accessor)
+                 (setf (generic-accessor-definition-writer accessor)
+                       (find-definition (definition-symbol accessor)
+                                        :writer pool))))
+             (dolist (writer (category-definitions :generic-writer pool))
+               (assert (null (generic-writer-definition-reader writer)))
+               (setf (generic-writer-definition-reader writer)
+                     (find-definition (definition-symbol writer)
+                                      :accessor pool)))
+             ;; At that point, a short form setf expander definition contains
+             ;; a symbol naming the update object. We now need to transform
+             ;; that into an actual (and possibly foreign) definition.
+             (dolist (expander (category-definitions :setf-expander pool))
+               (let ((name (setf-expander-definition-update expander)))
+                 (when (symbolp name)
+                   (let ((update-definition
+                          (or (find-definition name :function pool1)
+                              (find-definition name :function pool2)
+                              (find-definition name :generic pool1)
+                              (find-definition name :generic pool2)
+                              (find-definition name :macro pool1)
+                              (find-definition name :macro pool2)
+                              ;; #### NOTE: a foreign expander is not
+                              ;; necessarily a regular function. However,
+                              ;; since we don't actually document those (only
+                              ;; print their name), we can just use a
+                              ;; function definition here (it's out of
+                              ;; laziness).
+                              (make-function-definition :symbol name
+                                                        :foreignp t))))
+                     ;; #### NOTE: do you see why dropping structures and
+                     ;; using mixin classes would help here ? ;-)
+                     (etypecase update-definition
+                       (macro-definition
+                        (setf (macro-definition-update-expander
+                               update-definition)
+                              expander))
+                       (function-definition
+                        (setf (function-definition-update-expander
+                               update-definition)
+                              expander))
+                       (generic-definition
+                        (setf (generic-definition-update-expander
+                               update-definition)
+                              expander)))
+                     (setf (setf-expander-definition-update expander)
+                           update-definition)))))))
     (finalize pool1)
     (finalize pool2)))
 
@@ -1032,12 +1033,12 @@ Currently, this means resolving:
 (defmethod name ((writer-method writer-method-definition))
   "Return WRITER-METHOD's name, that is (setf <name>)."
   (format nil "(SETF ~A)"
-    (name (writer-method-definition-symbol writer-method))))
+          (name (writer-method-definition-symbol writer-method))))
 
 (defmethod name ((generic-writer generic-writer-definition))
   "Return GENERIC-WRITER's name, that is (setf <name>)."
   (format nil "(SETF ~A)"
-    (name (generic-writer-definition-symbol generic-writer))))
+          (name (generic-writer-definition-symbol generic-writer))))
 
 (defmethod name ((expander setf-expander-definition))
   "Return setf EXPANDER's name, that is (setf <name>)."
@@ -1061,7 +1062,7 @@ Currently, this means resolving:
     (definition type &key (name (definition-symbol definition)))
   "Return DEFINITION's source for TYPE."
   (when-let ((defsrc (car (sb-introspect:find-definition-sources-by-name
-			   name type))))
+                           name type))))
     (sb-introspect:definition-source-pathname defsrc)))
 
 ;; #### PORTME.
@@ -1259,7 +1260,7 @@ Currently, this means resolving:
 
 
 
-;;; — — this patch actually goes in asdf.lisp but 
+;;; — — this patch actually goes in asdf.lisp but
 
 (defun sub-component-p (component relative-to)
   "Return T if COMPONENT can be found under RELATIVE-TO."

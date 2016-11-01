@@ -1,7 +1,7 @@
 (in-package :cl-user)
 (defpackage tootstest
   (:documentation "This is the main (entry-point/top-level) package used
-  to launch the program in various modes of operation.")
+ to launch the program in various modes of operation.")
   (:use :cl)
   (:import-from :tootstest.config :config)
   (:import-from :clack :clackup)
@@ -23,10 +23,10 @@
 
 (defvar *handler* nil
   "If  a local  (testing?) Hunchentoot  server is  running, its  Clackup
-  value will be stored here…")
+ value will be stored here…")
 
 (defun start (&rest args &key server port debug &allow-other-keys)
-  "Start a local Hunchentoot server. 
+  "Start a local Hunchentoot server.
 
 PORT may be a port number .
 
@@ -117,7 +117,7 @@ Quicklisp when called."
   (format *trace-output* "~& Writing documentation…")
   (ql:quickload :net.didierverna.declt)
   (let ((source-dir (asdf:component-pathname (asdf:find-system :tootstest))))
-    (patch-declt-item/symbol.lisp source-dir)  
+    (patch-declt-item/symbol.lisp source-dir)
     (inform-declt-of-agplv3)
     (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
@@ -205,7 +205,7 @@ Note that it will print out  some HTTP-like garbage when it starts about
 browser, it was started as a “not-Fast” CGI program, in error."
   (format t "Content-Type: text/plain~c~c~c~c
 
-  Starting FastCGI is half-working if you see this. But, only half.~%"
+ Starting FastCGI is half-working if you see this. But, only half.~%"
           #\Return #\Linefeed #\Return #\Linefeed)
   (format *error-output* "~%FastCGI started~%")
   (let ((ql:*quickload-explain* nil) (ql:*quickload-verbose* nil))
