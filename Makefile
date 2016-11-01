@@ -25,6 +25,7 @@ clean:
 		js/*.js css/*.css \
 		static/js/*.js static/js/*.map static/css/*.css \
 		doc/* bin/buildapp
+	find . -name \*.fasl -exec rm {} \;
 
 deps:
 	if which pkcon; then \
