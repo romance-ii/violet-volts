@@ -68,7 +68,8 @@ else
 
     echo "Installing to $HOME/.local/"
     INSTALL_ROOT="$HOME/.local" sh install.sh
-    echo 'export SBCL_HOME=$HOME/.local' >> ~/.bashrc
+    echo 'export PATH='$HOME'/.local/bin:$PATH' >> ~/.bashrc
+    echo 'export SBCL_HOME='$HOME'/.local' >> ~/.bashrc
     
     popd
     echo " ✓ Done"
