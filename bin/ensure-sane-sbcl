@@ -19,8 +19,6 @@ else
     fi
 fi
 
-bad=test
-
 if [ "x$bad" = "x" ]
 then
     echo "✓ SBCL seems OK"
