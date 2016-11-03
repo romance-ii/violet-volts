@@ -16,7 +16,8 @@ before_install:
   - git submodule update --init --recursive
 
 install:
-  - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
+  - make deps
+#  - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
 
 script:
   - make

@@ -19,14 +19,10 @@
 
 all:	bin doc
 
-deps:
-	if which pkcon; then \
-		pkcon -y install $$(< build-deps ); \
-	elif which dnf; then \
-		sudo dnf -y install $$(< build-deps ); \
-	elif which yum; then \
-		sudo dnf -y install $$(< build-deps ); \
-	fi	
+deps:	.deps-installed~
+
+.deps-installed~:	build-deps bin/do-install-deps
+	bin/do-install-deps
 
 deploy:	bin test
 	./server-push

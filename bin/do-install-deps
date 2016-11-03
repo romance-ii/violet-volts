@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if which pkcon
+then
+  if pkcheck -a org.freedesktop.packagekit.package-install-untrusted -p $$$$
+  then
+    for pkg in $(< build-deps )
+    do
+      pkcon -y install $pkg
+    done
+  else 
+    for pkg in $(< build-deps )
+    do
+      sudo pkcon -y install $pkg
+    done
+  fi
+  exit
+fi
+
+if which dnf
+then 
+  for pkg in $(< build-deps )
+  do
+    sudo dnf -y install $pkg
+  done
+elif which yum
+then 
+  for pkg in $(< build-deps )
+  do
+    sudo yum -y install $pkg
+  done
+elif which apt-get
+then
+  for pkg in $(< build-deps )
+  do
+    sudo apt-get -y install $pkg
+  done
+fi

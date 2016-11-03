@@ -1,0 +1,21 @@
+machine:
+  pre:
+    make deps
+    
+checkout:
+  post:
+    - echo "Changing submodule pointers to use HTTPS URL's for Travis"
+    - sed -e 's#git@github.com:#https://github.com/#' -i .gitmodules
+    - git submodule sync
+    - echo "Updating submodules"
+    - git submodule update --init --recursive
+    - echo "Build"
+    - make
+
+test:
+  post:
+    - make test
+
+
+    
+
