@@ -27,7 +27,7 @@ else
     mkdir -p src/lib/sbcl
     pushd src/lib/sbcl
     echo "Downloading SBCL source tree"
-    curl -L https://sourceforge.net/projects/sbcl/files/latest/download?source=files > sbcl-latest.tar.bz2 || exit 9
+    curl -L --retry 10 -s https://sourceforge.net/projects/sbcl/files/latest/download?source=files > sbcl-latest.tar.bz2 || exit 9
     echo "Extracting source tree from archive"
     tar jxf sbcl-latest.tar.bz2 || exit 10
     rm sbcl-latest.tar.bz2 || exit 11
