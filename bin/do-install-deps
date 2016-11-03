@@ -15,7 +15,7 @@ fi
 if which pkcon
 then
   echo "Oh, good. I see you have PackageKit."
-  if pkcheck -a org.freedesktop.packagekit.package-install-untrusted -p $$$$
+  if pkcheck -a org.freedesktop.packagekit.package-install -p $$$$
   then
     for pkg in $depslist
     do
