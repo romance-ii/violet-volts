@@ -33,6 +33,7 @@ deps:	.deps-installed~ ~/quicklisp/setup.lisp
 
 .deps-installed~:	build-deps bin/do-install-deps
 	bin/do-install-deps
+	>> ~/.sbclrc
 	>.deps-installed~
 
 deploy:	bin test
