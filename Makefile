@@ -23,6 +23,7 @@ deps:	.deps-installed~
 
 .deps-installed~:	build-deps bin/do-install-deps
 	bin/do-install-deps
+	>.deps-installed~
 
 deploy:	bin test
 	./server-push
