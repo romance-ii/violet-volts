@@ -19,7 +19,17 @@
 
 all:	bin doc
 
-deps:	.deps-installed~
+deps:	.deps-installed~ ~/quicklisp/setup.lisp
+
+~/quicklisp/setup.lisp:	.quicklisp-signing-key.txt
+	gpg --import .quicklisp-signing-key.txt
+	curl -L https://beta.quicklisp.org/quicklisp.lisp > quicklisp.lisp
+	curl -L https://beta.quicklisp.org/quicklisp.lisp.asc > quicklisp.lisp.asc
+	gpg --verify quicklisp.lisp.asc quicklisp.lisp
+	sbcl --disable-debugger \
+		--load quicklisp.lisp \
+		--eval '(quicklisp-quickstart:install)' \
+		--eval '(quit)'
 
 .deps-installed~:	build-deps bin/do-install-deps
 	bin/do-install-deps
@@ -44,7 +54,8 @@ bin/buildapp:
 	then \
 		ln -s $$(which buildapp) bin/buildapp; \
 	else \
-		sbcl --eval '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
+		sbcl --load ~/quicklisp/setup.lisp \
+			--eval '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new

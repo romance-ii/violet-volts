@@ -67,3 +67,7 @@ bin/buildapp
 
 # Ignore generated documentation
 doc/**
+
+# Bootstrap files for loading Quicklisp
+quicklisp.lisp
+quicklisp.lisp.asc
