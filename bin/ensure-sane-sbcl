@@ -1,0 +1,76 @@
+#!/bin/bash
+echo "Ensuring that a sane version of SBCL is available"
+
+bad=
+
+if ! which sbcl
+then
+    echo "No ‘sbcl’ executable found on PATH" >&2
+    echo PATH=$PATH
+    bad=none
+else
+    if sbcl --noinform \
+         --no-userinit \
+         --non-interactive \
+         --eval "(or (find :asdf3 *features*) (sb-ext:exit :code 1))"
+    then
+        bad=asdf-old
+        echo "ASDF is older than v3" >&2
+    fi
+fi
+
+bad=test
+
+if [ "x$bad" = "x" ]
+then
+    echo "✓ SBCL seems OK"
+else
+    echo "✗ SBCL is not usable ($bad). Going to have to update." >&2
+    mkdir -p src/lib/sbcl
+    pushd src/lib/sbcl
+    echo "Downloading SBCL source tree"
+    curl -L https://sourceforge.net/projects/sbcl/files/latest/download?source=files > sbcl-latest.tar.bz2 || exit 9
+    echo "Extracting source tree from archive"
+    tar jxf sbcl-latest.tar.bz2 || exit 10
+    rm sbcl-latest.tar.bz2 || exit 11
+
+    if ! ( echo "PATH" | grep -q "$HOME/.local/bin" )
+    then
+        echo "~/.local/bin does not appear to be on PATH" >&2
+    fi
+
+    cd $(echo sbcl-1.*/)
+    if ! [ -f install.sh ]
+    then
+        echo "Archive might not have extracted correctly. Can't find install.sh" >&2
+        echo "Found myself in $(pwd)"
+        ls -l
+        exit 13
+    fi
+
+    if which sbcl
+    then
+        lisp=sbcl --no-userinit
+    elif which lisp
+    then
+        # Hopefully it's CMUCL
+        lisp=lisp -batch -noinit
+    else
+        echo "Can't find any compiler to use to bootstrap" >&2
+        exit 15
+    fi
+    
+    
+    echo "Performing bootstrap build with «$lisp»"
+    if ! sh make.sh --xc-host="$lisp"
+    then
+        echo "Unable to build" >&2
+        exit 14
+    fi
+
+    echo "Installing to $HOME/.local/"
+    INSTALL_ROOT="$HOME/.local" sh install.sh
+    
+    popd
+    echo " ✓ Done"
+fi
