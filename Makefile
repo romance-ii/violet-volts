@@ -56,7 +56,8 @@ bin/buildapp:
 	else \
 		sbcl --load ~/quicklisp/setup.lisp \
 			--eval '(ql:quickload :buildapp)' \
-			--eval '(buildapp:build-buildapp "bin/buildapp")'; \
+			--eval '(buildapp:build-buildapp "bin/buildapp")' \
+			--eval '(quit)' ; \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
