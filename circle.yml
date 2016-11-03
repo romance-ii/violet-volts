@@ -1,6 +1,6 @@
 machine:
   pre:
-    make deps
+    - make deps
     
 checkout:
   post:
