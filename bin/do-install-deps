@@ -2,7 +2,7 @@
 
 depslist=$(< build-deps )
 
-if which apt-get && ! -f /etc/redhat-release
+if which apt-get && ! [ -f /etc/redhat-release ]
 then
   echo "I suspect your machine is Debian."
   # Probably Debian, not Fedora/Red Hat.
