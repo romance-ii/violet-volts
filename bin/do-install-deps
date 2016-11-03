@@ -1,15 +1,24 @@
 #!/bin/bash
 
+depslist=$(< build-deps )
+
+if which apt-get && ! -f /etc/redhat-release
+then
+  # Probably Debian, not Fedora/Red Hat.
+  # Use alternative package names.
+  depslist=$( sed build-deps -e 's,^nodejs-,node-,g' )
+fi
+
 if which pkcon
 then
   if pkcheck -a org.freedesktop.packagekit.package-install-untrusted -p $$$$
   then
-    for pkg in $(< build-deps )
+    for pkg in $depslist
     do
       pkcon -y install $pkg
     done
   else 
-    for pkg in $(< build-deps )
+    for pkg in $depslist
     do
       sudo pkcon -y install $pkg
     done
@@ -19,19 +28,19 @@ fi
 
 if which dnf
 then 
-  for pkg in $(< build-deps )
+  for pkg in $depslist
   do
     sudo dnf -y install $pkg
   done
 elif which yum
 then 
-  for pkg in $(< build-deps )
+  for pkg in $depslist
   do
     sudo yum -y install $pkg
   done
 elif which apt-get
 then
-  for pkg in $(< build-deps )
+  for pkg in $depslist
   do
     sudo apt-get -y install $pkg
   done
