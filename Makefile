@@ -55,7 +55,8 @@ bin/buildapp:
 		ln -s $$(which buildapp) bin/buildapp; \
 	else \
 		sbcl --load ~/quicklisp/setup.lisp \
-			--eval '(ql:quickload :buildapp) (eval (read-from-string "(buildapp:build-buildapp \"bin/buildapp\")"))'; \
+			--eval '(ql:quickload :buildapp)' \
+			--eval '(buildapp:build-buildapp "bin/buildapp")'; \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
