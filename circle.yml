@@ -6,7 +6,7 @@ checkout:
     - echo "Updating submodules"
     - git submodule update --init --recursive
     - echo "Ensure that build dependencies are available"
-    - make deps || :
+    - sh -c 'make deps || true'
     - echo "Ensuring that we have a sane SBCL available"
     - bin/ensure-sane-sbcl
     - echo "Build"
