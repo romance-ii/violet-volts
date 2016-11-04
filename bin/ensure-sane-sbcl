@@ -105,11 +105,14 @@ else
      echo "SBCL for bootstrapping won't run here" >&2
      exit 18
  fi
- crosscompiler="\"$(pwd)\"/usr/bin/sbcl --no-userinit"
+ crosscompiler="\"$sbcl_bin\" --no-userinit"
 fi
 
 echo "Performing bootstrap build with «$crosscompiler»"
-if ! sh make.sh --xc-host="$crosscompiler"
+root="$(pwd)"/build
+mkdir -p "$root"
+
+if ! sh make.sh --xc-host="$crosscompiler" --prefix="$root"
 then
     echo "Unable to build" >&2
     exit 14
@@ -118,8 +121,6 @@ fi
 echo "Testing new SBCL build"
 ( cd tests && sh ./run-tests.sh ) || exit 21
 
-root="$(pwd)"/build
-mkdir -p "$root"
 echo "Installing to $root"
 INSTALL_ROOT="$root" sh install.sh
 popd
