@@ -24,7 +24,7 @@ else
            (sb-ext:exit :code 2))
        (print "SBCL/ASDF Seems passable"))'
     then
-        bad=ASDF too old (<3.1)
+        bad='ASDF too old (<3.1)'
         echo "ASDF is older than v3.1" >&2
     fi
 fi
