@@ -12,8 +12,8 @@ else
     if sbcl --noinform \
          --no-userinit \
          --non-interactive \
-         --eval '(unless (find :asdf3 *features*) (sb-ext:exit :code 1))' \
-         --eval '(unless (< 0 (digit-char-p (char (asdf:asdf-version) 2))) (sb-ext:exit :code 2))'
+         --eval '(unless (find :asdf3.1 *features*) (sb-ext:exit :code 1))' \
+         --eval '(unless (asdf::version<= "3.1" (asdf:asdf-version)) (sb-ext:exit :code 2))'
     then
         bad=asdf-old
         echo "ASDF is older than v3.1" >&2
