@@ -74,20 +74,20 @@ else
                    grep -E 'href="http.*pool/main/s/sbcl/sbcl.*amd64.deb' | \
                    cut -d\" -f2 | shuf | tail -n 1 ) \
       > sbcl.latest.jessie.amd64.deb
- mkdir -p 'bin/sbcl.debian/'
- pushd 'bin/sbcl.debian'
+ mkdir -p 'sbcl.debian/'
+ pushd 'sbcl.debian'
  ar p ../../sbcl.latest.jessie.amd64.deb data.tar.xz | \
      tar Jxf - && \
      rm ../../sbcl.latest.jessie.amd64.deb
  
- sbcl_bin="$(pwd)"/usr/bin/sbcl
+ sbcl_bin=$(realpath "$(pwd)"/usr/bin/sbcl)
  if ! [ -x "$sbcl_bin" ]
  then
      echo "Can't find SBCL bin" >&2
      ls -lR
      exit 16
  fi
- sbcl_core="$(pwd)"/"$(find . -name sbcl.core)"
+ sbcl_core=$(realpath "$(pwd)"/"$(find . -name sbcl.core)")
  if ! [ -f $sbcl_core ]
  then
      echo "Can't find SBCL core" >&2
