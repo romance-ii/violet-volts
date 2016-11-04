@@ -1,0 +1,94 @@
+#!/bin/bash
+
+if [ "$CODESHIP" = "TRUE" ]
+then
+	echo "Oh, my. Looks like we're on Codeship."
+	echo "We're going to have to use “npm” to load up some tools."
+	grep -E ^nodejs- build-deps | cut -d- -f 2- | \
+		while read pkg
+		do
+			npm install $pkg
+		done           
+	echo "Now, we're going to try to pull in a Debian package with SBCL …"
+	curl -L -p $( \
+		curl -L -p https://packages.debian.org/sid/amd64/sbcl/download | \
+			grep -E 'href="http.*pool/main/s/sbcl/sbcl.*amd64.deb' | \
+			cut -d\" -f2 | shuf | tail -n 1 ) \
+		> '.#sbcl.deb'
+	mkdir -p '.#sbcl'
+	pushd '.#sbcl'
+	ar x ../'.#sbcl.deb' && rm ../'.#sbcl.deb'
+	rm debian-binary
+	rm control.tar.gz
+	tar Jxf data.tar.xz && rm data.tar.xz
+	root="$(pwd)/usr"
+	popd
+	echo '#!/bin/bash' > bin/sbcl
+	chmod +x bin/sbcl
+	echo 'export SBCL_HOME="'$root'"/lib' >> bin/sbcl
+	echo 'exec "'$root'"/bin/sbcl' >> bin/sbcl
+	echo "Hopefully that will get us to bootstrapping …"
+	exit 0
+fi
+
+depslist=$(< build-deps )
+
+if which apt-get && ! [ -f /etc/redhat-release ]
+then
+  echo "I suspect your machine is Debian."
+  # Probably Debian, not Fedora/Red Hat.
+  # Use alternative package names.
+  depslist=$( sed build-deps -e 's,^nodejs-,node-,g' )
+else
+  echo "I hope your machine is a Fedora/Red Hat family member"
+fi
+
+if which pkcon
+then
+  echo "Oh, good. I see you have PackageKit."
+  if pkcheck -a org.freedesktop.packagekit.package-install -p $$$$
+  then
+    for pkg in $depslist
+    do
+      pkcon resolve $pkg | grep -q Installed || pkcon -p -y install $pkg
+    done
+  else 
+    for pkg in $depslist
+    do
+      pkcon resolve $pkg | grep -q Installed || sudo pkcon -p -y install $pkg
+    done
+  fi
+  true
+  exit
+fi
+
+echo "PackageKit not found."
+
+if which dnf
+then 
+  for pkg in $depslist
+  do
+    sudo dnf -y install $pkg
+  done
+elif which yum
+then 
+  for pkg in $depslist
+  do
+    sudo yum -y install $pkg
+  done
+elif which apt-get
+then
+  for pkg in $depslist
+  do
+    sudo apt-get -y install $pkg
+  done
+else
+  echo "Unable to find a usable alternative to PackageKit." >&2
+  echo "You'll need to install these dependencies yourself:"
+  echo "———"
+  cat build-deps
+  false
+  exit 1
+fi
+
+true

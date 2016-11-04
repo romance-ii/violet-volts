@@ -81,12 +81,12 @@ version — print compilation date-stamp
 
 (defun inform-declt-of-agplv3 ()
   "Adds the AGPLv3 to the list of licenses for DECLT."
-  (let ((licenses (intern "*LICENSES*" (find-package :net.didierverna.declt))))
-    (set licenses
-         (cons (eval licenses)
-               '((:agplv3
-                  "The GNU Affero General Public License"
-                  "This  program is  free  software; you  can redistribute  it
+    (let ((licenses (intern "*LICENSES*" (find-package :net.didierverna.declt))))
+      (set licenses
+           (cons (eval licenses)
+                 '((:agplv3
+                    "The GNU Affero General Public License"
+                    "This  program is  free  software; you  can redistribute  it
 and/or  modify it  under  the terms  of the  GNU  Affero General  Public
 License as  published by  the Free  Software Foundation;  either version
 3 of the License, or (at your option) any later version.
