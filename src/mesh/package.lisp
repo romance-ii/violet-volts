@@ -10,9 +10,10 @@
 (defpackage :appius-claudius-caecus
   (:nicknames #:appius)
   (:use :cl :jscl/ffi :romance)
-  (:documentation "the  main networking component or  \"socket server.\"
-  Appius  manages  network  listening  sockets, using  a  few  different
-  possible communications channels."))
+  (:documentation  "Appius manages  the  mesh communications  at a  high
+  level, ensuring  best-case routing  and avoiding  potential netsplits.
+  The  implementation is  independent of  the underlying  packet network
+  encoding (eg, UDP, TCP, WebSockets, or WebRTC)"))
 (defpackage :assets
   (:use :cl :jscl/ffi)
   (:export #:fetch-bytes)
