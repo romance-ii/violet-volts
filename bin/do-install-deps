@@ -21,11 +21,12 @@ then
 	rm debian-binary
 	rm control.tar.gz
 	tar Jxf data.tar.xz && rm data.tar.xz
+	root="$(pwd)/usr"
 	popd
 	echo '#!/bin/bash' > bin/sbcl
 	chmod +x bin/sbcl
-	echo 'export SBCL_HOME="$(dirname $BASH_SOURCE)"'"/'.#sbcl'/usr/" >> bin/sbcl
-	echo 'exec "$(dirname $BASH_SOURCE)"'"/'.#sbcl'/usr/bin/sbcl" >> bin/sbcl
+	echo 'export SBCL_HOME="'$root'"' >> bin/sbcl
+	echo 'exec "'$root'"/bin/sbcl' >> bin/sbcl
 	echo "Hopefully that will get us to bootstrapping …"
 	exit 0
 fi
