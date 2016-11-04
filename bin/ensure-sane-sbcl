@@ -115,13 +115,16 @@ then
     exit 14
 fi
 
+echo "Testing new SBCL build"
+( cd tests && sh ./run-tests.sh ) || exit 21
+
 root="$(pwd)"/build
 mkdir -p "$root"
 echo "Installing to $root"
 INSTALL_ROOT="$root" sh install.sh
 popd
 
-sbcl_bin="$root"/usr/bin/sbcl
+sbcl_bin="$root"/bin/sbcl
 if ! [ -x "$sbcl_bin" ]
 then
     echo "Can't find SBCL bin" >&2
