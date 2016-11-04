@@ -62,7 +62,7 @@ bin/sbcl:
 bin/buildapp:	bin/sbcl
 	if which buildapp; \
 	then \
-		ln -s $$(which buildapp) bin/buildapp; \
+		ln -s $$(which buildapp) -f bin/buildapp; \
 	else \
 		bin/sbcl --non-interactive \
 			--load ~/quicklisp/setup.lisp \
