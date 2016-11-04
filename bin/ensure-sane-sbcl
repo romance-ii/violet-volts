@@ -9,7 +9,7 @@ then
     echo PATH=$PATH
     bad=none
 else
-    if sbcl --noinform \
+    if ! sbcl --noinform \
          --no-userinit \
          --non-interactive \
          --eval "(require 'asdf)" \
