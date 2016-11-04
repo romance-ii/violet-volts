@@ -36,11 +36,6 @@ else
     tar jxf sbcl-latest.tar.bz2 || exit 10
     rm sbcl-latest.tar.bz2 || exit 11
 
-    if ! ( echo "PATH" | grep -q "$HOME/.local/bin" )
-    then
-        echo "~/.local/bin does not appear to be on PATH" >&2
-    fi
-
     cd $(echo sbcl-1.*/)
     if ! [ -f install.sh ]
     then
