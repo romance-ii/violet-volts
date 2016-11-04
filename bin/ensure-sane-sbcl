@@ -9,7 +9,7 @@ if ! which sbcl
 then
     echo "No ‘sbcl’ executable found on PATH" >&2
     echo PATH=$PATH
-    bad=no SBCL found on PATH
+    bad='no SBCL found on PATH'
 else
     if ! sbcl --noinform \
          --no-userinit \
