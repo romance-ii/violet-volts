@@ -49,12 +49,12 @@ then
   then
     for pkg in $depslist
     do
-      pkcon -p -y install $pkg
+      pkcon resolve $pkg | grep -q Installed || pkcon -p -y install $pkg
     done
   else 
     for pkg in $depslist
     do
-      sudo pkcon -p -y install $pkg
+      pkcon resolve $pkg | grep -q Installed || sudo pkcon -p -y install $pkg
     done
   fi
   true
