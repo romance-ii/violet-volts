@@ -13,8 +13,14 @@ else
          --no-userinit \
          --non-interactive \
          --eval "(require 'asdf)" \
-         --eval '(unless (find :asdf3.1 *features*) (sb-ext:exit :code 1))' \
-         --eval '(unless (asdf::version<= "3.1" (asdf:asdf-version)) (sb-ext:exit :code 2))'
+         --eval '
+(progn (if (find :asdf3.1 *features*)
+           (print "*FEATURES* has :ASDF3.1")
+           (sb-ext:exit :code 1))
+       (if (asdf::version<= "3.1" (asdf:asdf-version))
+           (print "ASDF-VERSION is OK")
+           (sb-ext:exit :code 2))
+       (print "SBCL/ASDF Seems passable"))'
     then
         bad=asdf-old
         echo "ASDF is older than v3.1" >&2
