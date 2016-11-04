@@ -21,15 +21,14 @@ all:	bin doc
 
 deps:	.deps-installed~ ~/quicklisp/setup.lisp
 
-~/quicklisp/setup.lisp:	.quicklisp-signing-key.txt
+~/quicklisp/setup.lisp:	.quicklisp-signing-key.txt bin/sbcl
 	gpg --import .quicklisp-signing-key.txt
 	curl -L https://beta.quicklisp.org/quicklisp.lisp > quicklisp.lisp
 	curl -L https://beta.quicklisp.org/quicklisp.lisp.asc > quicklisp.lisp.asc
 	gpg --verify quicklisp.lisp.asc quicklisp.lisp
-	sbcl --disable-debugger \
+	bin/sbcl --non-interactive \
 		--load quicklisp.lisp \
-		--eval '(quicklisp-quickstart:install)' \
-		--eval '(quit)'
+		--eval '(quicklisp-quickstart:install)'
 
 .deps-installed~:	build-deps bin/do-install-deps
 	bin/do-install-deps
@@ -49,16 +48,20 @@ bin:	tootstest.cgi \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
-bin/buildapp:
+bin/sbcl:	
+	mkdir -p bin
+	ln $(which sbcl) bin/sbcl
+
+bin/buildapp:	bin/sbcl
 	mkdir -p bin
 	if which buildapp; \
 	then \
 		ln -s $$(which buildapp) bin/buildapp; \
 	else \
-		sbcl --load ~/quicklisp/setup.lisp \
+		bin/sbcl --non-interactive \
+			--load ~/quicklisp/setup.lisp \
 			--eval '(ql:quickload :buildapp)' \
-			--eval '(buildapp:build-buildapp "bin/buildapp")' \
-			--eval '(quit)' ; \
+			--eval '(buildapp:build-buildapp "bin/buildapp")'
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
@@ -146,10 +149,12 @@ static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 	lessc $< | cleancss --skip-import -o $@
 
 js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
-		$(find src/mesh -name \*.lisp -and -not -path \**/.\*)
+		$(find src/mesh -name \*.lisp -and -not -path \**/.\*) \
+		bin/sbcl
 	mkdir -p js
-	( cd src/lib/jscl; sbcl --load jscl.lisp \
-		--disable-debugger \
+	( cd src/lib/jscl ; \
+		bin/sbcl --non-interactive \
+		--load jscl.lisp \
 		--load ../../../src/bootstrap-tootstest.lisp \
 		--eval '(jscl::bootstrap-mesh)' --eval '(quit)' ) || \
 	   ( echo " MESH not building (no surprises there) FIXME " ; \

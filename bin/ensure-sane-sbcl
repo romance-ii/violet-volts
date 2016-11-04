@@ -66,11 +66,17 @@ else
         exit 14
     fi
 
-    echo "Installing to $HOME/.local/"
-    INSTALL_ROOT="$HOME/.local" sh install.sh
-    echo 'export PATH='$HOME'/.local/bin:$PATH' >> ~/.bashrc
-    echo 'export SBCL_HOME='$HOME'/.local' >> ~/.bashrc
-    
+    root=$(cd ../../../build/sbcl; pwd)
+    mkdir -p "$root"
+    echo "Installing to $root"
+    INSTALL_ROOT="$root" sh install.sh
     popd
+
+    echo "Setting bin/sbcl"
+    rm -f bin/sbcl
+    echo '#!/bin/bash' > bin/sbcl
+    echo 'SBCL_HOME="'$root'" "'$root'"/bin/sbcl' >> bin/sbcl
+    chmod +x bin/sbcl
+    
     echo " ✓ Done"
 fi
