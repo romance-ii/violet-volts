@@ -59,7 +59,7 @@ bin/buildapp:	bin/sbcl
 		bin/sbcl --non-interactive \
 			--load ~/quicklisp/setup.lisp \
 			--eval '(ql:quickload :buildapp)' \
-			--eval '(buildapp:build-buildapp "bin/buildapp")'
+			--eval '(buildapp:build-buildapp "bin/buildapp")' \
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
