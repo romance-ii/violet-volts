@@ -24,7 +24,7 @@ fi
 if [ "x$bad" = "x" ]
 then
     echo "✓ SBCL seems OK"
-    ln -s $(which sbcl) bin/sbcl
+    ln -sf $(which sbcl) bin/sbcl
     exit 0
 else
     echo "✗ SBCL is not usable ($bad). Going to have to update." >&2
@@ -79,7 +79,7 @@ else
     echo "Setting bin/sbcl"
     rm -f bin/sbcl
     echo '#!/bin/bash' > bin/sbcl
-    echo 'SBCL_HOME="'$root'" "'$root'"/bin/sbcl' >> bin/sbcl
+    echo 'SBCL_HOME="'$root'" "'$root'"/bin/sbcl "$@"' >> bin/sbcl
     chmod +x bin/sbcl
     
     echo " ✓ Done"
