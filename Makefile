@@ -48,12 +48,10 @@ bin:	tootstest.cgi \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
-bin/sbcl:	
-	mkdir -p bin
-	ln $(which sbcl) bin/sbcl
+bin/sbcl:
+	bin/ensure-sane-sbcl
 
 bin/buildapp:	bin/sbcl
-	mkdir -p bin
 	if which buildapp; \
 	then \
 		ln -s $$(which buildapp) bin/buildapp; \

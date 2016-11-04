@@ -1,5 +1,35 @@
 #!/bin/bash
 
+if [ "$CODESHIP" = "TRUE" ]
+then
+	echo "Oh, my. Looks like we're on Codeship."
+	echo "We're going to have to use “npm” to load up some tools."
+	grep -E ^nodejs- build-deps | cut -d- -f 2- | \
+		while read pkg
+		do
+			npm install $pkg
+		done           
+	echo "Now, we're going to try to pull in a Debian package with SBCL …"
+	curl -L -p $( \
+		curl -L -p https://packages.debian.org/sid/amd64/sbcl/download | \
+			grep -E 'href="http.*pool/main/s/sbcl/sbcl.*amd64.deb' | \
+			cut -d\" -f2 | shuf | tail -n 1 ) \
+		> '.#sbcl.deb'
+	mkdir -p '.#sbcl'
+	pushd '.#sbcl'
+	ar x ../'.#sbcl.deb' && rm ../'.#sbcl.deb'
+	rm debian-binary
+	rm control.tar.gz
+	tar Jxf data.tar.xz && rm data.tar.xz
+	popd
+	echo '#!/bin/bash' > bin/sbcl
+	chmod +x bin/sbcl
+	echo 'export SBCL_HOME="$(dirname $BASH_SOURCE)"'"/'.#sbcl'/usr/" >> bin/sbcl
+	echo 'exec "$(dirname $BASH_SOURCE)"'"/'.#sbcl'/usr/bin/sbcl" >> bin/sbcl
+	echo "Hopefully that will get us to bootstrapping …"
+	exit 0
+fi
+
 depslist=$(< build-deps )
 
 if which apt-get && ! [ -f /etc/redhat-release ]
