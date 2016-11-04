@@ -25,7 +25,7 @@ then
 	popd
 	echo '#!/bin/bash' > bin/sbcl
 	chmod +x bin/sbcl
-	echo 'export SBCL_HOME="'$root'"' >> bin/sbcl
+	echo 'export SBCL_HOME="'$root'"/lib' >> bin/sbcl
 	echo 'exec "'$root'"/bin/sbcl' >> bin/sbcl
 	echo "Hopefully that will get us to bootstrapping …"
 	exit 0
