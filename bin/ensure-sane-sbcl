@@ -12,6 +12,7 @@ else
     if sbcl --noinform \
          --no-userinit \
          --non-interactive \
+         --eval "(require 'asdf)" \
          --eval '(unless (find :asdf3.1 *features*) (sb-ext:exit :code 1))' \
          --eval '(unless (asdf::version<= "3.1" (asdf:asdf-version)) (sb-ext:exit :code 2))'
     then
@@ -24,7 +25,8 @@ if [ "x$bad" = "x" ]
 then
     echo "✓ SBCL seems OK"
     sbcl --no-userinit --non-interactive \
-             --eval '(format t "~&ASDF version is ~a" (asdf:asdf-version))'
+    	 --eval "(require 'asdf)" \
+         --eval '(format t "~&ASDF version is ~a" (asdf:asdf-version))'
     ln -sf $(which sbcl) bin/sbcl
     exit 0
 else
