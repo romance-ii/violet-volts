@@ -88,8 +88,18 @@ tootstest.cgi.new:	tootstest.asd bin/buildapp \
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 			-and -not -name .\*) \
-		src/lib/jscl/src/prelude.js
-	alias sbcl=$(pwd)/bin/sbcl ; $(MAKE) -C src/lib/jscl
+		src/lib/jscl/src/prelude.js \
+		bin/sbcl
+# ensure our SBCL is on PATH
+	if [ -d ~/.local/bin ] && ! [ -x ~/.local/bin/sbcl ] ; \
+	then \
+		ln -s bin/sbcl ~/.local/bin/ ; \
+	fi
+	if [ -d ~//bin ] && ! [ -x ~/bin/sbcl ] ; \
+	then \
+		ln -s bin/sbcl ~/bin/ ; \
+	fi
+	$(MAKE) -C src/lib/jscl
 
 # required to make Closure happy
 js/undef-require.js:	
