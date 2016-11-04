@@ -105,7 +105,7 @@ else
      echo "SBCL for bootstrapping won't run here" >&2
      exit 18
  fi
- crosscompiler="\"$(pwd)\"/bin/sbcl --no-userinit"
+ crosscompiler="\"$(pwd)\"/usr/bin/sbcl --no-userinit"
 fi
 
 echo "Performing bootstrap build with «$crosscompiler»"
