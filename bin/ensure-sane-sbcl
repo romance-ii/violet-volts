@@ -83,14 +83,14 @@ else
  sbcl_bin=$(realpath "$(pwd)"/usr/bin/sbcl)
  if ! [ -x "$sbcl_bin" ]
  then
-     echo "Can't find SBCL bin" >&2
+     echo "Can't find SBCL bin; expected $sbcl_bin" >&2
      ls -lR
      exit 16
  fi
- sbcl_core=$(realpath "$(pwd)"/lib/sbcl/sbcl.core)
+ sbcl_core=$(realpath "$(pwd)"/usr/lib/sbcl/sbcl.core)
  if ! [ -f $sbcl_core ]
  then
-     echo "Can't find SBCL core" >&2
+     echo "Can't find SBCL core; expected $sbcl_core" >&2
      ls -lR
      exit 17
  fi
@@ -128,16 +128,16 @@ popd
 sbcl_bin="$root"/bin/sbcl
 if ! [ -x "$sbcl_bin" ]
 then
-    echo "Can't find SBCL bin" >&2
-    ls -lR
-    exit 16
+    echo "Can't find SBCL bin; expected $sbcl_bin" >&2
+    ls -lR "$root"
+    exit 18
 fi
-sbcl_core="$root"/"$(find "$root" -name sbcl.core)"
+sbcl_core="$root"/lib/sbcl/sbcl.core
 if ! [ -f $sbcl_core ]
 then
-    echo "Can't find SBCL core" >&2
-    ls -lR
-    exit 17
+    echo "Can't find SBCL core; expected $sbcl_core" >&2
+    ls -lR "$root"
+    exit 19
 fi
 
 echo "Setting bin/sbcl"
