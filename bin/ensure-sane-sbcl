@@ -87,7 +87,7 @@ else
      ls -lR
      exit 16
  fi
- sbcl_core=$(realpath "$(pwd)"/"$(find . -name sbcl.core)")
+ sbcl_core=$(realpath "$(pwd)"/lib/sbcl/sbcl.core)
  if ! [ -f $sbcl_core ]
  then
      echo "Can't find SBCL core" >&2
