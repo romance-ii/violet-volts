@@ -26,6 +26,8 @@ clean:
 		static/js/*.js static/js/*.map static/css/*.css \
 		doc/* bin/buildapp
 	find . -name \*.fasl -exec rm {} \;
+	git gc --auto
+	git submodule foreach git gc --auto
 
 deps:	.deps-installed~ ~/quicklisp/setup.lisp
 
