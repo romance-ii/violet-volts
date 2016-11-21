@@ -9,3 +9,6 @@
 [submodule "alexandria"]
 	path = src/lib/alexandria
 	url = git@github.com:romance-ii/alexandria.git
+[submodule "cl-selenium-webdriver"]
+	path = src/lib/src/lib/cl-selenium-webdriver
+	url = git@github.com:TatriX/cl-selenium-webdriver.git
