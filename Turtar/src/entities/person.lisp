@@ -80,6 +80,6 @@
 
 
 
-(defclass person (entity)
+(defclass person (component)
   ((name :type personal-name :reader person-name)))
 
