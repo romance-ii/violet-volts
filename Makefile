@@ -96,11 +96,11 @@ src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 # ensure our SBCL is on PATH
 	if [ -d ~/.local/bin ] && ! [ -x ~/.local/bin/sbcl ] ; \
 	then \
-		ln -s bin/sbcl ~/.local/bin/ ; \
+		ln -sf bin/sbcl -f ~/.local/bin/ ; \
 	fi
-	if [ -d ~//bin ] && ! [ -x ~/bin/sbcl ] ; \
+	if [ -d ~/bin ] && ! [ -x ~/bin/sbcl ] ; \
 	then \
-		ln -s bin/sbcl ~/bin/ ; \
+		ln -sf bin/sbcl ~/bin/ ; \
 	fi
 	$(MAKE) -C src/lib/jscl
 
