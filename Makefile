@@ -109,7 +109,7 @@ js/undef-require.js:
 	echo 'var require=undefined;' >> $@
 
 js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/js/mesh.cc.js.map \
 		--third_party true \
 		--js_output_file $@ \
@@ -132,7 +132,7 @@ js/%.yug.js: src/js/%.js
 		-m -c		
 
 js/%.cc.js: src/js/%.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/$@.map \
 		--third_party true \
 		--js_output_file $@ \
@@ -146,7 +146,7 @@ js/jscl.yug.js: src/lib/jscl/jscl.js
 		-m -c		
 
 js/jscl.cc.js: src/lib/jscl/jscl.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/$@.map \
 		--third_party true \
 		--js_output_file $@ \
