@@ -27,11 +27,10 @@ window.fbAsyncInit = function() {
 } (document,'script','facebook-jssdk'));
 
 /* Google Analytics */
-
-window.ga = window.ga || function() {
-    (ga.q = ga.q || []).push(arguments)
+ga = window['ga'] || function() {
+    (ga['q'] = ga['q'] || []).push(arguments)
 };
-ga.l = +new Date;
+ga["l"] = +new Date;
 ga('create', 'UA-80917352-1', 'auto');
 ga('set', 'transport', 'beacon');
 ga('set','appName','tootstest');
@@ -44,4 +43,3 @@ ga('require', 'eventTracker');
 ga('require', 'outboundLinkTracker');
 ga('require', 'urlChangeTracker');
 ga('send', 'pageview');
-
