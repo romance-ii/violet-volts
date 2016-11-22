@@ -12,3 +12,6 @@
 [submodule "test-utils"]
 	path = src/lib/test-utils
 	url = https://github.com/Inaimathi/test-utils
+[submodule "cl-selenium-webdriver"]
+	path = src/lib/src/lib/cl-selenium-webdriver
+	url = git@github.com:TatriX/cl-selenium-webdriver.git
