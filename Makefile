@@ -156,14 +156,6 @@ static/js/%.js: js/%.cc.js js/%.yug.js
 	echo "Comparing smaller JS isn't working, just using Closure version for now"
 	cp $< $@
 
-static/js/jscl.js:	js/jscl.cc.js js/jscl.yug.js
-	echo "Comparing smaller JS isn't working, just using Closure version for now"
-	cp $< $@
-
-static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
-	echo "Comparing smaller JS isn't working, just using Closure version for now"
-	cp $< $@
-
 static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 	lessc $< | cleancss --skip-import -o $@
 
