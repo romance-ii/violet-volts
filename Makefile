@@ -53,6 +53,7 @@ doc-publish:	doc
 	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.2/
 
 bin:	tootstest.cgi \
+	static/js/jscl.js \
 	static/js/mesh.js \
 	static/js/lisp.js \
 	static/js/social.js \
