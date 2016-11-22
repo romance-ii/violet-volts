@@ -10,9 +10,12 @@ the OS may do some disc caching."
   (check-type content-type string "A MIME content-type, eg, text/html;charset=utf-8")
   (check-type pathname (or string pathname)
               "The pathname ofa local file to be sent.")
-  (appendf (response-headers *response*)
-           (list "Content-Type" content-type))
-  (read-file-into-string pathname))
+  (cond
+    ((probe-file pathname)
+     (appendf (response-headers *response*)
+              (list "Content-Type" content-type))
+     (read-file-into-string pathname))
+    (:else (throw-code 404))))
 
 (defroute route-/css/*.css "/tootstest/css/:name.css" (&key name)
           "CSS files are served statically."
