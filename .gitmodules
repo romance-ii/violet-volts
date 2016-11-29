@@ -15,6 +15,6 @@
 	url = https://github.com/Inaimathi/test-utils
         branch = master
 [submodule "cl-selenium-webdriver"]
-	path = src/lib/src/lib/cl-selenium-webdriver
+	path = src/lib/cl-selenium-webdriver
 	url = git@github.com:TatriX/cl-selenium-webdriver.git
-        branch = master
+        branch = toots
