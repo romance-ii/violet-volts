@@ -2,30 +2,30 @@
  * Functions to allow JavaScript to call into Lisp functions.
  */
 
-window.call_lisp = function (symbol) {
-    var nameParts = symbol.split(":");
+window['call_lisp'] = function (symbol) {
+    var nameParts = (''+symbol).split(":");
     var packageName = nameParts[0];
     var symbolName = nameParts[2] || nameParts[1];
-    return jscl.packages[packageName].symbols[symbolName].
+    return window['jscl'].packages[packageName].symbols[symbolName].
         fvalue.apply(jscl,
                      arguments.slice(1).map(jscl.internals.js_to_lisp));
 }
 
-window.curry_lisp = function (symbol) {
-    var nameParts = symbol.split(":");
+window['curry_lisp'] = function (symbol) {
+    var nameParts = (''+symbol).split(":");
     var packageName = nameParts[0];
     var symbolName = nameParts[2] || nameParts[1];
-    var fun = jscl.packages[packageName].symbols[symbolName].fvalue;
+    var fun = window['jscl'].packages[packageName].symbols[symbolName].fvalue;
     var curryArgs = arguments.slice(1).map(jscl.internals.js_to_lisp);
     return function () {
         return fun.apply(jscl,
                          curryArgs.concat(arguments.map(jscl.internals.js_to_lisp)));
     }
-}
+};
 
 (function(){
-    var nextMethod = window.onerror;
-    window.onerror = function (message, source, line, column, error) {
+    var nextMethod = window['onerror'];
+    window['onerror'] = function (message, source, line, column, error) {
         console.error("Unhandled error: " + message +
                       "\n\tSource: " + (source || '?') +
                       "\n\tLine: " + (line || '?') + "\tColumn: " + (column || '?'));
@@ -38,7 +38,7 @@ window.curry_lisp = function (symbol) {
             "condition": "window.onerror",
             "catch": "gazonga",
             "product": "tootstest/0.2",
-            "navigator": {	"appCodeName": appName.appCodeName,
+            "navigator": {	"appCodeName": navigator.appCodeName,
                               "appName": navigator.appName,
                               "appVersion": navigator.appVersion,
                               "buildID": navigator.buildID,
@@ -76,4 +76,4 @@ window.curry_lisp = function (symbol) {
             nextMethod(message, source, line, column, error);
         }
     }
-})()
+})();

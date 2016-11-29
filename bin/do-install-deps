@@ -8,26 +8,9 @@ then
 		while read pkg
 		do
 			npm install $pkg
-		done           
-	echo "Now, we're going to try to pull in a Debian package with SBCL …"
-	curl -L -p $( \
-		curl -L -p https://packages.debian.org/sid/amd64/sbcl/download | \
-			grep -E 'href="http.*pool/main/s/sbcl/sbcl.*amd64.deb' | \
-			cut -d\" -f2 | shuf | tail -n 1 ) \
-		> '.#sbcl.deb'
-	mkdir -p '.#sbcl'
-	pushd '.#sbcl'
-	ar x ../'.#sbcl.deb' && rm ../'.#sbcl.deb'
-	rm debian-binary
-	rm control.tar.gz
-	tar Jxf data.tar.xz && rm data.tar.xz
-	root="$(pwd)/usr"
-	popd
-	echo '#!/bin/bash' > bin/sbcl
-	chmod +x bin/sbcl
-	echo 'export SBCL_HOME="'$root'"/lib' >> bin/sbcl
-	echo 'exec "'$root'"/bin/sbcl' >> bin/sbcl
-	echo "Hopefully that will get us to bootstrapping …"
+		done
+          echo "We're also going to have to bootstrap SBCL…"
+          $(dirname $BASH_SOURCE)/ensure-sane-sbcl
 	exit 0
 fi
 
@@ -39,6 +22,7 @@ then
   # Probably Debian, not Fedora/Red Hat.
   # Use alternative package names.
   depslist=$( sed build-deps -e 's,^nodejs-,node-,g' )
+  sudo apt-get update || apt-get update || true
 else
   echo "I hope your machine is a Fedora/Red Hat family member"
 fi

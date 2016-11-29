@@ -27,6 +27,18 @@ https://wiki-wiki.tootsville.adventuring.click/wikiwiki/
 Development is being financed entirely (as  of August, 2016) by the Fenn
 Pocock family.
 
+## Testing
+
+Our         unit        tests         are        being         developed
+for
+[Travis-CI](https://travis-ci.org/romance-ii/violet-volts/branches#),
+[Circle CI](https://circleci.com/gh/romance-ii/violet-volts/tree/tootstest),
+and   (possibly?)  [Codeship](https://app.codeship.com/projects/181513).
+Our     browser     integration     testing    is     being     designed
+for [Selenium](http://seleniumhq.com/) with the generous gift of support
+from [BrowserStack](http://browserstack.com/) for cross-platform testing
+on Android, Apple, and MicroSoft platforms.
+
 ## Usage
 
 At the  moment, we  are spending  more time  developing pieces  and less
@@ -38,7 +50,8 @@ If  you  have  a  serious  use-case for  this  program,  please  contact
 Bruce-Robert Fenn Pocock directly.
 
 In general, we do *not* expect this code to yet be interesting/useful to
-others.
+others, but  we'd be  happy to  be proven wrong.  Many hands  make light
+work, to many eyes all bugs are shallow, et al.
 
 ## License
 

@@ -19,6 +19,16 @@
 
 all:	bin doc
 
+clean:
+	$(MAKE) -C src/lib/jscl clean
+	-rm -f tootstest.cgi tootstest.cgi.new \
+		js/*.js css/*.css \
+		static/js/*.js static/js/*.map static/css/*.css \
+		doc/* bin/buildapp
+	find . -name \*.fasl -exec rm {} \;
+	git gc --auto
+	git submodule foreach git gc --auto
+
 deps:	.deps-installed~ ~/quicklisp/setup.lisp
 
 ~/quicklisp/setup.lisp:	.quicklisp-signing-key.txt bin/sbcl
@@ -43,6 +53,7 @@ doc-publish:	doc
 	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.2/
 
 bin:	tootstest.cgi \
+	static/js/jscl.js \
 	static/js/mesh.js \
 	static/js/lisp.js \
 	static/js/social.js \
@@ -54,7 +65,7 @@ bin/sbcl:
 bin/buildapp:	bin/sbcl
 	if which buildapp; \
 	then \
-		ln -s $$(which buildapp) bin/buildapp; \
+		ln -s $$(which buildapp) -f bin/buildapp; \
 	else \
 		bin/sbcl --non-interactive \
 			--load ~/quicklisp/setup.lisp \
@@ -80,15 +91,25 @@ tootstest.cgi.new:	tootstest.asd bin/buildapp \
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 			-and -not -name .\*) \
-		src/lib/jscl/src/prelude.js
-	cd src/lib/jscl; ./make.sh
+		src/lib/jscl/src/prelude.js \
+		bin/sbcl
+# ensure our SBCL is on PATH
+	if [ -d ~/.local/bin ] && ! [ -x ~/.local/bin/sbcl ] ; \
+	then \
+		ln -sf bin/sbcl -f ~/.local/bin/ ; \
+	fi
+	if [ -d ~/bin ] && ! [ -x ~/bin/sbcl ] ; \
+	then \
+		ln -sf bin/sbcl ~/bin/ ; \
+	fi
+	$(MAKE) -C src/lib/jscl
 
 # required to make Closure happy
 js/undef-require.js:	
 	echo 'var require=undefined;' >> $@
 
 js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/js/mesh.cc.js.map \
 		--third_party true \
 		--js_output_file $@ \
@@ -111,7 +132,7 @@ js/%.yug.js: src/js/%.js
 		-m -c		
 
 js/%.cc.js: src/js/%.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/$@.map \
 		--third_party true \
 		--js_output_file $@ \
@@ -125,21 +146,13 @@ js/jscl.yug.js: src/lib/jscl/jscl.js
 		-m -c		
 
 js/jscl.cc.js: src/lib/jscl/jscl.js
-	closure-compiler --compilation_level ADVANCED \
+	closure-compiler --compilation_level SIMPLE_OPTIMIZATIONS \
 		--create_source_map static/$@.map \
 		--third_party true \
 		--js_output_file $@ \
 		--js $<
 
 static/js/%.js: js/%.cc.js js/%.yug.js
-	echo "Comparing smaller JS isn't working, just using Closure version for now"
-	cp $< $@
-
-static/js/jscl.js:	js/jscl.cc.js js/jscl.yug.js
-	echo "Comparing smaller JS isn't working, just using Closure version for now"
-	cp $< $@
-
-static/js/mesh.js: js/mesh.cc.js js/mesh.yug.js
 	echo "Comparing smaller JS isn't working, just using Closure version for now"
 	cp $< $@
 
@@ -159,8 +172,8 @@ js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		> js/mesh.js )
 
 test:	bin
-	cd src/lib/jscl; ./run-tests.sh
 	./tootstest.cgi test
+	$(MAKE) -C src/lib/jscl test
 
 doc/violet-volts.pdf:	doc/violet-volts.texi
 

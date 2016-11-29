@@ -35,11 +35,10 @@ testbed case for the development."
                :cl-uglify-js
                :cl-rdfxml
                :drakma
-               :yason
-
                :uuid
+               :yason
                )
-  :components 
+  :components
   ((:module "src"
             :components
             ((:file "main" :depends-on ("config" "view" "db"))
@@ -60,7 +59,7 @@ testbed case for the development."
              (:file "view" :depends-on ("config"))
              (:file "db" :depends-on ("config"))
              (:file "config")
-             
+
              (:module "mesh"
                       :components
                       ((:file "assets/archives" :depends-on ("package"))

@@ -16,11 +16,13 @@ before_install:
   - git submodule update --init --recursive
 
 install:
+  - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
   - sh -c 'make deps || true'
-  - bin/ensure-sane-sbcl
-#  - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
+#  - bin/ensure-sane-sbcl
 
 script:
   - make
   - make test
   
+addons:
+  srcclr: true

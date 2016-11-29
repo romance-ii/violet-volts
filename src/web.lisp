@@ -28,11 +28,14 @@
   "This is the singleton instance of the web application object.")
 (clear-routing-rules *web*)
 
+
+
 (defun wants-json-p ()
   "Does the client request Accept JSON format?"
   (or (search "application/json" (gethash "Accept" (request-headers *request*)))
       (search "text/json" (gethash "Accept" (request-headers *request*)))
-      (search "application/x-json" (gethash "Accept" (request-headers *request*)))))
+      (search "application/x-json" (gethash "Accept" (request-headers *request*)))
+      (search ".js" (request-uri *request*))))
 
 (defun redirect-to/html-body (uri)
   "Returns an octet array that gives a simple redirection link.
@@ -67,12 +70,12 @@ As a side effect, provides an extremely skeletal HTML redirection page via `REDI
 ;;; Default route
 
 (defroute route-root "/" ()
-  "This is encountered only in local testing. Redirect to the actual default page."
-  (redirect-to "/tootstest/"))
+          "This is encountered only in local testing. Redirect to the actual default page."
+          (redirect-to "/tootstest/"))
 
 (defroute route-/ "/tootstest/" ()
-  "Redirect to the login page from the default page for this API version."
-  (redirect-to "/tootstest/login"))
+          "Redirect to the login page from the default page for this API version."
+          (redirect-to "/tootstest/login"))
 
 
 
