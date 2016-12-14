@@ -59,7 +59,7 @@ testbed case for the development."
              (:file "view" :depends-on ("config"))
              (:file "db" :depends-on ("config"))
              (:file "config")
-
+             #+jscl
              (:module "mesh"
                       :components
                       ((:file "assets/archives" :depends-on ("package"))
