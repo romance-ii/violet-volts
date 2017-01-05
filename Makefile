@@ -40,6 +40,9 @@ deps:	.deps-installed~ ~/quicklisp/setup.lisp
 		--load quicklisp.lisp \
 		--eval '(quicklisp-quickstart:install)'
 
+TAGS:	$(shell find . -name \*.lisp)
+	ctags --languages=lisp -e -R -f TAGS
+
 .deps-installed~:	build-deps bin/do-install-deps
 	bin/do-install-deps
 	>> ~/.sbclrc

@@ -1,5 +1,6 @@
 #!/bin/bash
 scp tootstest.asd Makefile app.lisp tootsville.adventuring.click:tootsville.adventuring.click/
+rsync -essh -v bin/* tootsville.adventuring.click:tootsville.adventuring.click/bin/
 rsync -essh -v src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
 ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi \
 	|| exit
