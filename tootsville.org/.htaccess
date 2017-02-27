@@ -60,5 +60,5 @@ ErrorDocument 510 /error/510.shtml
 
 
 ## SITE REFERRER BANNING
-RewriteCond %{HTTP_REFERER} sharebutton.to [NC,OR]
-RewriteRule .* - [F]
+#RewriteCond %{HTTP_REFERER} sharebutton.to [NC,OR]
+#RewriteRule .* - [F]
