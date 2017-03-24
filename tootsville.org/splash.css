@@ -1,6 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Acme);
 @import url(https://fonts.googleapis.com/css?family=Cantarell);
 
+* { transition: 2s ease-in-out }
+
 html { 
     margin: 0; 
     padding: 0;
@@ -103,13 +105,7 @@ body>ul>li>a:hover {
     font-family: Acme;
     text-align: center;
     border: 2px solid #888;
-    height: 2rem; width: auto;
-}
-#tootsbook-feed>channel, #tootsbook-feed>image, #tootsbook-feed>site, #tootsbook-feed>item>* {
-    display: none;
-}
-#tootsbook-feed>item>title {
-    display: inline;
+    width: auto;
 }
 .post-footer {
     position: fixed;
@@ -117,7 +113,57 @@ body>ul>li>a:hover {
     font-family: Cantarell, serif; 
     font-size: .8rem; 
     color: #444;
+    border: 1px solid white;
+    background-color: white;
+    background-color: rgba(255,255,255,.6);
 }
 .post-footer a:link, .post-footer a:visited {
     color: #444;
+}
+
+@media screen and (max-width:60em) {
+    body { margin: 1.25rem 0 5rem 0; }
+    #builder-toot {
+       position: absolute;
+       top: 5rem;
+       left: 50vw;
+       width: 100%;
+       opacity: .20;
+    }
+    #logo {
+        float: left;
+        width: 4rem;
+        margin-top: 3rem;
+    }
+    body>ul {
+        margin-left: 3rem;
+        margin-right: 0;
+        max-width: 100%;
+        max-width: calc(100% - 4rem);
+        width: 20rem;
+    }
+    audio {
+        width: 100%;
+    }
+}
+
+@media screen and (max-height:30rem) {
+    body { margin: 0 0 0 0 }
+    .post-footer { position: relative; top: 0; left: 0 }
+    #tootsville { top: -1rem; width: 20rem }
+    #builder-toot { position: absolute; 
+        top: 0;
+        right: 0;
+        height: 100%;
+        opacity: .20 }
+    #logo { display: inline-block; width: 4rem; margin: 1rex; }
+    body>ul {
+        display: block;
+        margin-left: 3rem;
+        margin-right: 0;
+        max-width: 100%;
+        max-width: calc(100% - 4rem);
+        width: 20rem;
+    }
+    body>ul>li { display: inline-block; width: auto; }
 }
