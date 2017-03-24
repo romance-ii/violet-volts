@@ -2,14 +2,18 @@
 <section id="redirect">
   <ul>
     <li> <a id="tootsvilleorg"
-            href="https://www.tootsville.org/">Tootsville.org</a> </li>
+            href="https://www.tootsville.org/">Tootsville.org</a> 
+		<br> Fun, free, for everyone! </li>
     <li> <a id="play-now"
             href="https://tootsville.adventuring.click/play-now">Play
-    Now</a> </li>
+    Now</a> 
+		<br> No downloads needed! </li>
     <li> <a id="tootsbook"
-            href="https://www.tootsbook.com/tootsbook/">Tootsbook</a> </li>
+            href="https://www.tootsbook.com/tootsbook/">Tootsbook</a> 
+		<br> News &amp; Blogs </li>
     <li> <a id="wiki-wiki"
-            href="https://wikiwiki.tootsville.adventuring.click/">Wiki-Wiki</a> </li>
+            href="https://wikiwiki.tootsville.adventuring.click/">Wiki-Wiki</a> 
+		<br> Tootsville Encyclopædia </li>
   </ul>
 </section>
 
