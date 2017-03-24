@@ -13,6 +13,6 @@ Features:~{~% • ~:(~a~)~^~38t • ~:(~a~)~} "
 
 ;; Check for ASDF v3.1 and bail out if it's not available
 (unless (asdf::version<= "3.1" (asdf:asdf-version))
-  (error "ASDF is too old to be useful in 2016"))
+  (error "ASDF is too old to be useful in 2017"))
 
 

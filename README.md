@@ -16,7 +16,7 @@ reliable;   however,    this   new   version   is    extremely   “alpha”
 quality software.
 
 Components are  being added in  chunks based  on various test  and pilot
-programs that  have been created  individually, mostly in  the 2012-2016
+programs that  have been created  individually, mostly in  the 2012-2017
 time frame.
 
 The pilot  program for Violet  Volts, from which  it takes its  name via
@@ -24,7 +24,7 @@ anagram, is Tootsville Ⅴ, a game accessible via http://Tootsville.org/ —
 For         details         on          that         game,         visit
 https://wiki-wiki.tootsville.adventuring.click/wikiwiki/
 
-Development is being financed entirely (as  of August, 2016) by the Fenn
+Development is being financed entirely (as  of March, 2017) by the Fenn
 Pocock family.
 
 ## Testing
