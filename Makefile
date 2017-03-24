@@ -20,7 +20,7 @@
 all:	bin doc
 
 clean:
-	$(MAKE) -C src/lib/jscl clean
+	-$(MAKE) -C src/lib/jscl clean
 	-rm -f tootstest.cgi tootstest.cgi.new \
 		js/*.js css/*.css \
 		static/js/*.js static/js/*.map static/css/*.css \
@@ -105,7 +105,7 @@ src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 	then \
 		ln -sf bin/sbcl ~/bin/ ; \
 	fi
-	$(MAKE) -C src/lib/jscl
+	$(MAKE) -C src/lib/jscl || ( cd src/lib/jscl ; ./make.sh )
 
 # required to make Closure happy
 js/undef-require.js:	
