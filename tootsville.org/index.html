@@ -53,7 +53,7 @@ sizes="192x192">
       	x-href="//tootsville.adventuring.click/play-now/">Play Now? …
       	<small>Coming Soon</small>
       </a> </li>
-      <li> <a id="blog" href="//tootsbook.com/tootsbook/">News &amp; Blogs</a> </li>
+      <li> <a id="tootsbook" href="//tootsbook.com/tootsbook/">News &amp; Blogs</a> </li>
       <li>  <a  id="wiki-wiki"  href="//wikiwiki.tootsville.adventuring.click/wikiwiki/">Learn
           More</a> </li>
     </ul>
@@ -113,6 +113,19 @@ sizes="192x192">
        "gameLocation":
        "//wikiwiki.tootsville.adventuring.click/wikiwiki/Tootanga"                      
     } </script>
+
+    <div id="tootsbook-feed"><a href="https://www.tootsbook.com/tootsbook/">Tootsbook has the latest news…</a></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+      $.get('https://www.tootsbook.com/tootsbook/feed?format=rss',
+        function (feed) {
+          var latest = $($(feed).find('item')[0])
+          $('#tootsbook-feed').html('<small>Latest News on Tootsbook: &nbsp; </small>' + 
+      '<a href="' + latest.find('link').text() + '">' + 
+	     latest.find('title').text() + '</a>');
+        });
+    </script>
 
    <p class="post-footer">
      © 2016,2017 brfp. Use is subject to our <a
