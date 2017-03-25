@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/bin/bash -xe
+make tootstest.cgi
 scp tootstest.asd Makefile app.lisp tootsville.adventuring.click:tootsville.adventuring.click/
 rsync -essh -v bin/* tootsville.adventuring.click:tootsville.adventuring.click/bin/
 rsync -essh -v src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
-ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi \
-	|| exit
+ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi
 rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
 	tootsville.adventuring.click:tootsville.adventuring.click/
 rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
+git tag -s server-push-$(date +%Y-%m-%d-%H:%M) HEAD -m "Pushed to server from $(hostname) by $(who am i) at $(date); $(git status -s -uno)"
