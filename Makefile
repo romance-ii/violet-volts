@@ -176,7 +176,7 @@ js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 
 test:	bin
 	./tootstest.cgi test
-	$(MAKE) -C src/lib/jscl test
+	$(MAKE) -C src/lib/jscl test || (cd src/lib/jscl && ./run-tests.sh)
 
 doc/violet-volts.pdf:	doc/violet-volts.texi
 
