@@ -3,3 +3,4 @@ closure-compiler
 nodejs-less
 nodejs-clean-css
 gnupg
+uglify-js
