@@ -53,7 +53,8 @@
 (defvar *renderer* nil)
 
 ;;; If no GPU, may need to set mesh.computeBonesUsingShaders = false for
-;;; each skeletal mesh to get reasonable performance. This is the global default.
+;;; each  skeletal  mesh to  get  reasonable  performance. This  is  the
+;;; global default.
 
 ;;; TODO: Profile the  playback frame rate. If  quality is unacceptable,
 ;;; have  a Parrot  offer to  “try some  things.” Alternate  the various
