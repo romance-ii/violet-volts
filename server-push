@@ -7,4 +7,5 @@ ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.
 rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
 	tootsville.adventuring.click:tootsville.adventuring.click/
 rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
-git tag -s server-push-$(date +%Y-%m-%d-%H:%M) HEAD -m "Pushed to server from $(hostname) by $(who am i) at $(date); $(git status -s -uno)"
+git tag -s server-push-$(date +%Y-%m-%d-%H:%M) HEAD \
+    -m "Pushed to server from $(hostname) by $(who am i) at $(date); $(git status -s -uno)"
