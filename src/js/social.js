@@ -23,10 +23,10 @@ window.fbAsyncInit = function() {
     js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1265378050154137";
     fjs.parentNode.insertBefore(js,fjs);
-} (document,'script','facebook-jssdk'));
+})(document,'script','facebook-jssdk');
 
 /* Google Analytics */
-function(){
+(function(){
     ga = window['ga'] || function() {
         (ga['q'] = ga['q'] || []).push(arguments)
     };
@@ -43,9 +43,9 @@ function(){
     ga('require', 'outboundLinkTracker');
     ga('require', 'urlChangeTracker');
     ga('send', 'pageview');
-}();
+})();
 
-function(){
+(function(){
     var gameState = {
         googleUser: false,
         facebookUser: false,
@@ -219,7 +219,7 @@ function(){
             console.log("Sign in to game mesh now; get directory");
             var xhr = new XMLHttpRequest();
             ga('send','event','Game Sign-In','Start','Start');
-            romance.xhrSetUpPost(xhr, '/gossip', romance.signInToMesh,);
+            romance.xhrSetUpPost(xhr, '/gossip', romance.signInToMesh);
             xhr.send('google-api-token=' + romance.googleAPIToken());
         },
         quitFromGame: function() {
@@ -243,7 +243,7 @@ function(){
             FB.logout();
         },
         disconnectMeshLink: function (link) {
-        }
+        },
         quitFromMesh: function() {
             if (! gameState.meshLinks) { return; }
             ga('send','event','Mesh','Disconnect','Disconnecting');
@@ -276,10 +276,10 @@ function(){
         },
         xhrSetUpPost: function(xhr,uri,onLoad) {
             xhr.open('PUT', romance.serverURL(uri));
-            xhr.setRequestHeader('Accept': 'application/json');
-            xhr.setRequestHeader('Content-Type': 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = onLoad;
             romance.xhrReportErrors(xhr);
         }
     };
-}();
+})();
