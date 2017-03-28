@@ -43,3 +43,8 @@ ga('require', 'eventTracker');
 ga('require', 'outboundLinkTracker');
 ga('require', 'urlChangeTracker');
 ga('send', 'pageview');
+
+function gotGoogleSignIn() {
+    console.log("Got Google sign-in");
+    curry_lisp('LOGIN::GOT-GOOGLE-SIGN-IN')
+}
