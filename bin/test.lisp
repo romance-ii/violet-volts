@@ -9,21 +9,21 @@
     (let ((systems
            (loop
               for index from 1
-                
-              for form = 
+
+              for form =
                 (handler-case
                     (read asd nil nil)
                   (error (error)
                     (warn "Error reading ~:r form in ~a: ~a"
                           index asd-path error)))
-                
+
               while form
-              when (and (listp form) 
+              when (and (listp form)
                         (string-equal (first form) "DEFSYSTEM"))
               collect (second form))))
       (cond ((null systems)
              (warn "No DEFSYSTEM forms found in ~a" asd-path))
-            (t 
+            (t
              (format *trace-output*
                      "~&;;* Testing ~r systems from ~a (~{~a~^, ~})~%"
                      (length systems)

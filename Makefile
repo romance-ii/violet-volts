@@ -176,7 +176,7 @@ js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 
 test:	bin
 	./tootstest.cgi test
-	$(MAKE) -C src/lib/jscl test
+	$(MAKE) -C src/lib/jscl test || (cd src/lib/jscl && ./run-tests.sh)
 
 doc/violet-volts.pdf:	doc/violet-volts.texi
 
@@ -192,11 +192,11 @@ doc/violet-volts.html.tar.bz2:	doc/violet-volts.html.tar
 doc/violet-volts.html.tar.xz:	doc/violet-volts.html.tar
 	xz -9 -c < $< > $@
 
-doc/violet-volts.html.tar:	doc/violet-volts.html.d/violet-volts.html\
+doc/violet-volts.html.tar:	doc/violet-volts.html.d/violet-volts.html \
 		doc/violet-volts.texi
 	cd doc; tar cf violet-volts.html.tar violet-volts.html.d
 
-doc/violet-volts.html.zip:	doc/violet-volts.html.d/violet-volts.html\
+doc/violet-volts.html.zip:	doc/violet-volts.html.d/violet-volts.html \
 		doc/violet-volts.texi
 	cd doc; zip -9 violet-volts.html.zip violet-volts.html.d
 
@@ -222,4 +222,6 @@ doc:	doc/violet-volts.pdf doc/violet-volts.info doc/violet-volts.txt \
 
 doc/violet-volts.texi:	tootstest.cgi
 	./tootstest.cgi write-docs
+	ln doc/tootstest.texi doc/violet-volts.texi
+
 
