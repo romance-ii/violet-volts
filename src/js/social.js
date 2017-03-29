@@ -1,57 +1,22 @@
 /* Social network logins and analytics */
 
-/* Facebook API */
-window.fbAsyncInit = function() {
-    FB.init({ appId: '1265378050154137',
-              xfbml: true,
-              version: 'v2.7'});
-};
+console.log(" _____                                        ___________ \n" +
+            "|  __ \\                                      |_   ___   _|\n" +
+            "| |__) |___  _ __ ___   __ _ _ __   ___ ___    | |   | |  \n" +
+            "|  _  // _ \\| '_ ` _ \\ / _` | '_ \\ / __/ _ \\   | |   | |  \n" +
+            "| | \\ \\ (_) | | | | | | (_| | | | | (_|  __/  _| |_ _| |_ \n" +
+            "|_|  \\_\\___/|_| |_| |_|\\__,_|_| |_|\\___\\___| |___________|\n" +
+            "                                                          \n" +
+            "Romance Ⅱ Game System");
 
-// (function(d,s,id){
-//     var js, fjs = d.getElementsByTagName(s)[0];
-//     if (d.getElementById(id)) {return;}
-//     js = d.createElement(s);
-//     js.id = id;
-//     js.src = "//connect.facebook.net/en_US/sdk.js";
-//     fjs.parentNode.insertBefore(js,fjs);
-// } (document,'script','facebook-jssdk'));
 
-(function(d,s,id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if(d.getElementById(id))return;
-    js=d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1265378050154137";
-    fjs.parentNode.insertBefore(js,fjs);
-})(document,'script','facebook-jssdk');
-
-/* Google Analytics */
-(function(){
-    ga = window['ga'] || function() {
-        (ga['q'] = ga['q'] || []).push(arguments)
-    };
-    ga["l"] = +new Date;
-    ga('create', 'UA-80917352-1', 'auto');
-    ga('set', 'transport', 'beacon');
-    ga('set','appName','tootstest');
-    ga('set','appVersion','0.0.2');
-    /*      if (gameState.playerInfo) {
-            ga('set', 'userId', gameState.playerInfo.playerID);
-            } */
-    ga('require', 'linkid');
-    ga('require', 'eventTracker');
-    ga('require', 'outboundLinkTracker');
-    ga('require', 'urlChangeTracker');
-    ga('send', 'pageview');
-})();
-
-(function(){
+window.romance = (function(){
     var gameState = {
         googleUser: false,
         facebookUser: false,
         oauthUser: false
     };
-    window.romance = {
+    return {
         googleLoggedInP: function() { return !! gameState.googleUser },
         facebookLoggedInP: function() { return !! gameState.facebookUser },
         oauthLoggedInP: function() { return !! gameState.oauthUser },
@@ -280,6 +245,65 @@ window.fbAsyncInit = function() {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = onLoad;
             romance.xhrReportErrors(xhr);
+        },
+        currentPlayerID: function() {
+            return gameState.playerInfo && gameState.playerInfo.id;
+        },
+        currentPlayerNick: function() {
+            return gameState.playerInfo && gameState.playerInfo.nickname;
         }
     };
 })();
+
+if ( ! window.romance ) {
+    console.error("Could not load Romance Ⅱ module");
+    alert("Unable to load the game software. Perhaps you need to update your web browser to the latest Firefox?");
+}
+
+console.log("Main library of functions has " + (Object.keys(romance).length) + " members.");
+
+/* Facebook API */
+window.fbAsyncInit = function() {
+    FB.init({ appId: '1265378050154137',
+              xfbml: true,
+              version: 'v2.7'});
+};
+
+// (function(d,s,id){
+//     var js, fjs = d.getElementsByTagName(s)[0];
+//     if (d.getElementById(id)) {return;}
+//     js = d.createElement(s);
+//     js.id = id;
+//     js.src = "//connect.facebook.net/en_US/sdk.js";
+//     fjs.parentNode.insertBefore(js,fjs);
+// } (document,'script','facebook-jssdk'));
+
+(function(d,s,id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if(d.getElementById(id))return;
+    js=d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1265378050154137";
+    fjs.parentNode.insertBefore(js,fjs);
+})(document,'script','facebook-jssdk');
+
+/* Google Analytics */
+(function(){
+    ga = window['ga'] || function() {
+        (ga['q'] = ga['q'] || []).push(arguments)
+    };
+    ga["l"] = +new Date;
+    ga('create', 'UA-80917352-1', 'auto');
+    ga('set', 'transport', 'beacon');
+    ga('set','appName','tootstest');
+    ga('set','appVersion','0.0.2');
+    if (romance.currentPlayerID()) {
+        ga('set', 'userId', romance.currentPlayerID());
+    } 
+    ga('require', 'linkid');
+    ga('require', 'eventTracker');
+    ga('require', 'outboundLinkTracker');
+    ga('require', 'urlChangeTracker');
+    ga('send', 'pageview');
+})();
+
