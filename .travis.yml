@@ -7,6 +7,8 @@ git:
 env:
   matrix:
     - LISP=sbcl
+    - LISP=ecl
+    - LISP=ccl
 
 before_install:
   - echo "Changing submodule pointers to use HTTPS URL's for Travis"
