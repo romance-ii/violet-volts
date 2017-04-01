@@ -5,7 +5,8 @@
 (defclass user ()
   ((google-token :type string :accessor user-google-token :initarg :google-token)
    (id :type fixnum :accessor user-id :initarg :id)
-   (remote-address :accessor user-remote-address :initarg :remote-address)))
+   (remote-address :accessor user-remote-address :initarg :remote-address)
+   (sdp-offer :accessor user-sdp-offer :initarg :sdp-offer)))
 
 (defun user= (a b &rest rest)
   (and (equal (user-id a) (user-id b))
@@ -27,15 +28,21 @@
                        (set= :google-token token)))
             (find-user-by-google-token token))))))
 
+(defun request-param-value (param)
+  (when-let (found (assoc
+                    param
+                    (request-body-parameters *request*)
+                    :test 'equal))
+    (cdr found)))
+
 (defun gossipnet-update-client (user)
   (setf (user-remote-address user) (request-remote-addr  *request*))
+  (when-let (sdp (request-param-value "sdp"))
+    (setf (user-sdp-offer user) sdp))
   (pushnew user *gossip-users* :test #'user=))
 
 (defun find-user-from-session ()
-  (when-let ((google-token (when-let (found (assoc "google-api-token"
-                                                   (request-body-parameters *request*)
-                                                   :test 'equal))
-                             (cdr found))))
+  (when-let ((google-token (request-param-value "google-api-token")))
     (find-user-by-google-token google-token)))
 
 (setf (ningle:route *web* "/tootstest/action/gossip"
