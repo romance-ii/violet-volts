@@ -48,8 +48,10 @@ TAGS:	$(shell find . -name \*.lisp)
 	>> ~/.sbclrc
 	>.deps-installed~
 
-deploy:	bin test
+server-push: tootstest.cgi
 	./server-push
+
+deploy:	bin test server-push doc-publish
 
 # TODO: fix version labels, filenames magically
 doc-publish:	doc
