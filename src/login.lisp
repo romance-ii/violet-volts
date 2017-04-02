@@ -10,4 +10,6 @@ There is a  lot of “stuff” happening  on this page —  optimizing it will
 probably be a Godsend at some point. XXX
 
 This page should have some more precise headers to assist in caching."
-          (render #P"login.html"))
+          (render #P"login.html"
+                  (list :server-url
+                        "https://tootsville.adventuring.click/tootstest")))

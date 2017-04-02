@@ -294,11 +294,11 @@
                                    href="https://myaccount.google.com/">at Google.com</a> </p>
 
         <img id="welcome-photo" align="middle"> <span id="welcome-name">???</span>
-        <button onclick="quitFromGoogle();">Sign out</button>
+        <button onclick="romance.quitFromGoogle();">Sign out</button>
       </div>
       <div id="google-not-signed-in">
         <center  style="min-height: 2em">
-          &nbsp; <div class="g-signin2" data-onsuccess="gotGoogleSignIn"></div>
+          &nbsp; <div class="g-signin2" data-onsuccess="romance.gotGoogleSignIn"></div>
         </center>
       </div>
     </div>
@@ -333,7 +333,15 @@
 </div>
 
 <div id="too-tiny">
-  Too tiny! Resize the window to play!
+  Too tiny! Resize the window to play! <br>
+  <small>(Is this your whole screen? I'm sorry ☹)</small>
 </div>
+
+<script language='javascript'>
+  <!--
+window.serverInfo = { 'url': "{{ server-url }}",
+                      'peers': [] };
+// -->
+</script>
 
 {% endblock %}
