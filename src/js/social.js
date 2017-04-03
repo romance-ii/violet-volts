@@ -134,15 +134,13 @@ window.romance = (function(){
                 romance.blockNone(! signedInP));
         },
         updateLoginOverlay: function() {
-            if ( (! romance.loggedInP()) ||
-                 (!! gameState.overlayActive) ) {
+            if (! romance.loggedInP() ) {
+                console.log('user not signed in');
+                gameState.overlayActive = 'login-overllay';
+                romance.updateSignInLayers();
+            }
+            if (!! gameState.overlayActive) {
                 romance.showOverlayLayer();
-                if (! romance.loggedInP() ) {
-                    console.log('user not signed in');
-                }
-                if (! romance.elementDisplayBlockP ('login-overlay')) {
-                    romance.showLoginOverlay ();
-                }
             } else {
                 romance.hideLoginOverlay();
             }
@@ -275,7 +273,8 @@ window.romance = (function(){
             if (gameState.playerInfo) {
                 romance.updatePeers();
             } else {
-                console.log('waiting for game server reply');
+                gameState.overlayActive = 'game-welcome';
+                console.log('waiting for directory server reply');
                 return;
             }
             romance.updateOverlay();
@@ -378,7 +377,14 @@ window.romance = (function(){
         },
         gotGoogleSignIn: function(user) {
             console.log("Got Google sign-in", user);
+            var wantSignInP = false;
+            if (! romance.loggedInP ()) {
+                wantSignInP = true;
+            }
             gameState.googleUser = user;
+            if (wantSignInP) {
+                romance.signInToGame();
+            }
             romance.gameStatusUpdate();
         },
         networkError: function(condition) {
@@ -466,5 +472,6 @@ window.fbAsyncInit = function() {
     ga('send', 'pageview');
 })();
 
+window.googleSignInButton = romance.googleSignInButton;
 window.gotGoogleSignIn = romance.gotGoogleSignIn;
 window.gotFacebookSignin = romance.gotFacebookSignin;
