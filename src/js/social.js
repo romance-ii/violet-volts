@@ -234,7 +234,7 @@ window.romance = (function(){
                 romance.setChannelEvents(firstPeer,event.channel,'?FIXME?');
                 romance.gossip({v:'i-am',nick:romance.currentPlayerNick()});
             };
-            var gossipChannel = romance.MakeChannel(firstPeer, 'System/Gossip');
+            var gossipChannel = romance.makeChannel(firstPeer, 'System/Gossip');
             firstPeer._$gossipChannel = gossipChannel;
             firstPeer.createOffer(function(sdp) {
                 firstPeer.setLocalDescription(sdp);
