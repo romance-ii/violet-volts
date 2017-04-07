@@ -30,6 +30,12 @@
 
 
 
+(setf (ningle:requirement *web* :content-type)
+      (lambda (content-type)
+        (string-equal content-type (request-content-type *request*))))
+
+
+
 (defun wants-json-p ()
   "Does the client request Accept JSON format?"
   (let ((accept (gethash "Accept" (request-headers *request*))))
