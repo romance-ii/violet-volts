@@ -32,7 +32,10 @@
 
 (setf (ningle:requirement *web* :content-type)
       (lambda (content-type)
-        (string-equal content-type (request-content-type *request*))))
+        (etypecase content-type
+          (string (string-equal content-type (request-content-type *request*)))
+          (cons (member (request-content-type *request*) content-type
+                        :test #'string-equal)))))
 
 
 
