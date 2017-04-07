@@ -69,11 +69,7 @@ As a side effect, provides an extremely skeletal HTML redirection page via `REDI
 
 ;;; Default route
 
-(defroute route-root "/" ()
-          "This is encountered only in local testing. Redirect to the actual default page."
-          (redirect-to "/tootstest/"))
-
-(defroute route-/ "/tootstest/" ()
+(defroute route-/ "/" ()
           "Redirect to the login page from the default page for this API version."
           (redirect-to "/tootstest/login"))
 

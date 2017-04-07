@@ -128,7 +128,7 @@ js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 		--source-map static/$@.map \
 		--screw-ie8 \
 		-o js/mesh.yug.js \
-		-m -c		
+		-m -c	
 
 js/%.yug.js: src/js/%.js
 	uglifyjs $< \
