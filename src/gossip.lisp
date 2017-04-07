@@ -79,45 +79,43 @@
 (defun get-user-info (user)
   (let ((answer (user-sdp-answer user)))
     (gossipnet-update-client user)
-    (setf (getf (response-headers *response*) :content-type) "application/json") 
+    (setf (getf (response-headers *response*) :content-type) "application/json")
     (let ((offers (active-sdp-offers user)))
       (format nil "{\"id\":~d,~
 \"toots\":{\"~:*~d\": \"Toot ~:*~d\"},~
 \"nickname\": \"Toot ~:*~d\",~
 \"offers\":[~{\"~A\"~^,~}]~
-~@[,\"answer\":~a~]}" 
+~@[,\"answer\":~a~]}"
               (user-id user) offers answer))))
 
-(setf (ningle:route *web* "/tootstest/action/gossip/answer"
-                    :method :post)
-      (lambda (x)
-        (declare (ignore x)) 
-        (let ((answeror (find-user-from-session))
-              (offeror (find-user-by-sdp (request-param-value "offeror"))))
-          (cond ((user-sdp-answer offeror)
-                 (setf (response-status *response*) 409)
-                 "{offeror:\"not-available\"}")
-                (t
-                 (setf (user-sdp-answer offeror) (request-param-value "answer"))
-                 (setf (response-status *response*) 202)
-                 "202")))))
+(defroute post/action/gossip/answer
+    ("/tootstest/action/gossip/answer"
+     :method :post :accept '("application/json")) ()
+     (let ((answeror (find-user-from-session))
+           (offeror (find-user-by-sdp (request-param-value "offeror"))))
+       (declare (ignore answeror)) ; for now TODO
+       (cond ((user-sdp-answer offeror)
+              (setf (response-status *response*) 409)
+              "{offeror:\"not-available\"}")
+             (t
+              (setf (user-sdp-answer offeror) (request-param-value "answer"))
+              (setf (response-status *response*) 202)
+              "202"))))
 
-(setf (ningle:route *web* "/tootstest/action/gossip"
-                    :method :put)
-      (lambda (x)
-        (declare (ignore x)) 
-        (let ((user (find-user-from-session)))
-          (unless user
-            (error "No user"))
-          (setf (response-status *response*) 201)
-          (get-user-info user))))
+(defroute put/action/gossip ("/tootstest/action/gossip"
+                             :method :put :accept '("application/json"))
+  ()
+  (let ((user (find-user-from-session)))
+    (unless user
+      (error "No user"))
+    (setf (response-status *response*) 201)
+    (get-user-info user)))
 
-(setf (ningle:route *web* "/tootstest/action/gossip"
-                    :method :get)
-      (lambda (x)
-        (declare (ignore x)) 
-        (let ((user (find-user-from-session)))
-          (unless user
-            (error "No user"))
-          (assert (member user *gossip-users* :test #'user=))
-          (get-user-info user))))
+(defroute /action/gossip ("/tootstest/action/gossip"
+                          :method :get :accept '("application/json"))
+  ()
+  (let ((user (find-user-from-session)))
+    (unless user
+      (error "No user"))
+    (assert (member user *gossip-users* :test #'user=))
+    (get-user-info user)))
