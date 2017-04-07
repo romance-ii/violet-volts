@@ -226,5 +226,3 @@ doc:	doc/violet-volts.pdf doc/violet-volts.info doc/violet-volts.txt \
 doc/violet-volts.texi:	tootstest.cgi
 	./tootstest.cgi write-docs
 	ln -f doc/tootstest.texi doc/violet-volts.texi
-
-
