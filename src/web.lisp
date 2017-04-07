@@ -32,10 +32,11 @@
 
 (defun wants-json-p ()
   "Does the client request Accept JSON format?"
-  (or (search "application/json" (gethash "Accept" (request-headers *request*)))
-      (search "text/json" (gethash "Accept" (request-headers *request*)))
-      (search "application/x-json" (gethash "Accept" (request-headers *request*)))
-      (search ".js" (request-uri *request*))))
+  (let ((accept (gethash "Accept" (request-headers *request*))))
+    (or (search "application/json" accept)
+        (search "text/json" accept)
+        (search "application/x-json" accept)
+        (search ".js" (request-uri *request*)))))
 
 (defun redirect-to/html-body (uri)
   "Returns an octet array that gives a simple redirection link.
