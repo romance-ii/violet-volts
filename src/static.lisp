@@ -7,7 +7,8 @@
 buffers the  entire file  into RAM, so  it should not  be used  for very
 large files. There is currently  no caching whatsoever, either, although
 the OS may do some disc caching."
-  (check-type content-type string "A MIME content-type, eg, text/html;charset=utf-8")
+  (check-type content-type string
+              "A MIME content-type, eg, text/html;charset=utf-8")
   (check-type pathname (or string pathname)
               "The pathname ofa local file to be sent.")
   (cond
