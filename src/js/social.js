@@ -13,7 +13,8 @@ window.romance = (function(){
     var gameState = {
         googleUser: false,
         facebookUser: false,
-        oauthUser: false
+        oauthUser: false,
+        peers: []
     };
     window.gameState = gameState;
     return {
@@ -115,13 +116,14 @@ window.romance = (function(){
                 romance.blockNone(blockP);
         },
         setActiveOverlay: function (overlay) {
-            romance.overlayActive = overlay;
+            gameState.overlayActive = overlay;
             for (layer in {'login-overlay':0,
                            'game-welcome':0,
                            'help-overlay':0}) {
                 romance.setElementDisplayBlock(layer,
                                                (layer == overlay)); 
             }
+            romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
         },
         hideLoginOverlay: function() {
             if ('none' != romance.elementStyle('login-overlay')) {
@@ -222,14 +224,14 @@ window.romance = (function(){
                 console.error('Error in channel ' + name, JSON.stringify(event, null, '\t'));
             };
             channel.onclose = function(event) {
-                if (gameState.selfPeers[name] == connection)
-                { delete gameState.selfPeers[name]; }
+                if (gameState.peers[name] == connection)
+                { delete gameState.peers[name]; }
             };
         },
         makeChannel: function (connection, name) {
             var channel = connection.createDataChannel(name);
             romance.setChannelEvents(connection,channel,name);
-            gameState.selfPeers[name] = connection;
+            gameState.peers[name] = connection;
             return channel;
         },
         advertiseSDP: function(description) {
@@ -273,10 +275,10 @@ window.romance = (function(){
             var response = update.currentTarget.response;
             if (response && response.answer) {
                 var answer =  JSON.parse(decodeURIComponent(answer.replace(/\+/g,'%20')));
-                var rendezvous = serverInfo.selfPeers["Rendezvous"];
+                var rendezvous = gameState.peers["Rendezvous"];
                 rendezvous.setRemoteDescription(answer);
-                serverInfo.selfPeers[serverInfo.selfPeers.length + 1] = rendezvous;
-                serverInfo.selfPeers["Rendezvous"] = null;
+                gameState.peers[gameState.peers.length + 1] = rendezvous;
+                gameState.peers["Rendezvous"] = null;
                 updatePeers();
             }
         },
@@ -313,14 +315,14 @@ window.romance = (function(){
             });
         },
         updatePeers: function() {
-            if ( (! gameState.selfPeers) ||
-                 0 == gameState.selfPeers.length) {
-                gameState.selfPeers = {};
+            if ( (! gameState.peers) ||
+                 0 == gameState.peers.length) {
+                gameState.peers = {};
                 romance.startFirstPeer();
             }
             else {
                 var connected = 0;
-                Object.keys(gameState.selfPeers).forEach(function(peer) {
+                Object.keys(gameState.peers).forEach(function(peer) {
                     if (peer._$gossipChannel.readyState == 'open')
                     { ++connected; }
                 });
