@@ -5,19 +5,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.1/platform.min.js"></script>
 <h1> Romance Ⅱ Game System </h1>
 
-<h2> Server Process </h2>
+<section id="server">
+  <h2> Server Process </h2>
 
-<p>      The      server     product      is      <tt      id="product">{{     product      }}</tt>,
-  version               <tt              id="version">{{               version              }}</tt>,
-  compiled <span id="build-date">{{ build-date }}</span>. </p>
-<p> I am running on  a <span id="machine-type">{{ machine.type }}</span>
-  machine (<small>version
-    <span      id="machine-version">{{     machine.version      }}</span></small>),
-  named   <span  id="machine-instance">{{   machine.instance  }}</span>.
-  Its system software is <span id="software-type">{{ software.type }}</span>, version
-  <span id="software-version">{{  software.version }}</span>.  My Common
-  Lisp implementation is <span id="lisp-type">{{ lisp.type }}</span>,
-  version <span id="lisp.version">{{ lisp.version }}</span>.</p>
+  <p>      The      server     product      is      <tt      id="product">{{     product      }}</tt>,
+    version               <tt              id="version">{{               version              }}</tt>,
+    compiled <span id="build-date">{{ build-date }}</span>. </p>
+  <p> I am running on  a <span id="machine-type">{{ machine.type }}</span>
+    machine (<small>version
+      <span      id="machine-version">{{     machine.version      }}</span></small>),
+    named   <span  id="machine-instance">{{   machine.instance  }}</span>.
+    Its system software is <span id="software-type">{{ software.type }}</span>, version
+    <span id="software-version">{{  software.version }}</span>.  My Common
+    Lisp implementation is <span id="lisp-type">{{ lisp.type }}</span>,
+    version <span id="lisp.version">{{ lisp.version }}</span>.</p>
+</section>
+
+<p> For copyright information and acknowledgements, continue reading. </p>
+
+<section id="u-a">
+<h2> Your User-Agent (Browser) </h2>
+
+<p> Your web browser information appears  below. We may request this for
+  technical support. </p>
+
+<p>   If   you   encounter   a   problem   while   playing   the   game,
+  the <q>ladybug</q> icon  can be used to submit a  bug report that will
+  contain useful information like this. </p>
+
+<noscript><p class="warning">Javascript  is not  working; you will  not be able  to play  this game.
+    <a href="http://enable-javascript.com/">Enable JavaScript.</a></p></noscript>
+
+<ul id="ua-info">
+  <li> User-Agent/Browser: <strong><script>document.writeln(platform.description)</script></strong> </li>
+  <li> HTTP User-Agent header: <tt><script>document.writeln(navigator.userAgent)</script></tt> </li>
+  <li> Layout engine: <script>document.writeln(platform.layout)</script> </li>
+  <li> Device/product: <script>document.writeln((platform.manufacturer || 'Any') +' '+(platform.product || 'General Computer'))</script> </li>
+</ul>
+</section>
+
+<section id="©">
 
 <h2> Copyright </h2>
 
@@ -26,8 +53,8 @@
   license. </p>
 
 
-<h2> <img src="https://www.gnu.org/graphics/agplv3-155x51.png"
-          alt="AGPLv3">License </h2>
+<h3> <img src="https://www.gnu.org/graphics/agplv3-155x51.png"
+          alt="AGPLv3">License </h3>
 
 <p> This program is free software: you can redistribute it and/or modify
   it             under              the             terms             of
@@ -75,7 +102,6 @@
        style="height: 3.5em" align="right"> </h4>
 
 <p> Tootsville characters use data from the YAGO ontology. </p>
-
 
 <p>YAGO  can only  be so  large because  it is  based on  other sources.
   We would like to thank</p>
@@ -146,21 +172,9 @@
   database.  Title  to copyright  in  this  software, database  and  any
   associated documentation shall at all  times remain with University of
   Texas at Dallas and LICENSEE agrees to preserve same. </p>
+</section>
 
-<h2> Your User-Agent (Browser) </h2>
-
-<p> Your web browser information appears below. We may request this for technical support. </p>
-
-<noscript><p class="warning">Javascript  is not  working; you will  not be able  to play  this game.
-    <a href="http://enable-javascript.com/">Enable JavaScript.</a></p></noscript>
-
-<ul id="ua-info">
-  <li> User-Agent/Browser: <strong><script>document.writeln(platform.description)</script></strong> </li>
-  <li> HTTP User-Agent header: <tt><script>document.writeln(navigator.userAgent)</script></tt> </li>
-  <li> Layout engine: <script>document.writeln(platform.layout)</script> </li>
-  <li> Device/product: <script>document.writeln((platform.manufacturer || 'Any') +' '+(platform.product || 'General Computer'))</script> </li>
-</ul>
-
+<section id="services">
 <h2> Services </h2>
 
 <p> Source code hosted courtesy of
@@ -178,7 +192,7 @@
   <img
     src="https://api.travis-ci.org/romance-ii/violet-volts.svg?branch=tootstest"> </p>
 
-<h2> Non-Free Partners </h2>
+<h3> Non-Free Partners </h3>
 
 <p> {{product}} is made with  support from proprietary software provided
   by these organizations: </p>
@@ -195,7 +209,17 @@
   <a href="https://circleci.com/"
      ><img src="https://d3r49iyjzglexf.cloudfront.net/logo-circleci-9a5afe10588065ad315b972de5ed572c25fb39a973e4b9cd28a35f88694f1fa0.svg"
            title="Circle CI"></a>
+
+  <a href="https://instabug.com/"
+     >Instabug</a>
+
+  <a href="https://rollbar.com/"
+     >Rollbar</a>
+
+  <a href="https://codeship.com/"
+     >Codeship</a>
 </div>
+</section>
 
 <h2> Power of Freedom </h2>
 
