@@ -320,7 +320,7 @@ window.romance = (function(){
             }
             else {
                 var connected = 0;
-                Object.keys(gameState.selfPeers)forEach(function(peer) {
+                Object.keys(gameState.selfPeers).forEach(function(peer) {
                     if (peer._$gossipChannel.readyState == 'open')
                     { ++connected; }
                 });
