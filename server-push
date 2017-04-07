@@ -1,14 +1,19 @@
 #!/bin/bash -xe
 make tootstest.cgi
+
+rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
+	tootsville.adventuring.click:tootsville.adventuring.click/
+
 scp tootstest.asd Makefile app.lisp tootsville.adventuring.click:tootsville.adventuring.click/
 rsync -essh -v bin/* tootsville.adventuring.click:tootsville.adventuring.click/bin/
 rsync -essh -v src/*.lisp tootsville.adventuring.click:tootsville.adventuring.click/src/
+
+
 ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.cgi
-rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
-	tootsville.adventuring.click:tootsville.adventuring.click/
+
 rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
-git tag -s server-push-$(date +%Y-%m-%d-%H%M) HEAD \
-    -m "Pushed to server from $(hostname) by $(who am i) at $(date); $(git status -s -uno)"
+
+
 until curl  https://tootsville.adventuring.click/tootstest/version 2>/dev/null | \
 	perl -ne 'if (/build-date">(20..-..?-..?)</) {print $1}' | \
 	grep $( date +%Y-%m-%d | sed -e s/-0/-/g )
@@ -16,3 +21,6 @@ do
 	echo "New version not yet running (FastCGI cache?)"
 	sleep 30 
 done
+
+git tag -s server-push-$(date +%Y-%m-%d-%H%M) HEAD \
+    -m "Pushed to server from $(hostname) by $(who am i) at $(date); $(git status -s -uno)"

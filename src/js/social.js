@@ -114,6 +114,15 @@ window.romance = (function(){
             romance.elementStyle(id).display =
                 romance.blockNone(blockP);
         },
+        setActiveOverlay: function (overlay) {
+            romance.overlayActive = overlay;
+            for (layer in {'login-overlay':0,
+                           'game-welcome':0,
+                           'help-overlay':0}) {
+                romance.setElementDisplayBlock(layer,
+                                               (layer == overlay)); 
+            }
+        },
         hideLoginOverlay: function() {
             if ('none' != romance.elementStyle('login-overlay')) {
                 gameState.overlayActive = 'game-welcome';
@@ -136,10 +145,10 @@ window.romance = (function(){
         updateLoginOverlay: function() {
             if (! romance.loggedInP() ) {
                 console.log('user not signed in');
-                gameState.overlayActive = 'login-overllay';
+                gameState.overlayActive = 'login-overlay';
                 romance.updateSignInLayers();
             }
-            if (!! gameState.overlayActive) {
+            if (gameState.overlayActive) {
                 romance.showOverlayLayer();
             } else {
                 romance.hideLoginOverlay();
@@ -223,42 +232,103 @@ window.romance = (function(){
             gameState.selfPeers[name] = connection;
             return channel;
         },
+        advertiseSDP: function(description) {
+            ga('send','event','Game Sign-In','SDP Offer','Advertise');
+            var xhr = new XMLHttpRequest();
+            console.log("SDP offer: ", description);
+            romance.xhrSetUp(xhr, 'PUT', '/action/gossip',
+                             romance.gotUserSignin);
+            xhr.send('google-api-token=' + romance.googleAPIToken() +
+                     '&sdp=' +
+                     encodeURIComponent(JSON.stringify(description)),
+                     romance.checkForAnswer);
+        },
         startFirstPeer: function () {
-            var iceServers = {iceServers:[{url: 'stun:stun.l.google.com:19302'},
+            serverInfo.iceServers = {iceServers:[{url: 'stun:stun.l.google.com:19302'},
                                           {url: 'stun:23.21.150.121'}]};
-            var firstPeer = new RTCPeerConnection(iceServers);
+            var firstPeer = new RTCPeerConnection(serverInfo.iceServers);
             firstPeer.onicecandidate = function(event) {
                 if (event.candidate) {
-                    romance.advertiseICE(event.candidate); }}
+                    console.log("Candidate in ",event);
+                    firstPeer.addIceCandidate(event.candidate).
+                        then(function() {
+                            console.log("Candidate added");
+                        }, function(e) {
+                            console.error("Could not add candidate", e);
+                        }); }
+                else { console.error ("No candidate in ", event) }}
             firstPeer.ondatachannel = function(event) {
                 romance.setChannelEvents(firstPeer,event.channel,'?FIXME?');
                 romance.gossip({v:'i-am',nick:romance.currentPlayerNick()});
             };
-            var gossipChannel = romance.MakeChannel(firstPeer, 'System/Gossip');
+            var gossipChannel = romance.makeChannel(firstPeer, 'System/Gossip');
             firstPeer._$gossipChannel = gossipChannel;
-            firstPeer.createOffer(function(sdp) {
-                firstPeer.setLocalDescription(sdp);
-                romance.advertiseOffer(sdp);
-            });
+            firstPeer.createOffer().then(function(sd) {
+                    firstPeer.setLocalDescription(sd);
+                    romance.advertiseSDP(sd);});
+            console.log("Starting first peer; waiting for ICE candidates");
+            return firstPeer;
+        },
+        checkForAnswer: function (update) {
+            var response = update.currentTarget.response;
+            if (response && response.answer) {
+                var answer =  JSON.parse(decodeURIComponent(answer.replace(/\+/g,'%20')));
+                var rendezvous = serverInfo.selfPeers["Rendezvous"];
+                rendezvous.setRemoteDescription(answer);
+                serverInfo.selfPeers[serverInfo.selfPeers.length + 1] = rendezvous;
+                serverInfo.selfPeers["Rendezvous"] = null;
+                updatePeers();
+            }
+        },
+        acceptPeerOffer: function (peerSDP) {
+            var newPeer = new RTCPeerConnection(serverInfo.iceServers);
+            newPeer.ondatachannel = function(event) {
+                romance.setChannelEvents(firstPeer,event.channel,'?FIXME?');
+                romance.gossip({v:'i-am',nick:romance.currentPlayerNick()});
+            };
+            var gossipChannel = romance.makeChannel(newPeer, 'System/Gossip');
+            newPeer._$gossipChannel = gossipChannel;
+            newPeer.setRemoteDescription(peerSDP);
+            console.log("Trying to reach peer through offer received");
+            newPeer.createAnswer().then (
+                function(sd) {
+                    newPeer.setLocalDescription(sd);
+                    var xhr = new XMLHttpRequest();
+                    console.log("SDP answer: ", sd);
+                    romance.xhrSetUp(xhr, 'POST', '/action/gossip/answer' );
+                    xhr.send('google-api-token=' + romance.googleAPIToken() +
+                             '&offeror=' + (encodeURIComponent(JSON.stringify(peerSDP))) +
+                             "&answer=" +
+                             encodeURIComponent(JSON.stringify(sd.toJSON())));
+                }
+            );
+            serverInfo.peers.concat(newPeer);
         },
         gossip: function(datum) {
-            window.serverInfo.peers.each(function(peer){
+            window.serverInfo.peers.forEach(function(peer){
                 var channel = peer._$gossipChannel;
                 if (channel) {
                     channel.send(datum);
                 }
             });
         },
-        advertiseOffer: function(candidate) {
-            var xhr = new XMLHttpRequest();
-            romance.xhrSetUp(xhr, 'PUT', '/action/gossip');
-            xhr.send('google-api-token=' + romance.googleAPIToken() + '&sdp=' + encodeURIComponent(sdp));
-        },
         updatePeers: function() {
             if ( (! gameState.selfPeers) ||
                  0 == gameState.selfPeers.length) {
+                gameState.selfPeers = {};
                 romance.startFirstPeer();
             }
+            else {
+                var connected = 0;
+                Object.keys(gameState.selfPeers)forEach(function(peer) {
+                    if (peer._$gossipChannel.readyState == 'open')
+                    { ++connected; }
+                });
+                if (connected < 1) { // FIXME: MinPeers
+                    romance.startFirstPeer();
+                }
+            }
+            setTimeout(1000, romance.updatePeers);
         },
         dispatchers: {
             alert: function(con,reli,message) {
@@ -273,8 +343,8 @@ window.romance = (function(){
             if (gameState.playerInfo) {
                 romance.updatePeers();
             } else {
-                gameState.overlayActive = 'game-welcome';
-                console.log('waiting for directory server reply');
+                romance.setActiveOverlay('game-welcome');
+                console.log('not signed in to mesh yet');
                 return;
             }
             romance.updateOverlay();
@@ -315,25 +385,52 @@ window.romance = (function(){
                            'repair': 1,
                            'maxRepair': 1 } ] };
         },
-        gotUserSignin: function(response) {
-            console.log("Sign in to game mesh now; received directory");
-            if (response) { console.log(response); }
+        gotUserSignin: function(update) {
+            console.log("update", update);
+            var response = JSON.parse(update.currentTarget.response);
+            if (!response) {
+                console.error("No response to sign-in yet");
+                return;
+            }
+            console.log("Sign in to game mesh now; received user sign-in");
+            console.log(response);
             ga('send', 'event', 'Game Sign-In', 'Join Mesh', 'Join Mesh');
-            var rando = Math.floor(Math.random(10000));
-            gameState.playerInfo = { 'id': response.playerID,
-                                     'nickname': response.nickname };
+            romance.setPlayerInfo ({ 'id': response.id,
+                                     'nickname': response.nickname });
+            if (response.offers.length > 0) {
+                console.log("Got peer offer × " +
+                            response.offers.length);
+                response.offers.forEach(function(sdp) {
+                    var remote = JSON.parse(decodeURIComponent(sdp.replace(/\+/g,'%20')));
+                    console.log("remote = ",remote);
+                    romance.acceptPeerOffer(remote);
+                });
+            }
             romance.gameStatusUpdate();
+        },
+        setPlayerInfo: function (hash) {
+            if (!gameState.playerInfo) {
+                gameState.playerInfo = {}; }
+            if (hash.id) {
+                gameState.playerInfo.id = hash.id;
+            }
+            if (hash.nickname) {
+                gameState.playerInfo.nickname = hash.nickname;
+            }
+            Rollbar.configure({
+                payload: { id: gameState.playerInfo.id,
+                           username: gameState.playerInfo.nickname,
+                           email: gameState.playerInfo.nickname +
+                           '@players.tootsville.org' }});
         },
         googleAPIToken: function () {
             return ( gameState.googleUser &&
-                     gameState.googleUser.getAuthResponse('id_token') );
+                     gameState.googleUser.getAuthResponse('id_token').access_token );
         },
         signInToGame: function () {
-            console.log("Sign in to game mesh now; get directory");
-            var xhr = new XMLHttpRequest();
+            console.log("Sign in to game mesh now; gather peers");
+            romance.updatePeers();
             ga('send','event','Game Sign-In','Start','Start');
-            romance.xhrSetUp(xhr, 'PUT', '/action/gossip', romance.gotUserSignin);
-            xhr.send('google-api-token=' + romance.googleAPIToken());
         },
         quitFromGame: function() {
             var xhr = new XMLHttpRequest();
@@ -368,12 +465,12 @@ window.romance = (function(){
                     (romance.loggedInP ()) ) ) {
                 romance.gameStatusUpdate();
             }
-            if (!! gameState.playerInfo) { romance.quitFromGame(); }
-            if (!! gameState.googleUser) { romance.quitFromGoogle(); }
-            if (!! gameState.facebookUser) {
+            if (gameState.playerInfo) { romance.quitFromGame(); }
+            if (gameState.googleUser) { romance.quitFromGoogle(); }
+            if (gameState.facebookUser) {
                 romance.quitFromFacebook(); }
-            if (!! gameState.meshLinks) { romance.quitFromMesh(); }
-            if (!! gameState.worker) { romance.quitWorker(); }
+            if (gameState.meshLinks) { romance.quitFromMesh(); }
+            if (gameState.worker) { romance.quitWorker(); }
         },
         gotGoogleSignIn: function(user) {
             console.log("Got Google sign-in", user);
@@ -390,11 +487,12 @@ window.romance = (function(){
         networkError: function(condition) {
             alert("A network error occurred.\n"+
                   "Check Internet connection.");
-            console.log("network error");
-            console.log(condition);
+            console.error("network error", condition);
         },
         xhrReportErrors: function(xhr) {
-            xhr.onerror = romance.networkError;
+            alert("Having trouble reaching the sign-in servers.\n"+
+                  "Perhaps network problems or servers too busy?");
+            console.error("XHR error", xhr);
         },
         serverURL: function (suffix) {
             return window.serverInfo.url + suffix;
@@ -405,7 +503,7 @@ window.romance = (function(){
             xhr.setRequestHeader('Content-Type',
                                  'application/x-www-form-urlencoded');
             xhr.onload = onLoad;
-            romance.xhrReportErrors(xhr);
+            xhr.onerror = romance.xhrReportErrors;
         },
         currentPlayerID: function() {
             return gameState.playerInfo && gameState.playerInfo.id;
@@ -440,6 +538,15 @@ window.fbAsyncInit = function() {
 //     fjs.parentNode.insertBefore(js,fjs);
 // } (document,'script','facebook-jssdk'));
 
+function toArray(arrayLikeObject) {
+    array = [];
+    for (i = 0;
+         i < arrayLikeObject.length;
+         ++i) {
+        array = array.concat(arrayLikeObject[i]) }
+    return array
+}
+
 (function(d,s,id){
     var js, fjs = d.getElementsByTagName(s)[0];
     if(d.getElementById(id))return;
@@ -454,7 +561,7 @@ window.fbAsyncInit = function() {
     var googleAnalytics = window['ga'] || function() {
         (ga['q'] = ga['q'] || []).push(arguments) };
     ga = function() {
-        console.log.apply(console.log, ["Analytics:"].concat(arguments));
+        console.log.apply(console.log, ["Analytics:"].concat(toArray(arguments)));
         googleAnalytics.apply(googleAnalytics, arguments);
     };
     ga["l"] = +new Date;
