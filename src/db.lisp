@@ -12,7 +12,7 @@
            #:journal))
 (in-package :tootstest.db)
 
-(defvar *db-secrets*)
+(defvar *db-secrets* nil)
 
 (defun db-secrets-pathname ()
   (merge-pathnames
