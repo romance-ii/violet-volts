@@ -121,7 +121,7 @@ window.romance = (function(){
                            'game-welcome':0,
                            'help-overlay':0}) {
                 romance.setElementDisplayBlock(layer,
-                                               (layer == overlay)); 
+                                               (layer == overlay));
             }
             romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
         },
@@ -247,7 +247,7 @@ window.romance = (function(){
         },
         startFirstPeer: function () {
             serverInfo.iceServers = {iceServers:[{url: 'stun:stun.l.google.com:19302'},
-                                          {url: 'stun:23.21.150.121'}]};
+                                                 {url: 'stun:23.21.150.121'}]};
             var firstPeer = new RTCPeerConnection(serverInfo.iceServers);
             firstPeer.onicecandidate = function(event) {
                 if (event.candidate) {
@@ -266,8 +266,8 @@ window.romance = (function(){
             var gossipChannel = romance.makeChannel(firstPeer, 'System/Gossip');
             firstPeer._$gossipChannel = gossipChannel;
             firstPeer.createOffer().then(function(sd) {
-                    firstPeer.setLocalDescription(sd);
-                    romance.advertiseSDP(sd);});
+                firstPeer.setLocalDescription(sd);
+                romance.advertiseSDP(sd);});
             console.log("Starting first peer; waiting for ICE candidates");
             return firstPeer;
         },
