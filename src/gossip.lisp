@@ -28,7 +28,7 @@
   (let ((token (handler-case
                    (user<-google-token id-token)
                  (simple-error (c)
-                   (declare (ignore c)) 
+                   (declare (ignore c))
                    (when (member (request-server-name *request*) '("localhost" "::1" "127.0.0.1") :test 'equal)
                      (warn "Falling back on special case for localhost testing")
                      (format nil "~a:~d" (subseq id-token 0 (position #\. id-token)) (request-remote-port *request*)))))))
@@ -70,7 +70,7 @@
 
 (defun active-sdp-offers (user)
   (map 'list (rcurry #'drakma:url-encode :utf-8)
-       (map 'list #'user-sdp-offer 
+       (map 'list #'user-sdp-offer
             (remove-if #'user-sdp-answer
                        (remove-if-not #'user-sdp-offer
                                       (remove-if (curry #'user= user)
