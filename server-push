@@ -24,7 +24,7 @@ curl https://api.rollbar.com/api/1/deploy/ \
      -F access_token=f6f4ae4d08dd415799a1ef2122fff0b0 \
      -F environment=tootstest \
      -F revision=$(git log -n 1 --pretty=format:"%H") \
-     -F local_username="$(who am i)@$(hostname)"
+     -F local_username="$(who am i)%$(hostname)"
 
 git tag -s server-push-$(date +%Y-%m-%d-%H%M) HEAD \
     -m "Pushed to server from $(who am i)@$(hostname) at $(date); $(git status -s -uno)"
