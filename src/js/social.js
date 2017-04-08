@@ -304,7 +304,7 @@ window.romance = (function(){
                              encodeURIComponent(JSON.stringify(sd.toJSON())));
                 }
             );
-            serverInfo.peers.concat(newPeer);
+            gameState.peers.concat(newPeer);
         },
         gossip: function(datum) {
             gameState.peers.forEach(function(peer){
