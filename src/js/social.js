@@ -295,6 +295,7 @@ window.romance = (function(){
             newPeer.createAnswer().then (
                 function(sd) {
                     newPeer.setLocalDescription(sd);
+                    gameState.peers[sd] = newPeer;
                     var xhr = new XMLHttpRequest();
                     console.log("SDP answer: ", sd);
                     romance.xhrSetUp(xhr, 'POST', '/action/gossip/answer' );
@@ -304,7 +305,6 @@ window.romance = (function(){
                              encodeURIComponent(JSON.stringify(sd.toJSON())));
                 }
             );
-            gameState.peers.concat(newPeer);
         },
         gossip: function(datum) {
             gameState.peers.forEach(function(peer){
