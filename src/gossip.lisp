@@ -89,7 +89,7 @@
               (user-id user) offers answer))))
 
 (defroute post/action/gossip/answer
-    ("/tootstest/action/gossip/answer"
+    ("/action/gossip/answer"
      :method :post :accept '("application/json")) ()
      (let ((answeror (find-user-from-session))
            (offeror (find-user-by-sdp (request-param-value "offeror"))))
@@ -102,7 +102,7 @@
               (setf (response-status *response*) 202)
               "202"))))
 
-(defroute put/action/gossip ("/tootstest/action/gossip"
+(defroute put/action/gossip ("/action/gossip"
                              :method :put :accept '("application/json"))
   ()
   (let ((user (find-user-from-session)))
@@ -111,7 +111,7 @@
     (setf (response-status *response*) 201)
     (get-user-info user)))
 
-(defroute /action/gossip ("/tootstest/action/gossip"
+(defroute /action/gossip ("/action/gossip"
                           :method :get :accept '("application/json"))
   ()
   (let ((user (find-user-from-session)))
