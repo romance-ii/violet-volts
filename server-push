@@ -1,8 +1,10 @@
 #!/bin/bash -xe
-make tootstest.cgi
+make assets
 
 rsync -essh -rv static tootstest.asd *.lisp .htaccess robots.txt templates \
 	tootsville.adventuring.click:tootsville.adventuring.click/
+
+make tootstest.cgi
 
 scp tootstest.asd Makefile app.lisp tootsville.adventuring.click:tootsville.adventuring.click/
 rsync -essh -v bin/* tootsville.adventuring.click:tootsville.adventuring.click/bin/
