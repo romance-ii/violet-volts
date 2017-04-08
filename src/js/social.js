@@ -118,8 +118,8 @@ window.romance = (function(){
         setActiveOverlay: function (overlay) {
             gameState.overlayActive = overlay;
             for (layer in {'login-overlay':0,
-                           'game-welcome':0,
-                           'help-overlay':0}) {
+                           'game-welcome':0
+                          }) {
                 romance.setElementDisplayBlock(layer,
                                                (layer == overlay));
             }
@@ -141,10 +141,10 @@ window.romance = (function(){
         signInLayersToggle: function(service, signedInP) {
             romance.setElementDisplayBlock(
                 service + '-signed-in',
-                romance.blockNone(signedInP));
+                signedInP);
             romance.setElementDisplayBlock(
                 service + '-not-signed-in',
-                romance.blockNone(! signedInP));
+                (! signedInP));
         },
         updateLoginOverlay: function() {
             if (! romance.loggedInP() ) {
@@ -195,7 +195,7 @@ window.romance = (function(){
         },
         dispatchPeerMessage: function(connection,
                                       reliability,message) {
-            if (window.serverInfo.peers[connection.id]) {
+            if (gameState.peers[connection.id]) {
                 ( romance.findMessageHandler(message)
                 )(connection, reliability, message );
             } else {
@@ -203,9 +203,9 @@ window.romance = (function(){
             }
         },
         peerAcceptConnection: function(connection) {
-            window.serverInfo.peers[connection.id] = connection;
+            gameState.peers[connection.id] = connection;
             connection.ondisconnect = function () {
-                delete window.serverInfo.peers[connection.id];
+                delete gameState.peers[connection.id];
             }
             connection.onmessage = function (label,message) {
                 romance.dispatchPeerMessage(connection,label,message);
@@ -248,8 +248,6 @@ window.romance = (function(){
                      romance.checkForAnswer);
         },
         startFirstPeer: function () {
-            serverInfo.iceServers = {iceServers:[{url: 'stun:stun.l.google.com:19302'},
-                                                 {url: 'stun:23.21.150.121'}]};
             var firstPeer = new RTCPeerConnection(serverInfo.iceServers);
             firstPeer.onicecandidate = function(event) {
                 if (event.candidate) {
@@ -309,10 +307,9 @@ window.romance = (function(){
             serverInfo.peers.concat(newPeer);
         },
         gossip: function(datum) {
-            window.serverInfo.peers.forEach(function(peer){
-                var channel = peer._$gossipChannel;
-                if (channel) {
-                    channel.send(datum);
+            gameState.peers.forEach(function(peer){
+                if ('_$gossipChannel' in peer) {
+                    peer._$gossipChannel.send(datum);
                 }
             });
         },
@@ -341,8 +338,8 @@ window.romance = (function(){
         },
         gameStatusUpdate: function() {
             console.log('game-status-update');
-            romance.updateLoginOverlay();
             romance.updateSignInLayers();
+            romance.updateLoginOverlay();
 
             if (gameState.playerInfo) {
                 romance.updatePeers();

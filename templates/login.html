@@ -2,6 +2,13 @@
 {% block title %}Play Now{% endblock %}
 {% block overlay %}
 
+<script language='javascript'>
+window.serverInfo = { 'url': "{{ server-url }}",
+                               'iceServers':[{'url': 'stun:stun.l.google.com:19302'},
+                                                 {'url': 'stun:23.21.150.121'}]};
+</script>
+
+
 <label id="help-check-label" for="help-check">
   <i class="fa fa-life-ring" aria-hidden="true"></i>
   Help
@@ -289,7 +296,7 @@
     <div class="sign-in-box">
 
       <div id="google-signed-in">
-        <h3> Signed in with Google </h3>
+        <h4><i class="fa fa-google-plus"></i> &nbsp; Signed In with Google </h4>
         <p> Manage your account <a target="oauthAccountManager"
                                    href="https://myaccount.google.com/">at Google.com</a> </p>
 
@@ -297,6 +304,8 @@
         <button onclick="romance.quitFromGoogle();">Sign out</button>
       </div>
       <div id="google-not-signed-in">
+        <h4><i  class="fa  fa-google-plus"></i>  &nbsp;  Google  Account
+          Sign-In</h4>
         <center  style="min-height: 2em">
           &nbsp; <div class="g-signin2" data-onsuccess="romance.gotGoogleSignIn"></div>
         </center>
@@ -305,18 +314,25 @@
 
     <div class="sign-in-box">
       <div id="facebook-signed-in">
-        <h3> Signed in with Facebook </h3>
+        <h4><i class="fa fa-facebook"></i> &nbsp; Signed in with Facebook </h4>
         <p>Manage your account <a target="oauthAccountManager"
                                   href="https://facebook.com/">at Facebook.com</a> </p>
 
         <img id="facebook-photo" align="middle">
         <span id="facebook-name">???</span>
-        <button onclick="romance.quitFromFacebook();">Sign Out</button>
+        <center>
+          <div class="fb-login-button" data-max-rows="1"
+               data-size="large" data-show-faces="true"
+               data-onlogin="gotFacebookSignin"></div>
+          <button onclick="romance.quitFromFacebook();">Sign Out</button>
+        </center>
       </div>
       <div id="facebook-not-signed-in">
-        <i> Facebook probably still broken </i>
+        <h4><i class="fa fa-facebook"></i> &nbsp; Facebook Account Sign-In</h4>
         <center style="min-height: 2em">
-          <button onclick="romance.signInToFacebook();">Sign In</button>
+          <div class="fb-login-button" data-max-rows="1"
+               data-size="large" data-show-faces="true"
+               data-onlogin="gotFacebookSignin"></div>
         </center>
       </div>
     </div>
@@ -337,11 +353,5 @@
   <small>(Is this your whole screen? I'm sorry ☹)</small>
 </div>
 
-<script language='javascript'>
-  <!--
-window.serverInfo = { 'url': "{{ server-url }}",
-                      'peers': [] };
-// -->
-</script>
 
 {% endblock %}

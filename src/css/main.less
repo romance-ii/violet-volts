@@ -99,21 +99,6 @@ nav a:hover {
     1px 1px 0 #000;
 }
 
-#game-welcome {
-    display: none;
-    display: block;
-    position: fixed;
-    top: 3rem;
-    left: 1rem;
-    border-radius: 2rem;
-    transition: 3s ease-in-out;
-    margin: 0;
-    padding: 0;
-    height: calc(100vh - 9rem);
-    width: calc(100vw - 2rem);
-    background-color: rgba(100%,100%,100%,.666);
-    overflow: visible;
-}
 
 #welcome-photo {
     border: 0px solid black;
@@ -123,13 +108,72 @@ nav a:hover {
     overflow: hidden;
 }
 
-#game-welcome>section {
-    border: 1pt solid #ddd;
-    padding: .25rem;
-    margin: .25rem;
-    width: calc(50% - 2rem);
-    display: inline-block;
-    height: max(10rem, calc(100vh - 5rem));
+#game-welcome {
+    display: none;
+    position: fixed;
+    top: 3rem;
+    left: 1rem;
+    border-radius: 2rem;
+    transition: 3s ease-in-out;
+    margin: 0;
+    padding: 0;
+    height: ~'calc(100vh - 9rem)';
+    width: ~'calc(100vw - 2rem)';
+    background-color: rgba(100%,100%,100%,.666);
+    overflow: visible;
+
+    center {
+        background-color: @periwinkle;
+        // background: repeating-linear-gradient(45deg, @periwinkle,
+        //                                       @periwinkle 1rem,
+        //                                       (@periwinkle - @charcoal) 1rem,
+        //                                       (@periwinkle - @charcoal) 2rem);
+        border-radius: .5rem;
+        border: 3px solid periwinkle;
+        margin-left: auto;
+        margin-right: auto;
+        padding: .5rem;
+        width: auto;
+    }
+
+    .sign-in-box {
+        border-radius: .5rem;
+        border: 3px solid periwinkle;
+    }
+
+    > section#welcome-news {
+        display: block;
+        position: absolute;
+        top: 4rem;
+        right: 2rem;
+        height: 50vh;
+        width: ~'calc(50vw - 2rem)';
+        > iframe {
+            height: 50vh;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1rem;
+        }
+
+        dd {
+            font-size: .8em;
+        }
+    }
+
+    > section {
+        border: 1pt solid @silver;
+        border-radius: .5rem;
+        padding: .5rem;
+        margin: .5rem;
+        max-width: ~'calc(50% - 4rem)';
+        min-height: max(10rem, ~'calc(100vh - 5rem)');
+        background-color: @silver;
+    }
 }
 
 .info-box {
@@ -214,24 +258,6 @@ input[type=clear]:active
     display: inline-block;
     height: ~'min(90vh, 14rem)';
     width: calc(50% - 2rem);
-}
-
-#welcome-news {
-    display: inline-block;
-    height: ~'min(90vh, 14rem)';
-    width: calc(50% - 2rem);
-}
-
-#welcome-news h1 {
-    font-size: 1.5rem;
-}
-
-#welcome-news h2 {
-    font-size: 1rem;
-}
-
-#welcome-news dd {
-    font-size: .8em;
 }
 
 p {
