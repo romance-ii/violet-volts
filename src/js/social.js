@@ -307,7 +307,8 @@ window.romance = (function(){
             );
         },
         gossip: function(datum) {
-            gameState.peers.forEach(function(peer){
+            Object.keys(gameState.peers).forEach(function(key) {
+                var peer = gameState.peers[key];
                 if ('_$gossipChannel' in peer) {
                     peer._$gossipChannel.send(datum);
                 }
