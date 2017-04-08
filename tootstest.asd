@@ -4,7 +4,7 @@
 (in-package :tootstest-asd)
 
 (defsystem tootstest
-  :version "0.2"
+  :version "0.3.0"
   :author "Bruce-Robert Fenn Pocock <BRFennPocock@star-hope.org>"
   :license "AGPL v3+"
   :bug-tracker "https://github.com/romance-ii/violet-volts/issues"

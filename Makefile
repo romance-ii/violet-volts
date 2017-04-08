@@ -55,7 +55,7 @@ deploy:	bin test server-push doc-publish
 
 # TODO: fix version labels, filenames magically
 doc-publish:	doc
-	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.2/
+	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.3.0/
 
 assets: 	static/js/jscl.js \
 	static/js/mesh.js \

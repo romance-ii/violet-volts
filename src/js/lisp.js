@@ -37,7 +37,7 @@ window['curry_lisp'] = function (symbol) {
         xhr.send(JSON.stringify({
             "condition": "window.onerror",
             "catch": "gazonga",
-            "product": "tootstest/0.2",
+            "product": "tootstest/0.3.0",
             "navigator": {	"appCodeName": navigator.appCodeName,
                               "appName": navigator.appName,
                               "appVersion": navigator.appVersion,
