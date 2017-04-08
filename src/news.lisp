@@ -87,5 +87,6 @@ lists, each made by `RDF-STORY-TO-PLIST'."
 
 (defroute "/news" ()
   "Render the latest news from Tootsbook into the “news” template."
+  (setf (getf (response-headers *response*) :x-frame-options) "SAMEORIGIN")
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
