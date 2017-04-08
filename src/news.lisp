@@ -53,8 +53,22 @@ headlines on Tootsbook."
     (tootsbook-headlines)) "item"))
 
 (defun unescape-& (string)
-  "Replaces SGML-style &amp; with #\&"
-  (cl-ppcre:regex-replace-all "&amp;" string "&"))
+  "Replaces SGML-style &amp; with #\&" 
+  (cl-ppcre:regex-replace-all 
+   "&#([0-9]+);" 
+   (cl-ppcre:regex-replace-all "&amp;" string "&")
+   (lambda (target-string start end 
+            match-start match-end
+            reg-starts reg-ends)
+     (declare (ignore start end match-start match-end))
+     (string 
+      (code-char
+       (parse-integer target-string
+                      :start (first-elt reg-starts) :end (first-elt reg-ends)
+                      :radix 10))))))
+
+(assert (string= (unescape-& "We&#8217;ve")
+                 "We’ve"))
 
 (defun get-text-of-element (node element)
   "Extracts  the  text  under  the  given ELEMENT  type  under  NODE  as
