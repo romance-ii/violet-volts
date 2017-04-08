@@ -89,7 +89,12 @@ This method needs to be reworked."
                                (:date-of-birth .,(player-date-of-birth player))
                                (:age .,(player-age player))))))))
 
-(defroute ("/tootstest/login/registrars/:registrar" :method :post)
+(defroute facebook-deauthorize
+    ("/login/registrars/facebook/deauthorize-callback") ()
+    
+    "☹")
+
+(defroute ("/login/registrars/:registrar" :method :post)
     (&key registrar id-token)
   "Accept a POST request with information about a player sign-in through an
 identity provider  identified by the case-insensitive  string REGISTRAR.
