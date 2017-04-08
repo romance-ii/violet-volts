@@ -14,7 +14,8 @@ ssh tootsville.adventuring.click make -C tootsville.adventuring.click tootstest.
 
 rsync -essh -rv tootsville.org tootsvilleorg@tootsville.org:
 
-until curl  https://tootsville.adventuring.click/version 2>/dev/null | \
+until curl -H 'Accept: text/html' \
+           https://tootsville.adventuring.click/version 2>/dev/null | \
 	perl -ne 'if (/build-date">(20..-..?-..?)</) {print $1}' | \
 	grep $( date +%Y-%m-%d | sed -e s/-0/-/g )
 do
