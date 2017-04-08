@@ -123,6 +123,8 @@ window.romance = (function(){
                 romance.setElementDisplayBlock(layer,
                                                (layer == overlay));
             }
+            romance.setElementDisplayBlock('login-overlay-coppa',
+                                               ('login-overlay' == overlay))
             romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
         },
         hideLoginOverlay: function() {
