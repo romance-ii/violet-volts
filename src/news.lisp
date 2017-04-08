@@ -2,7 +2,9 @@
 (in-package :tootstest.web)
 
 (defvar *tootsbook-cache* nil
-  "This is used as a cache for the current headlines from Tootsbook for a short time. See *TOOTSBOOK-REFRESH-SECONDS* for a definition of ``a short time.''")
+  "This is used as a cache  for the current headlines from Tootsbook for
+  a short time. See *TOOTSBOOK-REFRESH-SECONDS*  for a definition of ``a
+  short time.''")
 (defvar *tootsbook-fetched* 0
   "At what  universal-time was  *TOOTSBOOK-CACHE* last fetched  from the
  Tootsbook RDF feed?")
@@ -64,11 +66,12 @@ a singular string."
                 (dom:get-elements-by-tag-name node element))))))
 
 (defun tootsbook-news-plists ()
-  "Returns all headlines in Tootsbook currently as a list of property lists, each made by `RDF-STORY-TO-PLIST'."
+  "Returns all  headlines in Tootsbook  currently as a list  of property
+lists, each made by `RDF-STORY-TO-PLIST'."
   (map 'list #'rdf-story-to-plist
        (tootsbook-headline-stories)))
 
-(defroute "/tootstest/news" ()
+(defroute "/news" ()
   "Render the latest news from Tootsbook into the “news” template."
   (render #p"news.html"
           (list :headlines (tootsbook-news-plists))))
