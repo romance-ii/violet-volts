@@ -37,7 +37,7 @@ in HTTP headers and such."
                        nil (local-time:now)
                        :format '(:year #\- :month #\- :day))))
 
-(defroute route-/version ("/version" :accept '("text/html")) ()
+(defroute route-/version ("/version" :accept '("text/html" "*/*")) ()
           "Render the version and license information nicely for the player."
           (render #p"version.html" (version-info-list)))
 
