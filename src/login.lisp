@@ -12,6 +12,6 @@ probably be a Godsend at some point. XXX
 This page should have some more precise headers to assist in caching."
           (render #P"login.html"
                   (list :server-url
-                        (format nil "//~(~a~):~d/tootstest"
+                        (format nil "//~(~a~):~d/"
                                 (request-server-name *request*)
                                 (request-server-port *request*)))))
