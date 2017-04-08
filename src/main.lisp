@@ -145,7 +145,7 @@ to keep the process running."
   (let ((retries 3))
     (tagbody retry-post
        (handler-case
-           (return-from post-read-version-page (drakma:http-request "http://localhost:27701/tootstest/version"))
+           (return-from post-read-version-page (drakma:http-request "http://localhost:27701/version"))
          (usocket:connection-refused-error (c)
            (cond ((minusp (decf retries))
                   (error "Failed POST: Can't connect to local server (after retries)~%~a" c))

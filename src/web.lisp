@@ -81,7 +81,7 @@ As a side effect, provides an extremely skeletal HTML redirection page via `REDI
 
 (defroute route-/ "/" ()
           "Redirect to the login page from the default page for this API version."
-          (redirect-to "/tootstest/login"))
+          (redirect-to "/login"))
 
 
 
