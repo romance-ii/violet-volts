@@ -91,7 +91,11 @@ This method needs to be reworked."
 
 (defroute facebook-deauthorize
     ("/login/registrars/facebook/deauthorize-callback") ()
-    
+    "This callback is invoked whenever a Facebook user de-authorizes our
+access to their Facebook account/profile.  It should unlink the Facebook
+user information from the Toots account. If there is no remaining way to
+log  in to  the account,  though, that  effectively would  disable their
+access … TODO"
     "☹")
 
 (defroute ("/login/registrars/:registrar" :method :post)
