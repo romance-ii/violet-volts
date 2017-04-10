@@ -1,0 +1,48 @@
+#html5-loading {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    postion: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    background-color: black;
+    color: white;
+    animation-name: html5-loading-fade-in;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+#html5-loading > * {
+    animation-name: html5-loading-children-fade-in;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes html5-loading-fade-in {
+    0% { opacity: 1; display: block; visibility: visible; }
+    67% { opacity: 1; }
+    99% { opacity: .3333; }
+    100% { opacity: 0; display: none; visibility: hidden; }
+}
+
+@keyframes html5-loading-children-fade-in {
+    0% { opacity: 0; }
+    5% { opacity: 0; }
+    33% { opacity: 1; }
+    67% { opacity: 1; }
+    95% { opacity: .1; }
+    100% { opacity: .1; }
+}
+
+#html5-loading-tootsville-title {
+    display: block;
+    padding: 3rem;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    height: 3rem;
+}
