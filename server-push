@@ -26,7 +26,7 @@ done
 # Notify Rollbar of the deployment
 curl https://api.rollbar.com/api/1/deploy/ \
      -F access_token=f6f4ae4d08dd415799a1ef2122fff0b0 \
-     -F environment=$(./tootstest.cgi version-info product \
+     -F environment=$(./tootstest.cgi version-info product) \
      -F revision=$(git log -n 1 --pretty=format:"%H") \
      -F version=$(./tootstest.cgi version-info version) \
      -F local_username="$(whoami)%$(hostname)"
