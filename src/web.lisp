@@ -63,18 +63,23 @@ but sometimes caught by tools like curl or wget with certain settings."
                 "</a></html>")))
 
 (defun redirect-to (uri &optional (status 307))
-  "Redirect to another URI. Status code 307 for temporary, 301 or 308 for permanent (typically).
+  "Redirect to  another URI. Status code  307 for temporary, 301  or 308
+for  permanent  (typically).  (:TEMPORARY and  :PERMANENT  are  accepted
+for readability.)
 
-As a side effect, provides an extremely skeletal HTML redirection page via `REDIRECT-TO/HTML/BODY'."
+As a side  effect, provides an extremely skeletal  HTML redirection page
+via `REDIRECT-TO/HTML/BODY'."
   (check-type uri string "A URL string")
-  (check-type status (member 301 307 308)
+  (check-type status (member 301 307 308 :temporary :permanent)
               "An HTTP status code from among 301, 307, or 308")
-  (list
-   status
-   `(:location ,uri
-               :x-redirected-by ,(romance-ii-program-name/version)
-               :content-type "text/html")
-   (redirect-to/html-body uri)))
+  (let ((status (if (numberp status) status
+                    (ecase status (:temporary 307) (:permanent 308)))))
+    (list
+     status
+     `(:location ,uri
+                 :x-redirected-by ,(romance-ii-program-name/version)
+                 :content-type "text/html")
+     (redirect-to/html-body uri))))
 
 
 ;;; Default route
