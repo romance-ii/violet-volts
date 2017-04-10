@@ -3,8 +3,8 @@
 
 (defvar *tootsbook-cache* nil
   "This is used as a cache  for the current headlines from Tootsbook for
-  a short time. See *TOOTSBOOK-REFRESH-SECONDS*  for a definition of ``a
-  short time.''")
+ a short time. See *TOOTSBOOK-REFRESH-SECONDS*  for a definition of ``a
+ short time.''")
 (defvar *tootsbook-fetched* 0
   "At what  universal-time was  *TOOTSBOOK-CACHE* last fetched  from the
  Tootsbook RDF feed?")
@@ -53,15 +53,15 @@ headlines on Tootsbook."
     (tootsbook-headlines)) "item"))
 
 (defun unescape-& (string)
-  "Replaces SGML-style &amp; with #\&" 
-  (cl-ppcre:regex-replace-all 
-   "&#([0-9]+);" 
+  "Replaces SGML-style &amp; with #\&"
+  (cl-ppcre:regex-replace-all
+   "&#([0-9]+);"
    (cl-ppcre:regex-replace-all "&amp;" string "&")
-   (lambda (target-string start end 
+   (lambda (target-string start end
             match-start match-end
             reg-starts reg-ends)
      (declare (ignore start end match-start match-end))
-     (string 
+     (string
       (code-char
        (parse-integer target-string
                       :start (first-elt reg-starts) :end (first-elt reg-ends)
