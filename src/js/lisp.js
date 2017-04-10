@@ -32,7 +32,7 @@ window['curry_lisp'] = function (symbol) {
         if (error) { console.error(error) }
         console.log("Reporting home…");
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', "/tootstest/zomg", true);
+        xhr.open('POST', "/zomg", true);
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         xhr.send(JSON.stringify({
             "condition": "window.onerror",
