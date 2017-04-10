@@ -53,15 +53,18 @@ a restart will be presented to allow you to kill it (RESTART-SERVER)."
 invoked  by calling  the  program  with “help”  as  its first  argument,
 explicitly — the default behaviour is to run as a FastCGI server."
   (format t "~|
-Usage: Run this program with one of these verbs. No verb at all defaults to “fast-cgi”
+Usage: Run this program with one of these verbs.
+No verb at all defaults to “fast-cgi”
 
+check — perform a very simple power-on self-test
 fast-cgi — run in FastCGI mode under an appropriate server (eg, Apache)
-server — start a Hunchentoot server for testing
 repl — run a REPL (you might want to rlwrap it)
+server — start a Hunchentoot server for testing
 swank — start a Swank server
+version — print the precise time and date compiled (DEPRECATED)
+version-info — extract specfic version information
 write-docs — write out TeΧInfo documentation
 help — print this
-version — print compilation date-stamp
 "))
 
 (defvar *compiled* #.(with-output-to-string (s) (print-object (local-time:now) s))
@@ -197,6 +200,7 @@ a verb (case-insensitive) from the card-coded table in this function."
     (:version (print *compiled*))
     (:swank (start-swank))
     (:write-docs (write-docs))
+    (:version-info (version-info-report (nthcdr 2 argv)))
     (otherwise (print-help))))
 
 (defun fastcgi-entry ()
