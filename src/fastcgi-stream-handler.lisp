@@ -98,29 +98,32 @@
              (fcgx-puts req body)))
         (fcgx-finish req)))))
 
+(defun canonicalize (field &key (start 0) (case :upcase))
+  (let* ((end (length field))
+         (new (make-string (- end start))))
+    (do ((i start (1+ i))
+         (j 0 (1+ j)))
+        ((= i end) new)
+      (let ((char (aref field i)))
+        (cond
+          ((char= #\_ char)
+           (setf (aref new j) #\-))
+          ((and (eq case :downcase)
+                (upper-case-p char))
+           (setf (aref new j) (code-char (+ (char-code char) 32))))
+          ((and (eq case :upcase)
+                (lower-case-p char))
+           (setf (aref new j) (code-char (- (char-code char) 32))))
+          (T
+           (setf (aref new j) char)))))))
+
+(defparameter *ignored-prefix-list* '("/" "/tootstest"))
+
 (defun handle-request (req)
   "Convert Request from server into a plist
 before passing to Clack application."
   (let ((headers (make-hash-table :test 'equal)))
-    (flet ((canonicalize (field &key (start 0) (case :upcase))
-             (let* ((end (length field))
-                    (new (make-string (- end start))))
-               (do ((i start (1+ i))
-                    (j 0 (1+ j)))
-                   ((= i end) new)
-                 (let ((char (aref field i)))
-                   (cond
-                     ((char= #\_ char)
-                      (setf (aref new j) #\-))
-                     ((and (eq case :downcase)
-                           (upper-case-p char))
-                      (setf (aref new j) (code-char (+ (char-code char) 32))))
-                     ((and (eq case :upcase)
-                           (lower-case-p char))
-                      (setf (aref new j) (code-char (- (char-code char) 32))))
-                     (T
-                      (setf (aref new j) char)))))))
-           (set-header (k v)
+    (flet ((set-header (k v)
              (multiple-value-bind (current existsp)
                  (gethash k headers)
                (setf (gethash k headers)
@@ -158,7 +161,11 @@ before passing to Clack application."
          append (list :script-name
                       (if (string= v "/")
                           ""
-                          v))
+                          (loop for prefix in *ignored-prefix-list*
+                             when (and (< (length v) (length prefix))
+                                       (string-equal v prefix :end1 (length prefix)))
+                             do (return (subseq v (1+ (length prefix))))
+                             finally (return v))))
          into env
          finally
            (return (nconc
