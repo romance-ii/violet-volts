@@ -34,6 +34,7 @@ testbed case for the development."
                :bordeaux-threads
                :cl-uglify-js
                :cl-rdfxml
+               :cl-fastcgi
                :drakma
                :uuid
                :yason
