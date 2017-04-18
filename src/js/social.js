@@ -1,5 +1,9 @@
 /* Social network logins and analytics */
 
+window.r2note = function (kind,event,detail,size) {
+    ga('send','event',kind.event,detail,size);
+}
+
 console.log(" _____                                        ________" +
             "___ \n|  __ \\                                      |_" +
             "   ___   _|\n| |__) |___  _ __ ___   __ _ _ __   ___ _" +
@@ -57,7 +61,7 @@ window.romance = (function(){
             FB.getLoginStatus(romance.facebookSignInChanged);
         },
         signInToFacebook: function() {
-            ga('send','event','Facebook Sign-In','Start','Start');
+            r2note ('Facebook Sign-In','Start','Start');
             FB.login ({ 'scope': 'public_profile,email' },
                       romance.facebookSignInChanged );
         },
@@ -66,7 +70,7 @@ window.romance = (function(){
             romance.clearFacebookUser();
             romance.setHTML('facebook-name', '');
             romance.setSrc('facebook-photo', null);
-            ga('send','event','Facebook Sign-In', 'Error',
+            r2note ('Facebook Sign-In', 'Error',
                'After sign-in cannot load /me');
         },
         facebookGotMe: function(response) {
@@ -77,7 +81,7 @@ window.romance = (function(){
             romance.setHTML('facebook-name', name);
             romance.setSrc('facebook-photo',
                            response.picture.data.url);
-            ga('send','event','Facebook Sign-In', 'Success',
+            r2note ('Facebook Sign-In', 'Success',
                'Success');
             gameState.facebookUser = response;
         },
@@ -237,7 +241,7 @@ window.romance = (function(){
             return channel;
         },
         advertiseSDP: function(description) {
-            ga('send','event','Game Sign-In','SDP Offer','Advertise');
+            r2note ('Game Sign-In','SDP Offer','Advertise');
             var xhr = new XMLHttpRequest();
             console.log("SDP offer: ", description);
             romance.xhrSetUp(xhr, 'PUT', '/action/gossip',
@@ -353,7 +357,7 @@ window.romance = (function(){
         },
         googleSignInFailed: function () {
             alert("Google sign-in failed. Please try again.");
-            ga('send','event','Google Sign-In','Failed','Failed');
+            r2note ('Google Sign-In','Failed','Failed');
             romance.gameStatusUpdate();
         },
         googleSignInButton: function () {
@@ -374,7 +378,7 @@ window.romance = (function(){
                      'onfailure': romance.googleSignInFailed });}},
         makeNewPlayer: function () {
             var nickname = 'Bubba';
-            ga('send','event','Game Sign-In','Make New Player', nickname);
+            r2note ('Game Sign-In','Make New Player', nickname);
             return { 'nickname': nickname,
                      'hitPoints': 10,
                      'maxHitPoints': 10,
@@ -432,11 +436,11 @@ window.romance = (function(){
         signInToGame: function () {
             console.log("Sign in to game mesh now; gather peers");
             romance.updatePeers();
-            ga('send','event','Game Sign-In','Start','Start');
+            r2note ('Game Sign-In','Start','Start');
         },
         quitFromGame: function() {
             var xhr = new XMLHttpRequest();
-            ga('send','event','Game Sign-In','Sign Out','Sign Out');
+            r2note ('Game Sign-In','Sign Out','Sign Out');
             romance.xhrSetUpPost(xhr, '/action/quit', function(response) {
                 gameState.playerInfo = false;
                 romance.gameStatusUpdate ();
@@ -444,21 +448,21 @@ window.romance = (function(){
             xhr.send('google-api-token=' + romance.googleAPIToken());
         },
         quitFromGoogle: function() {
-            ga('send','event','Google Sign-In','Sign Out','Sign Out');
+            r2note ('Google Sign-In','Sign Out','Sign Out');
             gapi.auth2.getAuthInstance().signOut(function () {
                 gameState.googleUser = false;
                 romance.gameStatusUpdate();
             });
         },
         quitFromFacebook: function () {
-            ga('send','event','Facebook Sign-In','Sign Out','Sign Out');
+            r2note ('Facebook Sign-In','Sign Out','Sign Out');
             FB.logout();
         },
         disconnectMeshLink: function (link) {
         },
         quitFromMesh: function() {
             if (! gameState.meshLinks) { return; }
-            ga('send','event','Mesh','Disconnect','Disconnecting');
+            r2note ('Mesh','Disconnect','Disconnecting');
             gameState.meshLinks.each(romance.disconnectMeshLink);
         },
         quitWorker: function() {},
@@ -475,7 +479,7 @@ window.romance = (function(){
             if (gameState.worker) { romance.quitWorker(); }
         },
         gotGoogleSignIn: function(user) {
-            console.log("Got Google sign-in", user);
+            r2note ('Google Sign-In','Sign In','Success');
             var wantSignInP = false;
             if (! romance.loggedInP ()) {
                 wantSignInP = true;
