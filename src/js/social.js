@@ -1,7 +1,9 @@
 /* Social network logins and analytics */
 
 window.r2note = function (kind,event,detail,size) {
-    ga('send','event',kind.event,detail,size);
+    ga('send','event',kind,event,detail,size);
+    Rollbar.info(kind + "; " + event + "; " + detail + (size ? "; " + size : ""),
+                 { kind: kind, event: event, detail: detail, size: size });
 }
 
 console.log(" _____                                        ________" +
@@ -19,6 +21,11 @@ window.romance = (function(){
         facebookUser: false,
         oauthUser: false,
         peers: []
+    };
+    var gameAnalyticsKeys = {
+        host: 'https://sandbox-api.gameanalytics.com/',
+        gameKey: '5c6bcb5402204249437fb5a7a80a4959', // sandbox
+        secretKey: '16813a12f718bc5c620f56944e1abc3ea13ccbac'
     };
     window.gameState = gameState;
     return {
@@ -414,20 +421,27 @@ window.romance = (function(){
             }
             romance.gameStatusUpdate();
         },
-        setPlayerInfo: function (hash) {
-            if (!gameState.playerInfo) {
-                gameState.playerInfo = {}; }
-            if (hash.id) {
-                gameState.playerInfo.id = hash.id;
-            }
-            if (hash.nickname) {
-                gameState.playerInfo.nickname = hash.nickname;
-            }
+        updatePlayerAnalytics: function () {
+            ga('set','userId', gameState.playerInfo.id);
             Rollbar.configure({
                 payload: { id: gameState.playerInfo.id,
                            username: gameState.playerInfo.nickname,
                            email: gameState.playerInfo.nickname +
                            '@players.tootsville.org' }});
+        },
+        setPlayerInfo: function (hash) {
+            var changedP = false;
+            if (!gameState.playerInfo) {
+                gameState.playerInfo = {}; }
+            if (hash.id) {
+                gameState.playerInfo.id = hash.id;
+                changedP = true;
+            }
+            if (hash.nickname) {
+                gameState.playerInfo.nickname = hash.nickname;
+                changedP = true;
+            }
+            if (changedP) { romance.updatePlayerAnalytics(); }
         },
         googleAPIToken: function () {
             return ( gameState.googleUser &&
