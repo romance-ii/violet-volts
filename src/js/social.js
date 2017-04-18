@@ -2,8 +2,14 @@
 
 window.r2note = function (kind,event,detail,size) {
     ga('send','event',kind,event,detail,size);
-    Rollbar.info(kind + "; " + event + "; " + detail + (size ? "; " + size : ""),
+    Rollbar.info(kind + "; " + event + "; " + detail +
+                 (size ? "; " + size : ""),
                  { kind: kind, event: event, detail: detail, size: size });
+    var fbParams = {};
+    fbParams[ FB.AppEvents.ParameterNames.DESCRIPTION ] = detail;
+    FB.AppEvents.logEvent(kind + ";" + event,
+                          size, fbParams);
+
 }
 
 console.log(" _____                                        ________" +
@@ -78,7 +84,7 @@ window.romance = (function(){
             romance.setHTML('facebook-name', '');
             romance.setSrc('facebook-photo', null);
             r2note ('Facebook Sign-In', 'Error',
-               'After sign-in cannot load /me');
+                    'After sign-in cannot load /me');
         },
         facebookGotMe: function(response) {
             var name = response.name_format;
@@ -89,7 +95,7 @@ window.romance = (function(){
             romance.setSrc('facebook-photo',
                            response.picture.data.url);
             r2note ('Facebook Sign-In', 'Success',
-               'Success');
+                    'Success');
             gameState.facebookUser = response;
         },
         finishFacebookSignIn: function () {
@@ -135,7 +141,7 @@ window.romance = (function(){
                                                (layer == overlay));
             }
             romance.setElementDisplayBlock('login-overlay-coppa',
-                                               ('login-overlay' == overlay))
+                                           ('login-overlay' == overlay))
             romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
         },
         hideLoginOverlay: function() {
@@ -422,12 +428,32 @@ window.romance = (function(){
             romance.gameStatusUpdate();
         },
         updatePlayerAnalytics: function () {
-            ga('set','userId', gameState.playerInfo.id);
-            Rollbar.configure({
-                payload: { id: gameState.playerInfo.id,
-                           username: gameState.playerInfo.nickname,
-                           email: gameState.playerInfo.nickname +
-                           '@players.tootsville.org' }});
+            if (gameState.playerInfoid) {
+                ga('set','userId', gameState.playerInfo.id);
+                Rollbar.configure({
+                    payload: { id: gameState.playerInfo.id,
+                               username: gameState.playerInfo.nickname,
+                               email: (gameState.playerInfo.nickname ?
+                                       gameState.playerInfo.nickname :
+                                       gameState.playerInfo.id) +
+                               '@players.tootsville.org' }});
+                FB.AppEvents.setUserID(""+gameState.playerInfo.id);
+            } else {
+                ga('set','userId', null);
+                Rollbar.configure({
+                    payload: { id: null,
+                               username: null,
+                               email: null }});
+                FB.AppEvents.clearUserID();
+            }
+            if (gameState.playerInfo.nickname) {
+                FB.AppEvents.updateUserProperties(
+                    { nickname: gameState.playerInfo.nickname });
+            } else {
+                FB.AppEvents.updateUserProperties(
+                    { nickname: null });
+            }
+
         },
         setPlayerInfo: function (hash) {
             var changedP = false;
@@ -602,3 +628,11 @@ function toArray(arrayLikeObject) {
 window.googleSignInButton = romance.googleSignInButton;
 window.gotGoogleSignIn = romance.gotGoogleSignIn;
 window.gotFacebookSignin = romance.gotFacebookSignin;
+
+FB.getLoginStatus(function(response) {
+    // Check login status on load, and if the user is
+    // already logged in, go directly to the welcome message.
+    if (response.status == 'connected') {
+        romance.gotFacebookSignin(response);
+    }
+});
