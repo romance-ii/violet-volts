@@ -9,7 +9,11 @@
 
 <h1> 404: Not Found </h1>
 
-<p> There is no resource at “<!--#echo var="REDIRECT_URL"-->” </p>
+<!--#if expr="! %{REDIRECT_URL}"-->
+<p> There is no resource at “<!--#echo encoding="entity" var="REDIRECT_URL"-->” </p>
+<!--#else-->
+<p> There is no resource at the location you requested. </p>
+<!--#endif-->
 
 <ul>
   <li> If you typed the URL, check your spelling. </li>
