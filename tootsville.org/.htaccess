@@ -10,10 +10,17 @@ RedirectMatch ^/members/(.*)$ https://members.tootsbook.com/members/$1
 RedirectMatch ^/([Pp][Ll][Aa][Yy].*) https://tootsville.adventuring.click/$1
 RedirectMatch ^/(form.*)$ https://tootsville.adventuring.click/$1
 RedirectMatch ^/(quiz.*)$ https://tootsville.adventuring.click/$1
+RedirectMatch ^/one/([A-Za-z0-9]{6,10})$ https://toots.one/$1
+RedirectMatch ^/see/(.*)$ https://toots.one/see/$1
+RedirectMatch ^/adm/(.*)$ https://tootsville.net/adm/$1
+RedirectMatch ^/staff/(.*)$ https://tootsville.net/staff/$1
+
 
 RedirectMatch ^//(.*)$ https://www.tootsville.org/$1
+
 RedirectMatch ^/for/?$ https://www.tootsville.org/
-RedirectMatch ^/for/([^\.]*)$ https://www.tootsville.org/for/$1.html
+RedirectMatch ^/for/([^\.]+)$ https://www.tootsville.org/for/$1.html
+RedirectMatch ^/for/(.+)tootsville.com(.*)$ https://www.tootsville.org/for/tootsville.com.html
 
 # Error Documents for all defined error codes.
 ErrorDocument 400 /error/400.shtml
