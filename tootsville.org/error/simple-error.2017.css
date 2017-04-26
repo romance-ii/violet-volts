@@ -17,10 +17,11 @@ body {
 }
 
 #tootsville {
-    max-width: 100%;
-    max-height: 33%;
+    height: 5rem;
     position: relative;
-    top: -4rem;
+    float: left;
+    margin-right: 3rem;
+    top: -2rem;
 }
 #featured {
     position: absolute;
