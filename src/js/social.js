@@ -276,6 +276,9 @@ window.romance = (function(){
                      romance.checkForAnswer);
         },
         startFirstPeer: function () {
+            if (gameState.peers['first']) {
+                throw "Already have firstPeer";
+            }
             var firstPeer = new RTCPeerConnection(serverInfo.iceServers);
             firstPeer.onicecandidate = function(event) {
                 if (event.candidate) {
@@ -297,6 +300,7 @@ window.romance = (function(){
                 firstPeer.setLocalDescription(sd);
                 romance.advertiseSDP(sd);});
             console.log("Starting first peer; waiting for ICE candidates");
+            gameState.peers['first'] = firstPeer;
             return firstPeer;
         },
         checkForAnswer: function (update) {
@@ -351,8 +355,12 @@ window.romance = (function(){
             else {
                 var connected = 0;
                 Object.keys(gameState.peers).forEach(function(peer) {
-                    if (peer._$gossipChannel.readyState == 'open')
-                    { ++connected; }
+                    if (! peer._$gossipChannel) {
+                        console.warn("Peer has no Gossip channel", peer);
+                    } else {
+                        if (peer._$gossipChannel.readyState == 'open')
+                        { ++connected; }
+                    }
                 });
                 if (connected < 1) { // FIXME: MinPeers
                     romance.startFirstPeer();
