@@ -2,7 +2,7 @@
 {% block title %}Tootsbook News{% endblock %}
 {% block body %}
 
-<h1> Latest News from Tootsbook </h1>
+<h1> <small>Latest News from</small> Tootsbook </h1>
 
 <dl class="headlines">
   {% for story in headlines %}
@@ -15,7 +15,13 @@
 </dl>
 
 <h2>
+  <small>Catch up on all the latest news at</small>
   <a href="https://www.tootsbook.com/tootsbook/">Tootsbook</a>
 </h2>
+
+<p id="footer">
+  Headlines last updated {{ updated }}. More recent posts may not appear
+  here immediately.
+</p>
 
 {% endblock %}

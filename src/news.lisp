@@ -9,7 +9,7 @@
   "At what  universal-time was  *TOOTSBOOK-CACHE* last fetched  from the
  Tootsbook RDF feed?")
 
-(defvar *tootsbook-refresh-seconds* (* 60 5)
+(defvar *tootsbook-refresh-seconds* (* 60 39)
   "How many seconds must pass between checking Tootsbook for new headlines?")
 
 (defun fetch-tootsbook/http ()
@@ -33,8 +33,6 @@ Returns the RDF as a raw string"
            (+ *tootsbook-refresh-seconds* *tootsbook-fetched*))
     (fetch-tootsbook/http))
   *tootsbook-cache*)
-
-
 
 (defun rdf-story-to-plist (story)
   "Convert and  RDF story  (DOM object)  into a  property list  with the
@@ -85,8 +83,33 @@ lists, each made by `RDF-STORY-TO-PLIST'."
   (map 'list #'rdf-story-to-plist
        (tootsbook-headline-stories)))
 
+(defun pretty-date (&optional (universal-time (get-universal-time)))
+  (multiple-value-bind (sec min hour date month year dow dst tz)
+      (decode-universal-time universal-time)
+    (declare (ignore sec dst min tz))
+    (format nil "~a, the ~:r of ~a, ~d ~a"
+            (nth dow
+                 '(
+                   "Monday" "Tuesday" "Wednesday" "Thursday"
+                   "Friday" "Saturday" "Sunday" ))
+            date 
+            (nth month
+                 '("?"
+                   "January" "February" "March"
+                   "April" "May" "June"
+                   "July" "August" "September"
+                   "October" "November" "December"))
+            year 
+            (cond
+              ((<= 0 hour 6) "in the early morning")
+              ((<= 7 hour 12) "in the morning")
+              ((<= 13 hour 17) "in the afternoon")
+              ((<= 18 hour 22) "in the evening")
+              (t "at night")))))
+
 (defroute "/news" ()
   "Render the latest news from Tootsbook into the “news” template."
   (setf (getf (response-headers *response*) :x-frame-options) "SAMEORIGIN")
   (render #p"news.html"
-          (list :headlines (tootsbook-news-plists))))
+          (list :headlines (tootsbook-news-plists)
+                :updated (pretty-date *tootsbook-fetched*))))
