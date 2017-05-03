@@ -225,7 +225,7 @@ section>iframe:first-child {
 
 button, input[type=button], input[type=submit], input[type=clear] {
     border: 2pt solid @silver;
-    background-color: rgba(128,128,192,0);
+    background-color: (@periwinkle - rgba(0,0,0,0.5));
     color: @silver;
     font-family: Cantarell, serif;
     transition: .5s;
@@ -256,7 +256,7 @@ input[type=submit]:active,
 input[type=clear]:active
 {
     border: 2pt solid white;
-    background-color: (@periwinkle - rgba(0,0,0,0.5));
+    background-color: @periwinkle;
     color: white;
     .outline;
 }

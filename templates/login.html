@@ -56,7 +56,7 @@ window.serverInfo = { 'url': "{{ server-url }}",
 <div id="login-overlay">
   <h1><img src="https://jumbo.tootsville.adventuring.click/Assets/Icons/tootsville-logo.svg"
            alt="Tootsville">
-    <span class="play-now">Play Now</span></h1>
+    <span class="play-now">{% if debug %}Preview{% else %}Play Now{% endif %}</span></h1>
 
   <section id="under-13">
 
@@ -90,7 +90,9 @@ window.serverInfo = { 'url': "{{ server-url }}",
 
     <section id="facebook-sign-in-box" class="sign-in-box">
       <center>
-        <h4><i class="fa fa-facebook"></i> &nbsp; Facebook Account Sign-in </h4>
+        <h4><i  class="fa  fa-facebook"></i>   &nbsp;  Facebook  Account
+          Sign-in </h4>
+        <li> may not work yet </ld>
         <div class="fb-login-button" data-max-rows="1"
              data-size="large" data-show-faces="true"
              data-onlogin="gotFacebookSignin"></div>
@@ -130,8 +132,14 @@ window.serverInfo = { 'url': "{{ server-url }}",
 
     <ul class="rules">
 
-      <li><tt><a href="version">tootstest</a></tt> is  a work in progress.  Many things do
-        not work.</li>
+      {% if debug %}
+      <li> <h5 class="debug"> This is a Preview (test) build! </h5>
+        Lots  of stuff  will probably  not work  right here.  You should
+        check                                                  out
+        the <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Pre-Release_Warning">Pre-Release</a>
+        info. </li>
+      {% endif %}
+
 
       <li> Every player must follow the
         <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:TOS"
@@ -141,6 +149,8 @@ window.serverInfo = { 'url': "{{ server-url }}",
         <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Core:Privacy"
            target="privacy">privacy</a> in
         meaningful ways. </li>
+
+      <li><a href="version">About this game</a> (Tech. info and credits)</li>
 
     </ul>
 
@@ -152,9 +162,15 @@ window.serverInfo = { 'url': "{{ server-url }}",
 <div id="login-overlay-coppa">
   <h1><img src="https://jumbo.tootsville.adventuring.click/Assets/Icons/tootsville-logo.svg"
            alt="Tootsville">
-    <span class="play-now">Play Now</span></h1>
+    <span class="play-now">{% if debug %}Preview{% else %}Play Now{% endif %}</span></h1>
 
   <div class="hint">
+    {% if debug %}
+    <h5 class="debug"> This is a Preview (test) build! </h5>
+    <p> Lots  of stuff  will probably  not work  right here.  You should
+      check out the <a href="https://wikiwiki.tootsville.adventuring.click/wikiwiki/Pre-Release_Warning">Pre-Release</a> info. </p>
+    {% endif %}
+
     <h5>Hey, Parents!</h5>  <p> Your child  can play in  Tootsville with
       whatever supervision  or assistance you  prefer. You will  need to
       set up  your own  account, and  give them  permission to  sign in,
@@ -312,23 +328,27 @@ window.serverInfo = { 'url': "{{ server-url }}",
       </div>
     </div>
 
+    <hr>
+    
     <div class="sign-in-box">
       <div id="facebook-signed-in">
         <h4><i class="fa fa-facebook"></i> &nbsp; Signed in with Facebook </h4>
+        <img id="facebook-photo" align="middle">
+        <span id="facebook-name"></span>
         <p>Manage your account <a target="oauthAccountManager"
                                   href="https://facebook.com/">at Facebook.com</a> </p>
 
-        <img id="facebook-photo" align="middle">
-        <span id="facebook-name">???</span>
         <center>
           <div class="fb-login-button" data-max-rows="1"
-               data-size="large" data-show-faces="true"
+               data-size="lagre" data-show-faces="true"
                data-onlogin="gotFacebookSignin"></div>
           <button onclick="romance.quitFromFacebook();">Sign Out</button>
         </center>
       </div>
       <div id="facebook-not-signed-in">
-        <h4><i class="fa fa-facebook"></i> &nbsp; Facebook Account Sign-In</h4>
+        <h4><i  class="fa  fa-facebook"></i>   &nbsp;  Facebook  Account
+          Sign-In</h4>
+        <li> may not work yet </ld>
         <center style="min-height: 2em">
           <div class="fb-login-button" data-max-rows="1"
                data-size="large" data-show-faces="true"
@@ -338,6 +358,7 @@ window.serverInfo = { 'url': "{{ server-url }}",
     </div>
 
     <hr>
+    
     <h4> Child Accounts </h4>
     <p>
       <a   href="http://wikiwiki.tootsville.adventuring.click/wikiwiki/Builder:Child_Account_Creation"
