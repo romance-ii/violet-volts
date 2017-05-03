@@ -159,8 +159,7 @@ js/jscl.cc.js: src/lib/jscl/jscl.js
 		--js $<
 
 static/js/%.js: js/%.cc.js js/%.yug.js
-	echo "Comparing smaller JS isn't working, just using Closure version for now"
-	cp $< $@
+	cp $$(du -b $^ | sort -n | head -n 1 | cut -f 2 ) $@
 
 static/css/%.css:	src/css/%.less $(shell echo src/css/*.less)
 	lessc $< | cleancss --skip-import -o $@
