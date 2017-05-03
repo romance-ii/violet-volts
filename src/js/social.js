@@ -117,7 +117,8 @@ window.romance = (function(){
             document.getElementById(id).src = src;
         },
         elementStyle: function(id) {
-            return document.getElementById(id).style;
+            el = document.getElementById(id);
+            return el && el.style;
         },
         showOverlayLayer: function () {
             romance.elementStyle(gameState.overlayActive).display = 'block';
