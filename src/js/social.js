@@ -447,7 +447,7 @@ window.romance = (function(){
             romance.gameStatusUpdate();
         },
         updatePlayerAnalytics: function () {
-            if (gameState.playerInfoid) {
+            if (gameState.playerInfo.id) {
                 ga('set','userId', gameState.playerInfo.id);
                 Rollbar.configure({
                     payload: { id: gameState.playerInfo.id,
