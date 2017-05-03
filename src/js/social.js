@@ -522,8 +522,9 @@ window.romance = (function(){
             });
         },
         quitFromFacebook: function () {
-            r2note ('Facebook Sign-In','Sign Out','Sign Out');
-            FB.logout();
+            if (FB) {
+                r2note ('Facebook Sign-In','Sign Out','Sign Out');
+                FB.logout(); }
         },
         disconnectMeshLink: function (link) {
         },
@@ -600,6 +601,13 @@ window.fbAsyncInit = function() {
     FB.init({ appId: '1265378050154137',
               xfbml: true,
               version: 'v2.7'});
+    FB.getLoginStatus(function(response) {
+        // Check login status on load, and if the user is
+        // already logged in, go directly to the welcome message.
+        if (response.status == 'connected') {
+            romance.gotFacebookSignin(response);
+        }
+    });
 };
 
 // (function(d,s,id){
@@ -652,10 +660,3 @@ window.googleSignInButton = romance.googleSignInButton;
 window.gotGoogleSignIn = romance.gotGoogleSignIn;
 window.gotFacebookSignin = romance.gotFacebookSignin;
 
-FB.getLoginStatus(function(response) {
-    // Check login status on load, and if the user is
-    // already logged in, go directly to the welcome message.
-    if (response.status == 'connected') {
-        romance.gotFacebookSignin(response);
-    }
-});
