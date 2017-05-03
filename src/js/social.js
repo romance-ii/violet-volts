@@ -5,11 +5,12 @@ window.r2note = function (kind,event,detail,size) {
     Rollbar.info(kind + "; " + event + "; " + detail +
                  (size ? "; " + size : ""),
                  { kind: kind, event: event, detail: detail, size: size });
-    var fbParams = {};
-    fbParams[ FB.AppEvents.ParameterNames.DESCRIPTION ] = detail;
-    FB.AppEvents.logEvent(kind + ";" + event,
-                          size, fbParams);
-
+    if (FB) {
+        var fbParams = {};
+        fbParams[ FB.AppEvents.ParameterNames.DESCRIPTION ] = detail;
+        FB.AppEvents.logEvent(kind + " _ " + event,
+                              size, fbParams);
+    }
 }
 
 console.log(" _____                                        ________" +
@@ -71,9 +72,13 @@ window.romance = (function(){
             romance.gameStatusUpdate();
         },
         checkLogInState: function () {
-            FB.getLoginStatus(romance.facebookSignInChanged);
+            FB &&
+                FB.getLoginStatus(romance.facebookSignInChanged);
         },
         signInToFacebook: function() {
+            if (! FB) {
+                throw "No FB object (at sign-in time)";
+            }
             r2note ('Facebook Sign-In','Start','Start');
             FB.login ({ 'scope': 'public_profile,email' },
                       romance.facebookSignInChanged );
@@ -99,6 +104,9 @@ window.romance = (function(){
             gameState.facebookUser = response;
         },
         finishFacebookSignIn: function () {
+            if (! FB) {
+                throw "FB object gone (finishing sign-in)";
+            }
             FB.api(
                 '/me',
                 { 'fields': 'id,name_format,picture,email' },
@@ -438,21 +446,29 @@ window.romance = (function(){
                                        gameState.playerInfo.nickname :
                                        gameState.playerInfo.id) +
                                '@players.tootsville.org' }});
-                FB.AppEvents.setUserID(""+gameState.playerInfo.id);
+                if (FB) {
+                    FB.AppEvents.setUserID(""+gameState.playerInfo.id);
+                }
             } else {
                 ga('set','userId', null);
                 Rollbar.configure({
                     payload: { id: null,
                                username: null,
                                email: null }});
-                FB.AppEvents.clearUserID();
+                if (FB) {
+                    FB.AppEvents.clearUserID();
+                }
             }
             if (gameState.playerInfo.nickname) {
-                FB.AppEvents.updateUserProperties(
-                    { nickname: gameState.playerInfo.nickname });
+                if (FB) {
+                    FB.AppEvents.updateUserProperties(
+                        { nickname: gameState.playerInfo.nickname });
+                }
             } else {
-                FB.AppEvents.updateUserProperties(
-                    { nickname: null });
+                if (FB) {
+                    FB.AppEvents.updateUserProperties(
+                        { nickname: null });
+                }
             }
 
         },
