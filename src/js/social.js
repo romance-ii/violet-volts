@@ -1,6 +1,8 @@
 /* Social network logins and analytics */
 
 window.r2note = function (kind,event,detail,size) {
+    console.info("Event: Kind (" + kind + ") event (" + event + ") detail (" + detail +
+                 (size ? (") size (" + size + ")") : ")"));
     ga('send','event',kind,event,detail,size);
     Rollbar.info(kind + "; " + event + "; " + detail +
                  (size ? "; " + size : ""),
@@ -49,10 +51,10 @@ window.romance = (function(){
         clearFacebookUser: function() {
             gameState.facebookUser = false },
         facebookUserRefusedSignIn: function () {
-            ga('send', 'event', 'Facebook Sign-In', 'Refused', 'Refused');
+            r2note('Facebook Sign-In', 'Refused', 'Refused');
         },
         userIsNoSignedInToFacebook: function() {
-            ga('send', 'event', 'Facebook Sign-In', 'Not Signed In',
+            r2note('Facebook Sign-In', 'Not Signed In',
                'Not Signed In');
             romance.clearFacebookUser();
         },
@@ -151,7 +153,7 @@ window.romance = (function(){
             }
             romance.setElementDisplayBlock('login-overlay-coppa',
                                            ('login-overlay' == overlay))
-            romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
+            // romance.setElementDisplayBlock ("overlay", gameState.overlayActive);
         },
         hideLoginOverlay: function() {
             if ('none' != romance.elementStyle('login-overlay')) {
@@ -422,7 +424,7 @@ window.romance = (function(){
             }
             console.log("Sign in to game mesh now; received user sign-in");
             console.log(response);
-            ga('send', 'event', 'Game Sign-In', 'Join Mesh', 'Join Mesh');
+            r2note('Game Sign-In', 'Join Mesh', 'Join Mesh');
             romance.setPlayerInfo ({ 'id': response.id,
                                      'nickname': response.nickname });
             if (response.offers.length > 0) {
@@ -621,12 +623,8 @@ function toArray(arrayLikeObject) {
 
 /* Google Analytics */
 (function(){
-    var googleAnalytics = window['ga'] || function() {
+    window['ga'] = window['ga'] || function() {
         (ga['q'] = ga['q'] || []).push(arguments) };
-    ga = function() {
-        console.log.apply(console.log, ["Analytics:"].concat(toArray(arguments)));
-        googleAnalytics.apply(googleAnalytics, arguments);
-    };
     ga["l"] = +new Date;
     ga('create', 'UA-80917352-1', 'auto');
     ga('set', 'transport', 'beacon');
