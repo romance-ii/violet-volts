@@ -309,15 +309,19 @@ window.serverInfo = { 'url': "{{ server-url }}",
       <button onClick="romance.quit()">Quit</button>
     </center>
 
+    <hr>
+    
     <div class="sign-in-box">
 
       <div id="google-signed-in">
         <h4><i class="fa fa-google-plus"></i> &nbsp; Signed In with Google </h4>
+        <img id="welcome-photo" align="middle">
+        <span id="welcome-name"></span>
         <p> Manage your account <a target="oauthAccountManager"
                                    href="https://myaccount.google.com/">at Google.com</a> </p>
-
-        <img id="welcome-photo" align="middle"> <span id="welcome-name">???</span>
-        <button onclick="romance.quitFromGoogle();">Sign out</button>
+        <center>
+          <button onclick="romance.quitFromGoogle();">Sign out</button>
+        </center>
       </div>
       <div id="google-not-signed-in">
         <h4><i  class="fa  fa-google-plus"></i>  &nbsp;  Google  Account

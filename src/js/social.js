@@ -553,6 +553,8 @@ window.romance = (function(){
                 wantSignInP = true;
             }
             gameState.googleUser = user;
+            document.getElementById('welcome-photo').src = user.w3.Paa;
+            document.getElementById('welcome-name').innerHTML = user.w3.ig;
             if (wantSignInP) {
                 romance.signInToGame();
             }
