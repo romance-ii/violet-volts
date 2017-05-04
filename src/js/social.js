@@ -647,7 +647,7 @@ function toArray(arrayLikeObject) {
     ga('create', 'UA-80917352-1', 'auto');
     ga('set', 'transport', 'beacon');
     ga('set','appName','tootstest');
-    ga('set','appVersion','0.3.0');
+    ga('set','appVersion','0.3.1');
     if (romance.currentPlayerID()) {
         ga('set', 'userId', romance.currentPlayerID());
     }

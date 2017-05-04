@@ -53,9 +53,9 @@ server-push: tootstest.cgi
 
 deploy:	bin test server-push doc-publish
 
-# TODO: fix version labels, filenames magically
+VERSION=$(shell grep :version tootstest.asd | cut -d '"' -f 2)
 doc-publish:	doc
-	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/0.3.0/
+	rsync -rv -essh doc/* goethe.tootsville.adventuring.click:goethe.tootsville.adventuring.click/devel/docs/tootstest/$(VERSION)/
 
 assets: 	static/js/jscl.js \
 	static/js/mesh.js \
