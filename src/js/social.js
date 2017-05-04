@@ -334,7 +334,7 @@ window.romance = (function(){
                     xhr.send('google-api-token=' + romance.googleAPIToken() +
                              '&offeror=' + (encodeURIComponent(JSON.stringify(peerSDP))) +
                              "&answer=" +
-                             encodeURIComponent(JSON.stringify(sd.toJSON())));
+                             encodeURIComponent(sd.toSource()));
                 }
             );
         },
