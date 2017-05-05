@@ -61,13 +61,13 @@
                                    :value nil
                                    :prior prior))
      (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
-       (loop for child in node
+       (loop for child in (hash-table-keys node)
              with prior-child
              do (journal-node child prior-child)
              do (setq prior-child child))))
     (atom (datafly:execute (sxql:insert-into :journal-nodes
                              :event-time *now*
-                             :node-type (simple-type-of node)
+                             :node-type (type-of node)
                              :key nil
                              :value nil
                              :prior prior)))))
