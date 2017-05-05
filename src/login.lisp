@@ -15,4 +15,4 @@ This page should have some more precise headers to assist in caching."
                 (format nil "//~(~a~):~d"
                         (request-server-name *request*)
                         (request-server-port *request*))
-                :debug t)))
+                :debug (not (productionp)))))
