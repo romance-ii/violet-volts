@@ -108,7 +108,12 @@ src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 	then \
 		ln -sf bin/sbcl ~/bin/ ; \
 	fi
-	$(MAKE) -C src/lib/jscl || ( cd src/lib/jscl ; ./make.sh )
+	if [ -f src/lib/jscl/Makefile ] ; \
+	then \
+		$(MAKE) -C src/lib/jscl jscl.js test ; \
+	else \
+		( cd src/lib/jscl ; ./make.sh ) ; \
+	fi
 
 # required to make Closure happy
 js/undef-require.js:	

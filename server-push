@@ -1,9 +1,12 @@
 #!/bin/bash -xe
 make assets
 
-rsync -essh -rv static/ src/ templates/ \
+rsync -essh -rv static src templates \
       tootstest.asd *.lisp \
       .htaccess robots.txt \
+      tootsville.adventuring.click:tootsville.adventuring.click/
+
+rsync -essh -rv tootsville.org/error \
       tootsville.adventuring.click:tootsville.adventuring.click/
 
 make tootstest.cgi
