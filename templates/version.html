@@ -25,6 +25,23 @@
       My Common Lisp implementation is <span id="lisp-type">{{ lisp.type }}</span>,
       version <span id="lisp.version">{{ lisp.version }}</span>.
     </p>
+    <p> The runtime environment is
+      {% if environment.configuration %}
+      <q>{environment.configuration}.</q>
+      {% else %}
+      unnamed.
+      {% endif %}
+      
+      {% if environment.developmentp %}
+      This is a development environment.
+      {% else %}
+      {% if environment.productionp %}
+      This is a public (production) environment.
+      {% else %}
+      This is a testing environment.
+      {% endif %}
+      {% endif %}
+    </p>
 
     {% if lisp-libs %}
     {% endif %}

@@ -32,11 +32,17 @@ in HTTP headers and such."
             sb-sys:*long-site-name*
             "Tootsville: A free, fun adventure game for the entire family"))))
 
+(defun null-if-empty (string)
+  (and (not (emptyp string)) string))
+
 (defun version-info-list ()
   (ensure-site-name)
   (let ((basics
           (list :product (romance-ii-program-name)
                 :version (romance-ii-program-version)
+                :environment (list :configuration (null-if-empty (appenv))
+                                   :developmentp (developmentp)
+                                   :productionp (productionp))
                 :machine (list :version (unembarassing (machine-version))
                                :type (machine-type)
                                :instance (string-capitalize (machine-instance)))
