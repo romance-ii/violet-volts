@@ -1,0 +1,41 @@
+input.hide-away { 
+    display:  none
+}
+input.hide-away +  h2 {
+    margin: 0;
+    cursor: pointer;
+    border-bottom: 2pt grey dotted;
+    :before {
+        display: inline-block;
+        margin: 1rem;
+        content: '⯈';
+        color: black;
+        transform: rotate(0);
+        transition: transform 0.333s ease-in-out;
+    }
+}
+input.hide-away:checked + h2
+{ 
+    cursor: resize-n; 
+    border-bottom: 2pt rgba(0,0,0,0) dotted;
+    :before {
+        display: inline-block;
+        margin: 1rem;
+        content: '⯈';
+        color: blue;
+        transform: rotate(90deg);
+        transition: transform 0.333s ease-in-out;
+    }
+}
+
+input.hide-away ~ article {
+    overflow: auto; 
+    height: 0px; 
+    position: relative; 
+    transition: height 0.3s ease-in-out;
+}
+input.hide-away:checked ~ article {
+    height: ~'calc(min(50vh, 8rem))';
+    transition: height 0.5s ease-in-out;
+}
+

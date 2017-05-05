@@ -16,7 +16,7 @@ the OS may do some disc caching."
      (appendf (response-headers *response*)
               (list "Content-Type" content-type))
      (read-file-into-string pathname))
-    (:else (throw-code 404))))
+    (:else (warn "404 ~a" pathname) (throw-code 404))))
 
 (defroute route-/css/*.css "/css/:name.css" (&key name)
   "CSS files are served statically."
@@ -24,6 +24,13 @@ the OS may do some disc caching."
                (merge-pathnames (make-pathname
                                  :directory '(:relative "css")
                                  :name name :type "css")
+                                *static-directory*)))
+
+(defroute route-/nascar/*.svg "/nascar/:name.svg" (&key name)
+  (send-static "image/svg+xml"
+               (merge-pathnames (make-pathname
+                                 :directory '(:relative "nascar")
+                                 :name name :type "svg")
                                 *static-directory*)))
 
 (defroute route-/js/*.js "/js/:name.js" (&key name)
