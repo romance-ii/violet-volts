@@ -8,15 +8,16 @@
         "text/plain;charset=utf-8")
   "You are not the boss of me.")
 
-(defun pretty-time (seconds)
-  (cond
-    ((< seconds 90)
-     (format nil "~d second~:p" seconds))
-    ((< seconds (* 90 60))
-     (format nil "~d minutes" (round seconds 60)))
-    ((< seconds (* 36 60 60))
-     (format nil "~d hours" (round seconds (* 60 60))))
-    (t (format nil "~d days" (round seconds (* 24 60 60))))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun pretty-time (seconds)
+    (cond
+      ((< seconds 90)
+       (format nil "~d second~:p" seconds))
+      ((< seconds (* 90 60))
+       (format nil "~d minutes" (round seconds 60)))
+      ((< seconds (* 36 60 60))
+       (format nil "~d hours" (round seconds (* 60 60))))
+      (t (format nil "~d days" (round seconds (* 24 60 60)))))))
 
 (defmacro with-maintenance-times ((task-name task-string
                                    start-delay finish-delay)
