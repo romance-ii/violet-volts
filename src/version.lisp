@@ -18,7 +18,7 @@ in HTTP headers and such."
                (romance-ii-program-version)))
 
 (defun unembarassing (string)
-  (loop for ((from to)) on '(("\\(R\\)" "®") ("\\(TM\\)" "™"))
+  (loop for ((from to)) on '(("\\(R\\)" "®") ("\\(tm\\)" "™") ("\\(TM\\)" "™"))
         do (setf string
                  (cl-ppcre:regex-replace-all from string to)))
   string)
