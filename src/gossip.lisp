@@ -86,21 +86,21 @@
 \"nickname\": \"Toot ~:*~d\",~
 \"offers\":[~{\"~A\"~^,~}]~
 ~@[,\"answer\":~a~]}"
-              (user-id user) offers answer))))
+(user-id user) offers answer))))
 
 (defroute post/action/gossip/answer
     ("/action/gossip/answer"
      :method :post :accept '("application/json")) ()
-     (let ((answeror (find-user-from-session))
-           (offeror (find-user-by-sdp (request-param-value "offeror"))))
-       (declare (ignore answeror)) ; for now TODO
-       (cond ((user-sdp-answer offeror)
-              (setf (response-status *response*) 409)
-              "{offeror:\"not-available\"}")
-             (t
-              (setf (user-sdp-answer offeror) (request-param-value "answer"))
-              (setf (response-status *response*) 202)
-              "202"))))
+  (let ((answeror (find-user-from-session))
+        (offeror (find-user-by-sdp (request-param-value "offeror"))))
+    (declare (ignore answeror)) ; for now TODO
+    (cond ((user-sdp-answer offeror)
+           (setf (response-status *response*) 409)
+           "{offeror:\"not-available\"}")
+          (t
+           (setf (user-sdp-answer offeror) (request-param-value "answer"))
+           (setf (response-status *response*) 202)
+           "202"))))
 
 (defroute put/action/gossip ("/action/gossip"
                              :method :put :accept '("application/json"))

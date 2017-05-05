@@ -3,14 +3,11 @@
   (:documentation  "This package  contains  the  handlers that  directly
  handle  various URI  routes for  the web  server. These  are generally
  invoked currently via FastCGI, or a running Hunchentoot instance.")
-  (:use :alexandria
-        :cl
-        :caveman2
-        :tootstest.config
-        :tootstest.view
-        :tootstest.db
-        :datafly
-        :sxql)
+  (:use :alexandria :cl
+        :caveman2 :tootstest.config
+        :tootstest.view :tootstest.db
+        :datafly :sxql)
+  (:import-from :split-sequence :split-sequence)
   (:export #:*web*)
   (:export #:jscl-rebuild-when-needed
            #:jscl-rebuild-thread
@@ -23,7 +20,8 @@
 ;; Application
 
 (defclass <web> (<app>) ()
-  (:documentation "This is the local specialization of the Caveman2 application class."))
+  (:documentation  "This is  the  local specialization  of the  Caveman2
+ application class."))
 (defvar *web* (make-instance '<web>)
   "This is the singleton instance of the web application object.")
 (clear-routing-rules *web*)
@@ -56,9 +54,11 @@ redirecting. In  real life, it's  rarely encountered by a  real browser,
 but sometimes caught by tools like curl or wget with certain settings."
   (flexi-streams:string-to-octets
    (concatenate 'string
-                "<!DOCTYPE html><html><title>Redirect</title><a href=\""
+                "<!DOCTYPE html><html><title>Redirect</title><a href="
+                (string #\quotation_mark)
                 uri
-                "\">Redirected to "
+                (string #\quotation_mark)
+                ">Redirected to "
                 uri
                 "</a></html>")))
 
@@ -77,16 +77,16 @@ via `REDIRECT-TO/HTML/BODY'."
     (list
      status
      `(:location ,uri
-                 :x-redirected-by ,(romance-ii-program-name/version)
-                 :content-type "text/html")
+       :x-redirected-by ,(romance-ii-program-name/version)
+       :content-type "text/html")
      (redirect-to/html-body uri))))
 
 
 ;;; Default route
 
 (defroute route-/ "/" ()
-          "Redirect to the login page from the default page for this API version."
-          (redirect-to "/login"))
+  "Redirect to the login page from the default page for this API version."
+  (redirect-to "/login"))
 
 
 

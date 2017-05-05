@@ -67,10 +67,18 @@ write-docs — write out TeΧInfo documentation
 help — print this
 "))
 
-(defvar *compiled* #.(with-output-to-string (s) (print-object (local-time:now) s))
-        "A string representing the (fairly precise) time at which the program was compiled.")
+(defparameter *compiled* :never
+  "A string representing the (fairly  precise) time at which the program
+  was compiled.")
+(defparameter *build-date* :never
+  "A string representing  the year, month, and day at  which the program
+  was compiled.")
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (setf *compiled* (with-output-to-string (s) (print-object (local-time:now) s))))
+  (setf *compiled* (with-output-to-string (s)
+                     (print-object (local-time:now) s))
+        *build-date* (local-time:format-timestring
+                      nil (local-time:now)
+                      :format '(:year #\- :month #\- :day))))
 
 (defun start-repl ()
   "Starts a PREPL REPL."

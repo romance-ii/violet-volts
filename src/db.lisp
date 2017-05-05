@@ -2,9 +2,9 @@
 (defpackage tootstest.db
   (:use :cl :alexandria)
   (:import-from :tootstest.config
-                :config)
+   :config)
   (:import-from :datafly
-                :*connection*
+   :*connection*
                 :connect-cached)
   (:export #:connection-settings
            #:db
@@ -49,22 +49,22 @@
                              :key nil
                              :value nil
                              :prior prior))
-          (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
-            (loop for child in node
-               with prior-child
-               do (journal-node child prior-child)
-               do (setq prior-child child))))
+     (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
+       (loop for child in node
+             with prior-child
+             do (journal-node child prior-child)
+             do (setq prior-child child))))
     (hash-table (datafly:execute (sxql:insert-into :journal-nodes
                                    :event-time *now*
                                    :node-type "list"
                                    :key nil
                                    :value nil
                                    :prior prior))
-                (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
-                  (loop for child in node
-                     with prior-child
-                     do (journal-node child prior-child)
-                     do (setq prior-child child))))
+     (let ((parent-id (datafly:retrieve-one (sxql:select (:last-insert-id)))))
+       (loop for child in node
+             with prior-child
+             do (journal-node child prior-child)
+             do (setq prior-child child))))
     (atom (datafly:execute (sxql:insert-into :journal-nodes
                              :event-time *now*
                              :node-type (simple-type-of node)

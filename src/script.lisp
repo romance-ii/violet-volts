@@ -54,4 +54,4 @@ console.log(\"Compile-time error: ~a in …>jscl>~a\");
  * —————————— */
 
 "
-          (type-of c) (pathname-name source-path) c))
+(type-of c) (pathname-name source-path) c))

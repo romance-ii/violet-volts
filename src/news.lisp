@@ -38,10 +38,10 @@ Returns the RDF as a raw string"
   "Convert and  RDF story  (DOM object)  into a  property list  with the
 title, link, content, and description."
   (loop for (tag label)
-     in '(("title" :title) ("link" :link)
-          ("content:encoded" :content) ("description" :description))
-     collect label
-     collect (get-text-of-element story tag)))
+          in '(("title" :title) ("link" :link)
+               ("content:encoded" :content) ("description" :description))
+        collect label
+        collect (get-text-of-element story tag)))
 
 (defun tootsbook-headline-stories ()
   "Returns  the  headline  elements   (DOM  objects)  from  the  current
@@ -92,14 +92,14 @@ lists, each made by `RDF-STORY-TO-PLIST'."
                  '(
                    "Monday" "Tuesday" "Wednesday" "Thursday"
                    "Friday" "Saturday" "Sunday" ))
-            date 
+            date
             (nth month
                  '("?"
                    "January" "February" "March"
                    "April" "May" "June"
                    "July" "August" "September"
                    "October" "November" "December"))
-            year 
+            year
             (cond
               ((<= 0 hour 6) "in the early morning")
               ((<= 7 hour 12) "in the morning")

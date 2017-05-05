@@ -2,14 +2,14 @@
 (defpackage tootstest.config
   (:use :cl)
   (:import-from :envy
-                :config-env-var
+   :config-env-var
                 :defconfig)
   (:export :config
-           :*application-root*
+   :*application-root*
            :*static-directory*
-           :*template-directory*
+   :*template-directory*
            :appenv
-           :developmentp
+   :developmentp
            :productionp))
 (in-package :tootstest.config)
 
@@ -21,11 +21,11 @@
 
 (defconfig :common
     `(:databases ((:maindb :sqlite3 :database-name ":memory:"))
-                 :on-error-mail (:from-name "Tootsville Support"
-                                            :from-address "support@tootsville.adventuring.click"
-                                            :to-address "support@tootsville.adventuring.click"
-                                            :smtp-server "localhost"
-                                            :subject-prefix "Error")))
+      :on-error-mail (:from-name "Tootsville Support"
+                      :from-address "support@tootsville.adventuring.click"
+                      :to-address "support@tootsville.adventuring.click"
+                      :smtp-server "localhost"
+                      :subject-prefix "Error")))
 
 (defconfig |development|
     '())

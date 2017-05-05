@@ -4,8 +4,8 @@
 (defroute characters
     ("/characters/"
      :method :get :accept '("application/json")) ()
-     (setf (getf (response-headers *response*) :content-type) "application/json")
-     '(:error))
+  (setf (getf (response-headers *response*) :content-type) "application/json")
+  '(:error))
 
 (defroute characters/by-id
     ("/characters/:character-id"
@@ -17,8 +17,8 @@
 (defroute put/characters
     ("/characters"
      :method :put :accept '("application/json")) ()
-     (setf (getf (response-headers *response*) :content-type) "application/json")
-     '(:error))
+  (setf (getf (response-headers *response*) :content-type) "application/json")
+  '(:error))
 
 (defroute post/characters/by-id
     ("/characters/:character-id"
@@ -39,7 +39,7 @@
 (defroute characters.html
     ("/characters/"
      :method :get :accept '("text/html")) ()
-     "Error")
+  "Error")
 
 (defroute characters/by-id.html
     ("/characters/:character-id"

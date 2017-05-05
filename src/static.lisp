@@ -19,17 +19,17 @@ the OS may do some disc caching."
     (:else (throw-code 404))))
 
 (defroute route-/css/*.css "/css/:name.css" (&key name)
-          "CSS files are served statically."
-          (send-static "text/css;charset=utf-8"
-                       (merge-pathnames (make-pathname
-                                         :directory '(:relative "css")
-                                         :name name :type "css")
-                                        *static-directory*)))
+  "CSS files are served statically."
+  (send-static "text/css;charset=utf-8"
+               (merge-pathnames (make-pathname
+                                 :directory '(:relative "css")
+                                 :name name :type "css")
+                                *static-directory*)))
 
 (defroute route-/js/*.js "/js/:name.js" (&key name)
-          "JavaScript files are served statically."
-          (send-static "application/javascript;charset=utf-8"
-                       (merge-pathnames (make-pathname
-                                         :directory '(:relative "js")
-                                         :name name :type "js")
-                                        *static-directory*)))
+  "JavaScript files are served statically."
+  (send-static "application/javascript;charset=utf-8"
+               (merge-pathnames (make-pathname
+                                 :directory '(:relative "js")
+                                 :name name :type "js")
+                                *static-directory*)))
