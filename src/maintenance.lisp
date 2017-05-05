@@ -19,6 +19,25 @@
        (format nil "~d hours" (round seconds (* 60 60))))
       (t (format nil "~d days" (round seconds (* 24 60 60)))))))
 
+(defmacro with-continuable-errors-skipped (&body body)
+  `(handler-case
+       (progn ,@body)
+     (serious-condition (c)
+       (format t "…encountered a serious condition:~%~s~:*~%~a" c)
+       (dolist (kind '(:ignore :continue :take-new :accept))
+         (when (find-restart kind)
+           (format t "~&Found a ~a restart; invoking." kind)
+           (invoke-restart kind)))
+       (format t "~&No “continuable” restarts found; aborting.")
+       (abort))))
+
+(defmacro with-standard-streams-to-string (&body body)
+  `(with-output-to-string (s)
+     (let ((*standard-output* s)
+           (*error-output* s)
+           (*trace-output* s)) 
+       ,@body)))
+
 (defmacro with-maintenance-times ((task-name task-string
                                    start-delay finish-delay)
                                   &body body)
@@ -41,20 +60,9 @@
        (prog2
            (setf (getf *maintenance-tasks-performed* ,task-start-sym)
                  (get-universal-time))
-           (with-output-to-string (s)
-             (let ((*standard-output* s)
-                   (*error-output* s)
-                   (*trace-output* s))
-               
-               (handler-case
-                   (progn ,@body)
-                 (serious-condition (c)
-                   (format t "…encountered a serious condition:~%~s~:*~%~a" c)
-                   (dolist (kind '(:continue :take-new :accept))
-                     (when (find-restart kind)
-                       (format t "~&Found a ~a restart; invoking." kind)
-                       (invoke-restart kind)))
-                   (format t "~&No “safe” restart found; aborting.")))))
+           (with-standard-streams-to-string
+             (with-continuable-errors-skipped
+               ,@body))
          (setf (getf *maintenance-tasks-performed* ,task-sym)
                (get-universal-time))))))
 
@@ -65,7 +73,7 @@
                                    (string label)))
        ,(concatenate 'string
                      "/maintenance/"
-                     (string label))
+                     (string-downcase label))
      nil
      (with-maintenance-times (,label
                               ,name
@@ -81,9 +89,21 @@
 (define-maintenance-task hot-reload
     ("Reloading from local sources"
      (* 5 60) (* 30 60))
-  (asdf:load-system :tootstest))
+  (locally (declare #+sbcl (sb-ext:muffle-conditions style-warning))
+    (asdf:load-system :tootstest)))
 
 (define-maintenance-task buildapp.cgi
     ("Recompiling tootstest.cgi executable"
      (* 20 60) (* 3 60 60))
-  (uiop:run-program "make tootstest.cgi"))
+  (uiop:chdir (asdf:system-relative-pathname :tootstest "./"))
+  (uiop:run-program "make tootstest.cgi"
+                    :output :string :error-output :output))
+
+(define-maintenance-task reload-jscl
+    ("Recompiling jscl.js"
+     (* 20 60) (* 3 60 60))
+  (uiop:chdir (asdf:system-relative-pathname :tootstest "./"))
+  (locally (declare #+sbcl (sb-ext:muffle-conditions style-warning))
+    (uiop:chdir (asdf:system-relative-pathname :tootstest "./src/lib/jscl/"))
+    (load (asdf:system-relative-pathname :tootstest "./src/lib/jscl/jscl.lisp"))
+    (funcall (intern "BOOTSTRAP-CORE" :jscl/bootstrap))))
