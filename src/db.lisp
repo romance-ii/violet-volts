@@ -33,7 +33,7 @@
   (apply #'connect-cached (connection-settings db)))
 
 (defmacro with-connection ((conn) &body body)
-  `(let ((*connection* ,conn))
+  `(let ((*connection* ,(if (keywordp conn) `(db ,conn) conn)))
      ,@body))
 
 

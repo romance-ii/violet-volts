@@ -36,7 +36,7 @@
                                     (equal token (user-google-token user)))
                                   *gossip-users*))
       (first found)
-      (with-connection (db :members)
+      (with-connection (:members)
         (or (retrieve-one (select :*
                             (from :users)
                             (where (:= :google-token token)))

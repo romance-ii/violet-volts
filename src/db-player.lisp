@@ -203,7 +203,7 @@ representing that player."
   (check-type registrar (or string symbol) "string-designator for a registrar")
   (check-type id-string string
               "string that uniquely identifies a user across time, distinctive to REGISTRAR")
-  (with-connection :members
+  (with-connection (:members)
     (datafly:execute
      (sxql:insert-into :player-registrations
        (sxql:set= :player-id (player-id player)
@@ -245,7 +245,7 @@ calling MAKE-USER-REGISTRATION for them."
       (make-user-registration registrar id info)))
 
 (defun user-id<-registration (registrar id-string)
-  (with-connection :members
+  (with-connection (:members)
     (datafly:retrieve-one-value
      (sxql:select (:id)
        (sxql:from :player-registrations)
@@ -261,7 +261,7 @@ calling MAKE-USER-REGISTRATION for them."
 (defun find-player-by-id (id)
   "Retrieve the player object represented by ID."
   (check-type id (unsigned-byte 128))
-  (with-connection :members
+  (with-connection (:members)
     (datafly:retrieve-one
      (sxql:select (:*)
        (sxql:from :players)
