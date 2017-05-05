@@ -15,9 +15,12 @@
 
 (setf (config-env-var) "VIOLETVOLTS")
 
-(defparameter *application-root* (asdf:system-source-directory :tootstest))
-(defparameter *static-directory* (merge-pathnames #P"static/" *application-root*))
-(defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
+(defparameter *application-root*
+  (asdf:system-source-directory :tootstest))
+(defparameter *static-directory* 
+  (asdf:system-relative-pathname :tootstest #P"static/"))
+(defparameter *template-directory*
+  (asdf:system-relative-pathname :tootstest #P"templates/"))
 
 (defconfig :common
     `(:databases ((:maindb :sqlite3 :database-name ":memory:"))
