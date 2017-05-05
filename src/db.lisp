@@ -32,7 +32,7 @@
 (defun db (&optional (db :maindb))
   (apply #'connect-cached (connection-settings db)))
 
-(defmacro with-connection (conn &body body)
+(defmacro with-connection ((conn) &body body)
   `(let ((*connection* ,conn))
      ,@body))
 
