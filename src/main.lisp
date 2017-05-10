@@ -81,12 +81,13 @@ help — print this
                       :format '(:year #\- :month #\- :day))))
 
 (defun start-repl ()
-  "Starts a PREPL REPL."
+  "Starts  a PREPL  REPL. This  is useful  if you  cannot use  Swank for
+some reason. (Will Quickload PREPL if needed.)"
   (ql:quickload :prepl)
   (funcall (intern "REPL" (find-package :prepl))))
 
 (defun start-swank ()
-  "Starts a SWANK server."
+  "Starts a SWANK server. (Will Quickload Swank if needed.)"
   (ql:quickload :swank)
   (funcall (intern "START-SERVER" (find-package :swank))))
 
@@ -152,13 +153,16 @@ Quicklisp when called."
 
 (defun start-hunchentoot ()
   "Start a Hunchentoot  server via `START' and fall through  into a REPL
-to keep the process running."
+to  keep  the  process  running.  This  is  intended  for  testing  from
+a local terminal."
   (start)
   (print "Hunchentoot server running. Evaluate (TOOTSTEST:STOP) to stop, or exit the REPL.")
   (start-repl))
 
 (defun post-read-version-page ()
-  "Power-On-Self-Test: Checks that the server can respond to the version-page query locally."
+  "Power-On-Self-Test:  Checks  that  the  server  can  respond  to  the
+version-page  query  locally.  This  is  the  simplest  round-trip  test
+possible and should be improved upon."
   (let ((retries 3))
     (tagbody retry-post
        (handler-case
@@ -199,8 +203,9 @@ need to be expanded a great deal to increase confidence in these tests."
 
 (defun entry (argv)
   "Top-level  entry-point  for  the  compiled  executable  binary  form.
-Dispatches   based   upon   the   single  argument,   expected   to   be
-a verb (case-insensitive) from the card-coded table in this function."
+Dispatches based  upon the  first (or single)  argument, expected  to be
+a verb  (case-insensitive) from the  card-coded table in  this function.
+If none is given, calls `PRINT-HELP'"
   (case (intern (string-upcase (typecase argv
                                  (cons (if (< 1 (length argv))
                                            (second argv)

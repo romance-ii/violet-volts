@@ -49,7 +49,9 @@
 
 Structure slots:
 
-@itemize  @item ID
+@itemize  
+
+@item ID
 
 A 128-bit  unique identifier  for this player,  used internally.  We are
 generating these using v4-UUID's, at  least for now, although other than
@@ -121,7 +123,7 @@ The time  zone used for  this computation  is the not  defined, however,
 yielding  rather  irregular  behaviour   depending  on  time  zones  and
 the like.
 
-TODO: Determine  in what  time zone  we should  computer this  for legal
+TODO:  Determine in  what time  zone we  should compute  this for  legal
 reasons, eg, COPPA."
   (check-type date-of-birth local-time:timestamp)
   (check-type reference-date local-time:timestamp)
@@ -143,6 +145,9 @@ reasons, eg, COPPA."
            (if had-birthday-p 1 0))))))
 
 (defun player-age (player)
+  "Returns the computed age of the player (using their date of birth, if
+know, or  falling back  upon the  age supplied  if no  date of  birth is
+known."
   (check-type player player)
   (let ((dob (player-date-of-birth player)))
     (if dob
@@ -245,6 +250,9 @@ calling MAKE-USER-REGISTRATION for them."
       (make-user-registration registrar id info)))
 
 (defun user-id<-registration (registrar id-string)
+  "Given a REGISTRAR and an ID-STRING  that is unique among all users of
+that  registrar,  find  any  member   who  can  be  identified  by  that
+registration information."
   (with-connection (:members)
     (datafly:retrieve-one-value
      (sxql:select (:id)
@@ -253,7 +261,7 @@ calling MAKE-USER-REGISTRATION for them."
                          (:equal :id-string id-string)))))))
 
 (defmethod user-id<-registrar-id ((registrar symbol) (id string) &optional info)
-  "The default handler  accepts any persistently unique  ID string and
+  "The default  handler accepts  any persistently  unique ID  string and
  returns a user object, if one exists."
   (declare (ignore info))
   (user-id<-registration registrar id))
@@ -270,7 +278,7 @@ calling MAKE-USER-REGISTRATION for them."
 
 (defun ensure-player (player)
   "Ensure  that  PLAYER   is  a  PLAYER  object.   Coërces  integers  or
-base-36-coded integer strings."
+base-36-coded integer strings into integers and calls `FIND-PLAYER-BY-ID'"
   (etypecase player
     (player player)
     ((integer 1 *) (find-player-by-id player))
