@@ -133,16 +133,22 @@ Quicklisp when called."
     (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
              :tootstest
-             :library-name "Violet Volts: tootstest"
+             :library "Violet Volts: tootstest"
              :texi-file (merge-pathnames #p"doc/tootstest.texi"
                                          source-dir)
-             :info-file (merge-pathnames #p "doc/tootstest"
+             :info-file (merge-pathnames #p"doc/tootstest"
                                          source-dir)
+             :copyright (format nil "2004-~d"
+                                #.(nth-value 5
+                                             (decode-universal-time
+                                              (get-universal-time))))
              :license :agplv3
              :declt-notice :short
              :hyperlinks nil
-             :introduction (alexandria:read-file-into-string #p"src/static/introduction")
-             :conclusion (alexandria:read-file-into-string #p"src/static/conclusion"))))
+             :introduction (alexandria:read-file-into-string
+                            #p"src/static/introduction")
+             :conclusion (alexandria:read-file-into-string
+                          #p"src/static/conclusion"))))
 
 (defun start-hunchentoot ()
   "Start a Hunchentoot  server via `START' and fall through  into a REPL

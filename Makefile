@@ -199,18 +199,22 @@ doc/violet-volts.html.tar.bz2:	doc/violet-volts.html.tar
 doc/violet-volts.html.tar.xz:	doc/violet-volts.html.tar
 	xz -9 -c < $< > $@
 
-doc/violet-volts.html.tar:	doc/violet-volts.html.d/violet-volts.html \
+doc/violet-volts.html.tar:	doc/violet-volts.html.d/index.html \
 		doc/violet-volts.texi
 	cd doc; tar cf violet-volts.html.tar violet-volts.html.d
 
-doc/violet-volts.html.zip:	doc/violet-volts.html.d/violet-volts.html \
+doc/violet-volts.html.zip:	doc/violet-volts.html.d/index.html \
 		doc/violet-volts.texi
 	cd doc; zip -9 violet-volts.html.zip violet-volts.html.d
 
-doc/violet-volts.html.d/violet-volts.html:	doc/violet-volts.texi
-	cd doc; makeinfo -o violet-volts.html.d/ \
-		--html --css-include=src/static/css/doc.css \
+doc/violet-volts.html.d/index.html:	doc/violet-volts.texi static/css/doc.css
+	mkdir -p doc/violet-volts.html.d/
+	cp static/css/doc.css doc/violet-volts.html.d/
+	cd doc; texi2html --iso --doctype='<!DOCTYPE html>' \
+		--toc-links --footnote-style=end --use-nodes \
+		-o violet-volts.html.d/ --html --css-include=violet-volts.html.d/doc.css \
 		--split=node violet-volts.texi
+	ln -f doc/violet-volts.html.d/violet-volts.html doc/violet-volts.html.d/index.html
 
 doc/violet-volts.ps:	doc/violet-volts.texi
 	cd doc; makeinfo --ps -o violet-volts.ps violet-volts.texi
