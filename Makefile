@@ -80,7 +80,7 @@ bin/buildapp:	bin/sbcl
 	fi
 
 tootstest.cgi:	tootstest.cgi.new
-	./tootstest.cgi.new check
+	./tootstest.cgi.new post
 	mv --backup=t tootstest.cgi.new tootstest.cgi
 
 tootstest.cgi.new:	tootstest.asd bin/buildapp \

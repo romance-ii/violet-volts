@@ -56,7 +56,7 @@ explicitly — the default behaviour is to run as a FastCGI server."
 Usage: Run this program with one of these verbs.
 No verb at all defaults to “fast-cgi”
 
-check — perform a very simple power-on self-test
+post — perform a very simple power-on self-test
 fast-cgi — run in FastCGI mode under an appropriate server (eg, Apache)
 repl — run a REPL (you might want to rlwrap it)
 server — start a Hunchentoot server for testing
@@ -214,7 +214,7 @@ If none is given, calls `PRINT-HELP'"
                                  (t argv))) :keyword)
     (:fast-cgi (fastcgi-entry))
     (:server (start-hunchentoot))
-    (:check (power-on-self-test))
+    (:post (power-on-self-test))
     (:repl (start-repl))
     (:version (print *compiled*))
     (:swank (start-swank))
