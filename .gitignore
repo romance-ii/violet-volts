@@ -48,6 +48,9 @@ js/*.map
 css/*.css
 
 # Compilation target
+Romance-II
+Romance-II.new
+# Old name for it
 tootstest.cgi
 tootstest.cgi.new
 

@@ -1,24 +1,37 @@
 # Redirect for things that are on other servers.
 #
-# This   allows  arbitrary   servers  to   bounce  404's   off  to   one
+# This allows  arbitrary servers to  bounce (would-be) 404's off  to one
 # another, basically.
 RedirectMatch ^/wikiwiki/(.*)$ https://wikiwiki.tootsville.adventuring.click/wikiwiki/$1
 RedirectMatch ^/tootsbook/(.*)$ https://www.tootsbook.com/tootsbook/$1
 RedirectMatch ^/Assets/(.*)$ //jumbo.tootsville.adventuring.click/Assets/$1
 RedirectMatch ^/directory/(.*)$ https://whitney.tootsville.adventuring.click/directory/$1
 RedirectMatch ^/members/(.*)$ https://members.tootsbook.com/members/$1
-RedirectMatch ^/([Pp][Ll][Aa][Yy].*) /login?to=$1
+RedirectMatch ^/([Pp][Ll][Aa][Yy].*) https://tootsville.adventuring.click/latest/login?to=$1
+
+# Local static files are remapped
 RedirectMatch ^/css/(.*)$ /static/css/$1
 RedirectMatch ^/js/(.*)$ /static/js/$1
 
+# If they landed on the root, they meant to find the web server
 RedirectMatch ^/$ https://www.tootsville.org/
 
+# Form and quiz vanity URIs
 Redirect /form/reserve-legacy-toot-name https://goo.gl/forms/TSF6zTktKAsty7OR2
 Redirect /form/display-bug https://wikiwiki.tootsville.adventuring.click/wikiwiki/The_Yes_it_is_ugly_Page
 Redirect /quiz/toots-quiz-201610 https://docs.google.com/forms/d/e/1FAIpQLSf3u024H6qDYC7U5dsMdORwOw7oYXXLoN2nJQJC3RFVljXYog/viewform
 
+# Manually point the /latest/ link to the current version
+RedirectMatch ^/latest/(.*)$ /0.3.1/$1
+
+# Make the FastCGI executables … executable
 Options ExecCGI SymLinksIfOwnerMatch Includes
-AddHandler fastcgi-script .cgi
+<Files ~ "/(tootstest|[0-9\.]+)/Romance-II$">
+    AcceptPathInfo On
+    RewriteEngine Off
+    Header always set X-Romance-II-Game Tootsville
+    SetHandler fastcgi-script
+</Files>
 
 AcceptPathInfo On
 RewriteEngine On
@@ -28,9 +41,10 @@ Header always set X-Frame-Options SAMEORIGIN
 RewriteCond %{HTTPS} !=on
 RewriteRule (.*) https://tootsville.adventuring.click%{REQUEST_URI} [R=301,L]
 
-RewriteRule ^((version|action|maintenance|news|zomg|characters|login|game-server)(.*))$ tootstest.cgi/%1 [QSA,L]
-RewriteRule ^tootstest/(.*)$ tootstest.cgi/%1 [QSA,L]
-
+# Direct to one of the CGI handlers for API versions.
+RewriteRule "^(tootstest|[0-9\.]+)/((version|action|maintenance|news|zomg|characters|login|splash|game-server)(.*))$" "/$1/Romance-II/$2" [qsappend,handler=fastcgi-script,passthrough]
+# RewriteCond "%{REQUEST_URI}" "!=m#^(tootstest|[0-9\.]+)/Romance-II#"
+# RewriteRule "^(tootstest|[0-9\.]+)/.*$" "-" [forbidden,last]
 
 # Error Documents for all defined error codes.
 ErrorDocument 400 /error/400.shtml

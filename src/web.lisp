@@ -87,8 +87,12 @@ via `REDIRECT-TO/HTML/BODY'."
 ;;; Default route
 
 (defroute route-/ "/" ()
-  "Redirect to the login page from the default page for this API version."
+  "Redirect to the splash page from the default page for this API version."
   (redirect-to "/login"))
+
+(defroute route-/splash "/splash" ()
+  "Display a splash screen and give users the option to log in"
+  (render #P"splash.html"))
 
 
 

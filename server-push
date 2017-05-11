@@ -5,49 +5,95 @@ BOLD=" ★ "
 if [ -t ]
 then
     BOLD="[1;32m ★ [0m[1m"
+    echo -n "]0;Server push from $(pwd)"
 fi
 
 NORM="[0m"
 
-RSYNC=rsync -essh -v --timeout=45
+RSYNC="rsync -essh -v --timeout=45"
+
+version=tootstest
+if [ "--production" = "$1" ]
+then
+    make Romance-II
+    version=$(./Romance-II version-info version)
+    if [ -t ]
+    then
+        echo -n "]0;Server push to Live $version from $(pwd)"
+        echo -n "[1;31m"
+        figlet -f big -k -t -c Warning!
+        echo -n $NORM"[31m"
+        figlet -f big -k -t -c Deploying
+        figlet -f mini -k -t -c to
+        echo -n "[1;31m"
+        figlet -f big -k -t -c Live
+        echo -n $NORM"[31m"
+        figlet -f big -k -t -c $version
+        echo -n $NORM
+    fi
+else
+    if [ -t ]
+    then
+        echo -n "]0;Server push to Tootstest from $(pwd)"
+        echo -n "[32m"
+        figlet -f big -k -t -c Toots Test
+        echo -n $NORM
+    fi
+fi
 
 echo $BOLD Building assets $NORM
 make assets
 
+$RSYNC .htaccess tootsville.adventuring.click:tootsville.adventuring.click/
+
 echo $BOLD Synchronizing assets and source to host $NORM
 $RSYNC -r static src templates \
-      tootstest.asd Makefile *.lisp \
-      .htaccess robots.txt \
-      --exclude '*~' --exclude '.#*' \
-      --exclude 'src/lib/babylon.js/**' \
-      tootsville.adventuring.click:tootsville.adventuring.click/
+       tootstest.asd Makefile *.lisp \
+       index.html robots.txt \
+       --exclude '*~' --exclude '.#*' \
+       --exclude 'src/lib/babylon.js/**' \
+       tootsville.adventuring.click:tootsville.adventuring.click/$version/
 
 echo $BOLD Synchronizing error pages with Tootsville.org $NORM
 $RSYNC -r tootsville.org/error \
-      tootsville.adventuring.click:tootsville.adventuring.click/
+       tootsville.adventuring.click:tootsville.adventuring.click/$version/
 
 echo $BOLD Pushing Tootsville.org web site $NORM
-$RSYNC -r tootsville.org tootsvilleorg@tootsville.org:
-
-echo $BOLD Building local executable to test $NORM
-make tootstest.cgi
+if [ "--production" = $1 ]
+then
+    $RSYNC -r tootsville.org tootsvilleorg@tootsville.org:
+else
+    $RSYNC -r tootsville.org/* tootsville.org/.??* tootsvilleorg@tootsville.org:test.tootsville.org/
+fi
 
 echo $BOLD Pushing bin/ scripts $NORM
-$RSYNC bin/* tootsville.adventuring.click:tootsville.adventuring.click/bin/
+$RSYNC bin/* tootsville.adventuring.click:tootsville.adventuring.click/$version/bin/
 
 echo $BOLD Attempting to build on host $NORM
 build_tries=5
-build_try=1
+build_try=0
 while [ $build_try -lt $build_tries ]
 do
-    ssh tootsville.adventuring.click nice make -C tootsville.adventuring.click tootstest.cgi || (
+    build_try=$(( 1 + $build_try ))
+    echo -n "]0;Server build compiling …"
+    ssh tootsville.adventuring.click nice make -C tootsville.adventuring.click/$version/ Romance-II || (
         echo "$BOLD Build attempt failed: try $build_try of $build_tries.$NORM"
+        ssh tootsville.adventuring.click rm -f tootsville.adventuring.click/$version/Romance-II
         if [ $build_try -lt $build_tries ]
         then
             delay=$(( $build_try * 30 ))
-            echo $BOLD will try again in $delay sec $NORM
-            sleep $delay
-            build_try=$(( 1 + $build_try ))
+            echo -n "]0;Server build failed …"
+            echo $BOLD will try again in $delay sec … $NORM
+            while [ $delay -gt 0 ]
+            do
+                if [ -t ]
+                then
+                    echo -n "]0;$delay sec delay: Server build failed …  "
+                fi
+                echo "     in $delay sec …"
+                sleep 10
+                delay=$(( $delay - 10 ))
+            done
         else
             echo $BOLD Exhausted build attempts, aborting $NORM
             exit -5
@@ -60,27 +106,34 @@ git tag -s server-push-$(date +%Y-%m-%d-%H%M) HEAD \
     -m "Pushed to server from $(whoami)@$(hostname) at $(date); $(git status -s -uno)"
 
 echo $BOLD Waiting for FastCGI to refresh $NORM
-until curl https://tootsville.adventuring.click/version.txt 2>/dev/null | \
+until curl https://tootsville.adventuring.click/$version/version.txt 2>/dev/null | \
         grep -E "^Build-Date:\s+$( date +%Y-%m-%d | sed -e s/-0/-/g )"
 do
-	echo "New version not yet running (FastCGI cache?)"
-	sleep 30 
+    echo "New version not yet running (FastCGI cache?)"
+    sleep 30
 done
 
 echo $BOLD Notifying Rollbar of the deployment $NORM
+
+# environment was: $(./Romance-II version-info product)
+environ=tootstest
+if [ "$version" != tootstest ]
+then
+    environ=live
+fi
+
 curl https://api.rollbar.com/api/1/deploy/ \
      -F access_token=f6f4ae4d08dd415799a1ef2122fff0b0 \
-     -F environment=$(./tootstest.cgi version-info product) \
+     -F environment=$environ \
      -F revision=$(git log -n 1 --pretty=format:"%H") \
-     -F version=$(./tootstest.cgi version-info version) \
+     -F version=$(./Romance-II version-info version) \
      -F local_username="$(whoami)%$(hostname)"
 
-# echo $BOLD Providing Source Maps to Rollbar $NORM
-# curl https://api.rollbar.com/api/1/sourcemap \
-#   -F access_token=aaaabbbbccccddddeeeeffff00001111 \
-#   -F version=version_string_here \
-#   -F minified_url=http://example.com/static/js/example.min.js \
-#   -F source_map=@static/js/example.min.map \
-#   -F static/js/site.js=@static/js/site.js \
-#   -F static/js/util.js=@static/js/util.js
-
+# echo   $BOLD   Providing   Source   Maps   to   Rollbar   $NORM   curl
+# https://api.rollbar.com/api/1/sourcemap              \              -F
+# access_token=aaaabbbbccccddddeeeeffff00001111           \           -F
+# version=version_string_here                    \                    -F
+# minified_url=http://example.com/static/js/example.min.js      \     -F
+# source_map=@static/js/example.min.map               \               -F
+# static/js/site.js=@static/js/site.js                \               -F
+# static/js/util.js=@static/js/util.js

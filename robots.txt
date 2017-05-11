@@ -1,6 +1,7 @@
 User-agent: *
-Disallow: /login
-Disallow: /play*
-Disallow: tootstest/login
-Disallow: tootstest/rpc
+Disallow: */login*
+Disallow: */play*
+Disallow: */maintenance*
+Disallow: */zomg*
+Disallow: */action*
 

@@ -4,9 +4,13 @@
 html { 
     margin: 0; 
     padding: 0;
-    background-color: #ccf;
     font-family: Acme, sans-serif;
+    background: repeating-linear-gradient(45deg, #9c0059,
+                                          #9c0059 1rem,
+                                          #690026 1rem,
+                                          #690026 2rem);
 }
+
 body { 
     color: black; 
     background-color: white; 

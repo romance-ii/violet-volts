@@ -21,7 +21,7 @@ all:	bin doc
 
 clean:
 	-$(MAKE) -C src/lib/jscl clean
-	-rm -f tootstest.cgi tootstest.cgi.new \
+	-rm -f Romance-II Romance-II.new \
 		js/*.js css/*.css \
 		static/js/*.js static/js/*.map static/css/*.css \
 		doc/* bin/buildapp
@@ -48,7 +48,7 @@ TAGS:	$(shell find . -name \*.lisp)
 	>> ~/.sbclrc
 	>.deps-installed~
 
-server-push: tootstest.cgi
+server-push: Romance-II
 	./server-push
 
 deploy:	bin test server-push doc-publish
@@ -63,7 +63,7 @@ assets: 	static/js/jscl.js \
 	static/js/social.js \
 	static/css/main.css static/css/doc.css
 
-bin:	tootstest.cgi assets
+bin:	Romance-II assets
 
 bin/sbcl:
 	bin/ensure-sane-sbcl
@@ -79,21 +79,22 @@ bin/buildapp:	bin/sbcl
 			--eval '(buildapp:build-buildapp "bin/buildapp")'; \
 	fi
 
-tootstest.cgi:	tootstest.cgi.new
-	./tootstest.cgi.new post
-	mv --backup=t tootstest.cgi.new tootstest.cgi
+Romance-II:	Romance-II.new
+	./Romance-II.new post
+	mv --backup=t Romance-II.new Romance-II
 
-tootstest.cgi.new:	tootstest.asd bin/buildapp \
+Romance-II.new:	tootstest.asd bin/buildapp \
 		$(shell find . -name \*.lisp \
 			-and -not -path \**/.\* \
 			-and -not -path src/mesh/\**)
-	bin/buildapp --output tootstest.cgi.new \
+	bin/buildapp --output Romance-II.new \
 		--load ~/quicklisp/setup.lisp \
 		--asdf-path . \
 		--load "src/setup.lisp" \
 		--eval '(ql:quickload :tootstest)' \
 		--load-system tootstest \
 		--entry tootstest:entry
+	chmod +x Romance-II.new
 
 src/lib/jscl/jscl.js:	$(shell find src/lib/jscl -name \*.lisp \
 			-and -not -name .\*) \
@@ -182,7 +183,7 @@ js/mesh.js:	src/lib/jscl/jscl.js src/bootstrap-tootstest.lisp \
 		> js/mesh.js )
 
 test:	bin
-	./tootstest.cgi test
+	./Romance-II test
 	$(MAKE) -C src/lib/jscl test || (cd src/lib/jscl && ./run-tests.sh)
 
 doc/violet-volts.pdf:	doc/violet-volts.texi
@@ -231,6 +232,6 @@ doc/violet-volts.info:	doc/violet-volts.texi
 doc:	doc/violet-volts.pdf doc/violet-volts.info doc/violet-volts.txt \
 	doc/violet-volts.html.tar.gz
 
-doc/violet-volts.texi:	tootstest.cgi
-	./tootstest.cgi write-docs
+doc/violet-volts.texi:	Romance-II
+	./Romance-II write-docs
 	ln -f doc/tootstest.texi doc/violet-volts.texi

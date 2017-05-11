@@ -93,10 +93,10 @@
     (asdf:load-system :tootstest)))
 
 (define-maintenance-task buildapp.cgi
-    ("Recompiling tootstest.cgi executable"
+    ("Recompiling Romance-II executable"
      (* 20 60) (* 3 60 60))
   (uiop:chdir (asdf:system-relative-pathname :tootstest "./"))
-  (uiop:run-program "make tootstest.cgi"
+  (uiop:run-program "make Romance-II"
                     :output :string :error-output :output))
 
 (define-maintenance-task reload-jscl
