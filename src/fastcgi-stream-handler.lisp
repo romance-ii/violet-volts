@@ -24,21 +24,41 @@
     (setf (acceptor-socket acceptor)
           (make-two-way-stream *standard-input* *standard-output*))))
 
-(defun run (app &key (debug t) fd)
-  "Start FastCGI server."
-  (flet ((main-loop (req)
-           (let* ((env (handle-request req))
-                  (res (if debug
+(defun make-error-response (request error)
+  "Create a response object for the given ERROR to the given REQUEST.
+
+This  is  called  when  a  SERIOUS-CONDITION  is  signaled  from  within
+ a request handler."
+  (cond
+    ((tootstest.web:wants-json-p request)
+     (list 500
+           (list :x-romance-2-error-type (type-of error))
+           (list (format nil "{\"error\": 500, \"errorType\": \"~a\"}"
+                         (type-of error)))))
+    (t (tootstest.web:redirect-to "https://tootsville.adventuring.click/error/500.shtml"))))
+
+(defun run (app &key (debugp t) fd)
+  "Start a  FastCGI server for  APP, possibly  in DEBUGP mode.
+
+In  DEBUGP   mode,  errors  are   NOT  caught,  allowing  the   user  to
+interactively  trap  errors  in  the  debugger.  When  not  DEBUGP,  any
+SERIOUS-CONDITION will
+
+FD is IGNORED. "
+  (declare (ignore fd))
+  (flet ((main-loop (request)
+           (let* ((env (handle-request request))
+                  (res (if debugp
                            (funcall app env)
                            (handler-case (funcall app env)
-                             (error (error)
-                               (princ error *error-output*)
-                               '(500 () ("Internal Server Error")))))))
+                             (serious-condition (c)
+                               (princ c *error-output*)
+                               (make-error-response request c))))))
              (etypecase res
-               (list (handle-response req res))
-               (function (funcall res (lambda (res) (handle-response req res))))))))
-    (let ((acceptor
-            (make-instance '<fastcgi-acceptor>)))
+               (list (handle-response request res))
+               (function (funcall res (lambda (res)
+                                        (handle-response request res))))))))
+    (let ((acceptor (make-instance '<fastcgi-acceptor>)))
       (unwind-protect
            (cl-fastcgi::server-on-fd
             #'main-loop
@@ -47,56 +67,88 @@
       acceptor)))
 
 (defun stop (acceptor)
+  "Stop listening on a FastCGI socket associated with ACCEPTOR."
   (when-let (socket (acceptor-socket acceptor))
     (usocket:socket-close socket)))
 
-(defun handle-response (req res)
+(defun send-headers-for-response (request headers)
+  "Writes the HEADERS from response to REQUEST.
+
+Set-Cookie headers are emitted individually. All other headers are
+concatenated with any prior values with commas when repeated."
+  (loop for (k v) on headers by #'cddr
+        with hash = (make-hash-table :test #'eq)
+        if (eq k :set-cookie)
+          do (fcgx-puts request (format nil "~:(~A~): ~A~%" k v))
+        else if (gethash k hash)
+               do (setf (gethash k hash)
+                        (concatenate 'string (gethash k hash) ", " v))
+        else
+          do (setf (gethash k hash) v)
+        finally
+           (loop for k being the hash-keys in hash
+                   using (hash-value v)
+                 if v
+                   do (fcgx-puts request (format nil "~:(~A~): ~A~%" k v)))))
+
+(defun make-no-body-handler (request)
+  (lambda (body &key (close nil))
+    (fcgx-puts request body)
+    (if close
+        (fcgx-finish request)
+        (fcgx-flush request))))
+
+(defun send-file-as-response (request file-name)
+  (with-open-file (in file-name
+                      :direction :input
+                      :element-type '(unsigned-byte 8)
+                      :if-does-not-exist :error)
+    (let ((buffer (make-array (file-length in)
+                              :element-type '(unsigned-byte 8))))
+      (read-sequence buffer in)
+      (fcgx-puts request buffer))))
+
+(defun send-response-body (request body)
+  (etypecase body
+    (null) ;; nothing to response
+    (pathname
+     (send-file-as-response request body))
+    (string
+     (fcgx-puts request
+                (flex:string-to-octets body
+                                       :external-format :utf-8)))
+    (list
+     (fcgx-puts request
+                (flex:string-to-octets
+                 (format nil "~{~A~}" body)
+                 :external-format :utf-8)))
+    ((vector (unsigned-byte 8))
+     (fcgx-puts request body))))
+
+(defun send-status-for-response (request status)
+  (etypecase status
+    ((integer 100 599)
+     (fcgx-puts request (format nil "Status: ~D ~A~%"
+                                status (http-status-reason status))))
+    (cons (destructuring-bind (status-code status-reason) status
+            (check-type status-code (integer 100 599)
+                        "An HTTP status code")
+            (check-type status-reason string)
+            (fcgx-puts request (format nil "Status: ~D ~A~%"
+                                       status-code status-reason))))))
+
+(defun handle-response (request response)
+  "Handle a RESPONSE to a REQUEST for FastCGI. "
   (let ((no-body '#:no-body))
-    (destructuring-bind (status headers &optional (body no-body)) res
-      (fcgx-puts req (format nil "Status: ~D ~A~%" status (http-status-reason status)))
-      (loop for (k v) on headers by #'cddr
-            with hash = (make-hash-table :test #'eq)
-            if (eq k :set-cookie)
-              do (fcgx-puts req (format nil "~:(~A~): ~A~%" k v))
-            else if (gethash k hash)
-                   do (setf (gethash k hash)
-                            (concatenate 'string (gethash k hash) ", " v))
-            else
-              do (setf (gethash k hash) v)
-            finally
-               (loop for k being the hash-keys in hash
-                       using (hash-value v)
-                     if v
-                       do (fcgx-puts req (format nil "~:(~A~): ~A~%" k v))))
-      (fcgx-puts req #.(format nil "~%"))
-
-      (when (eq body no-body)
-        (return-from handle-response
-          (lambda (body &key (close nil))
-            (fcgx-puts req body)
-            (if close
-                (fcgx-finish req)
-                (fcgx-flush req)))))
-
-      (prog1
-          (etypecase body
-            (null) ;; nothing to response
-            (pathname
-             (with-open-file (in body
-                                 :direction :input
-                                 :element-type '(unsigned-byte 8)
-                                 :if-does-not-exist nil)
-               (let ((buf (make-array (file-length in) :element-type '(unsigned-byte 8))))
-                 (read-sequence buf in)
-                 (fcgx-puts req buf))))
-            (list
-             (fcgx-puts req
-                        (flex:string-to-octets
-                         (format nil "~{~A~}" body)
-                         :external-format :utf-8)))
-            ((vector (unsigned-byte 8))
-             (fcgx-puts req body)))
-        (fcgx-finish req)))))
+    (destructuring-bind (status headers &optional (body no-body)) response
+      (send-status-for-response request status)
+      (send-headers-for-response request headers)
+      (fcgx-puts request #.(coerce #(#\newline) 'string))
+      (if (eq body no-body)
+          (make-no-body-handler request)
+          (prog1
+              (send-response-body request body)
+            (fcgx-finish request))))))
 
 (defun canonicalize (field &key (start 0) (case :upcase))
   (let* ((end (length field))

@@ -11,7 +11,9 @@
   (:export #:*web*)
   (:export #:jscl-rebuild-when-needed
            #:jscl-rebuild-thread
-           #:jscl-rebuild-if-needed))
+           #:jscl-rebuild-if-needed
+           #:redirect-to
+           #:wants-json-p))
 (in-package :tootstest.web)
 
 ;; for @route annotation
@@ -37,13 +39,13 @@
 
 
 
-(defun wants-json-p ()
-  "Does the client request Accept JSON format?"
-  (let ((accept (gethash "Accept" (request-headers *request*))))
+(defun wants-json-p (&optional (request *request*))
+  "Does the client REQUEST Accept JSON format?"
+  (let ((accept (gethash "Accept" (request-headers request))))
     (or (search "application/json" accept)
         (search "text/json" accept)
         (search "application/x-json" accept)
-        (search ".js" (request-uri *request*)))))
+        (search ".js" (request-uri request)))))
 
 (defun redirect-to/html-body (uri)
   "Returns an octet array that gives a simple redirection link.
