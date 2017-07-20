@@ -122,7 +122,7 @@ js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
 
 js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 	uglifyjs src/lib/jscl/jscl.js js/mesh.js \
-		--source-map static/$@.map \
+		--source-map=static/$@.map \
 		--screw-ie8 \
 		-o js/mesh.yug.js \
 		-m -c		
