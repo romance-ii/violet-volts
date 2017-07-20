@@ -17,7 +17,7 @@ before_install:
   - echo "Installing UglifyJS"
   - sudo apt-get update
   - sudo apt-get install -y npm
-  - npm install uglifyjs
+  - npm install uglify-js
 
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
