@@ -14,6 +14,10 @@ before_install:
   - git submodule sync
   - echo "Updating submodules"
   - git submodule update --init --recursive
+  - echo "Installing UglifyJS"
+  - sudo apt-get update
+  - sudo apt-get install -ynpm
+  - npm install uglifyjs
 
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
