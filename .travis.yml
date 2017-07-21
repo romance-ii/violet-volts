@@ -17,7 +17,10 @@ before_install:
   - echo "Installing UglifyJS"
   - sudo apt-get update
   - sudo apt-get install -y npm
-  - npm install -g uglify-js
+  # NB. NPM now installs  the breaking, backward-incompatible, α-quality
+  # version  3 by  default,  which  is *not*  what  we  want. Trying  to
+  # convince it to load the latest v2.* here.
+  - npm install -g uglify-js@2
 
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
