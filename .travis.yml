@@ -1,5 +1,6 @@
 language: lisp
 sudo: required
+dist: trusty
 
 git:
   submodules: false
@@ -25,7 +26,6 @@ before_install:
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
   - sh -c 'make deps || true'
-#  - bin/ensure-sane-sbcl
 
 script:
   - make
