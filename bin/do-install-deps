@@ -30,7 +30,7 @@ fi
 if which pkcon
 then
   echo "Oh, good. I see you have PackageKit."
-  if pkcheck -a org.freedesktop.packagekit.package-install -p $$$$
+  if pkcheck -a org.freedesktop.packagekit.package-install -p $$
   then
     for pkg in $depslist
     do
@@ -50,28 +50,19 @@ echo "PackageKit not found."
 
 if which dnf
 then 
-  for pkg in $depslist
-  do
-    sudo dnf -y install $pkg
-  done
+    sudo dnf -y install $depslist
 elif which yum
 then 
-  for pkg in $depslist
-  do
-    sudo yum -y install $pkg
+    sudo yum -y install $depslist
   done
 elif which apt-get
 then
-  for pkg in $depslist
-  do
-    sudo apt-get -y install $pkg
-  done
+    sudo apt-get -y install $depslist
 else
   echo "Unable to find a usable alternative to PackageKit." >&2
   echo "You'll need to install these dependencies yourself:"
   echo "———"
   cat build-deps
-  false
   exit 1
 fi
 
