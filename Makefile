@@ -122,14 +122,14 @@ js/mesh.cc.js:	js/mesh.js js/undef-require.js src/lib/jscl/jscl.js
 
 js/mesh.yug.js: js/mesh.js src/lib/jscl/jscl.js
 	uglifyjs src/lib/jscl/jscl.js js/mesh.js \
-		--source-map static/$@.map \
+		--source-map=static/$@.map \
 		--screw-ie8 \
 		-o js/mesh.yug.js \
 		-m -c		
 
 js/%.yug.js: src/js/%.js
 	uglifyjs $< \
-		--source-map static/$@.map \
+		--source-map=static/$@.map \
 		--screw-ie8 \
 		-o $@ \
 		-m -c		
@@ -143,7 +143,7 @@ js/%.cc.js: src/js/%.js
 
 js/jscl.yug.js: src/lib/jscl/jscl.js
 	uglifyjs $< \
-		--source-map static/$@.map \
+		--source-map=static/$@.map \
 		--screw-ie8 \
 		-o $@ \
 		-m -c		
@@ -222,6 +222,6 @@ doc:	doc/violet-volts.pdf doc/violet-volts.info doc/violet-volts.txt \
 
 doc/violet-volts.texi:	tootstest.cgi
 	./tootstest.cgi write-docs
-	ln doc/tootstest.texi doc/violet-volts.texi
+	ln -f doc/tootstest.texi doc/violet-volts.texi
 
 

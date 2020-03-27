@@ -1,5 +1,6 @@
 language: lisp
 sudo: required
+dist: trusty
 
 git:
   submodules: false
@@ -14,11 +15,17 @@ before_install:
   - git submodule sync
   - echo "Updating submodules"
   - git submodule update --init --recursive
+  - echo "Installing UglifyJS"
+  - sudo apt-get update
+  - sudo apt-get install -y npm
+  # NB. NPM now installs  the breaking, backward-incompatible, α-quality
+  # version  3 by  default,  which  is *not*  what  we  want. Trying  to
+  # convince it to load the latest v2.* here.
+  - npm install -g uglify-js@2
 
 install:
   - curl -L https://github.com/luismbo/cl-travis/raw/master/install.sh | sh
   - sh -c 'make deps || true'
-#  - bin/ensure-sane-sbcl
 
 script:
   - make

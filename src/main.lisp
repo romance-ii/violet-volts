@@ -122,7 +122,7 @@ Quicklisp when called."
     (ensure-directories-exist (merge-pathnames #p"doc/" source-dir))
     (funcall (intern "DECLT" (find-package :net.didierverna.declt))
              :tootstest
-             :library-name "Violet Volts: tootstest"
+             :library "Violet Volts: tootstest"
              :texi-file (merge-pathnames #p"doc/tootstest.texi"
                                          source-dir)
              :info-file (merge-pathnames #p "doc/tootstest"
